@@ -1,0 +1,106 @@
+# Safety rules, evaluated per venue-hour with three-valued logic (TRUE / FALSE / UNKNOWN).
+# A rule references either a fixed `value` or a named `limit` (resolved from activity + profiles).
+# decision: avoid  -> the hour is gated (never recommended)
+#           caution -> the hour stays eligible, the concern is reported, the score is reduced by `penalty`
+# If a rule's variable is missing, the rule is UNKNOWN: an `avoid` rule that is UNKNOWN makes the hour
+# "unverified" for that risk, and the answer must say the data was unavailable.
+# Variables come from the hourly cell (see scoring/grid.py: weather + air quality + derived fields).
+
+rules:
+  - id: GEN-STORM
+    severity: extreme
+    decision: avoid
+    when: {var: weather_code, op: in, value: [95, 96, 99]}
+    text: "thunderstorm forecast (WMO weather code {value})"
+
+  - id: GEN-HEAT
+    severity: high
+    decision: avoid
+    when: {var: apparent_temperature, op: ">", limit: apparent_max}
+    text: "feels-like temperature {value} °C is above the {limit} °C limit"
+
+  - id: GEN-HEAT-CAUTION
+    severity: moderate
+    decision: caution
+    penalty: 12
+    when: {var: apparent_temperature, op: ">", limit: apparent_caution}
+    text: "feels-like temperature {value} °C (warm, above {limit} °C)"
+
+  - id: GEN-COLD
+    severity: high
+    decision: avoid
+    when: {var: temperature_2m, op: "<", limit: temp_min}
+    text: "temperature {value} °C is below the {limit} °C limit"
+
+  - id: GEN-GUST
+    severity: high
+    decision: avoid
+    when: {var: wind_gusts_10m, op: ">", limit: gust_max}
+    text: "wind gusts {value} km/h exceed {limit} km/h"
+
+  - id: GEN-GUST-CAUTION
+    severity: moderate
+    decision: caution
+    penalty: 8
+    when: {var: wind_gusts_10m, op: ">", limit: gust_caution}
+    text: "gusty wind, up to {value} km/h"
+
+  - id: GEN-RAIN
+    severity: high
+    decision: avoid
+    when: {var: precipitation_probability, op: ">", limit: precip_prob_max}
+    text: "rain probability {value}% is above {limit}%"
+
+  - id: GEN-RAIN-CAUTION
+    severity: moderate
+    decision: caution
+    penalty: 10
+    when: {var: precipitation_probability, op: ">", limit: precip_prob_caution}
+    text: "rain probability {value}%"
+
+  - id: GEN-AQI
+    severity: high
+    decision: avoid
+    when: {var: us_aqi, op: ">", limit: us_aqi_max}
+    text: "US AQI {value} is above the {limit} limit for this activity/profile"
+
+  - id: GEN-AQI-UNHEALTHY
+    severity: high
+    decision: caution
+    penalty: 18
+    when: {var: us_aqi, op: ">", limit: us_aqi_unhealthy}
+    text: "US AQI {value} is unhealthy (above {limit}): keep exertion light and short"
+
+  - id: GEN-AQI-CAUTION
+    severity: moderate
+    decision: caution
+    penalty: 10
+    when: {var: us_aqi, op: ">", limit: us_aqi_caution}
+    text: "US AQI {value} (above {limit})"
+
+  - id: GEN-UV
+    severity: moderate
+    decision: caution
+    penalty: 6
+    when: {var: uv_index, op: ">=", limit: uv_caution}
+    text: "UV index {value} (very high)"
+
+  - id: GEN-DARK
+    severity: high
+    decision: avoid
+    when: {all: [{var: is_day, op: "==", value: 0}, {var: daylight_required, op: "==", value: 1}]}
+    text: "after dark: this activity needs daylight"
+
+  - id: GEN-WET-GROUND
+    severity: moderate
+    decision: caution
+    penalty: 10
+    when: {var: rain_prev_12h_mm, op: ">", limit: recent_rain_mm_caution}
+    text: "{value} mm of rain in the previous 12 h: wet or slippery ground"
+
+  - id: GEN-HAZE
+    severity: low
+    decision: caution
+    penalty: 8
+    when: {var: visibility, op: "<", limit: visibility_min_m}
+    text: "visibility only {value} m (haze)"

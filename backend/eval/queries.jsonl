@@ -1,0 +1,20 @@
+{"q": "evening jog near Indiranagar tomorrow?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "running"}
+{"q": "my 70 year old father wants a morning walk in Jayanagar this weekend", "expect_status": ["ok", "partial", "not_recommended"], "activity": "walking", "profiles": ["senior"]}
+{"q": "box cricket saturday or sunday near Thane?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "cricket"}
+{"q": "golden hour photos near Marine Drive Kochi today", "expect_status": ["ok", "partial", "not_recommended", "not_available"], "activity": "photography"}
+{"q": "tennis after office near Kondapur tomorrow", "expect_status": ["ok", "partial", "not_recommended"], "activity": "tennis"}
+{"q": "golf this sunday within 30 km of Gurugram", "expect_status": ["ok", "partial", "not_recommended"], "activity": "golf"}
+{"q": "picnic with toddlers at a garden in Chandigarh tomorrow afternoon", "expect_status": ["ok", "partial", "not_recommended"], "activity": "picnic", "profiles": ["child"]}
+{"q": "trek near Pune next weekend, I have asthma", "expect_status": ["ok", "partial", "not_recommended"], "activity": "hiking", "profiles": ["asthma"]}
+{"q": "outdoor wedding reception in Udaipur on friday evening, what to plan for?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "outdoor_event"}
+{"q": "cycle ride around Gachibowli early morning tomorrow, heart patient", "expect_status": ["ok", "partial", "not_recommended"], "activity": "cycling", "profiles": ["cardiac"]}
+{"q": "five-a-side near Koramangala tonight", "expect_status": ["ok", "partial", "not_recommended", "not_available"], "activity": "football"}
+{"q": "yoga on the beach in Besant Nagar before work tomorrow", "expect_status": ["ok", "partial", "not_recommended"], "activity": "yoga"}
+{"q": "birdwatching near Navi Mumbai this week", "expect_status": ["ok", "partial", "not_recommended"], "activity": "birdwatching"}
+{"q": "kal subah jogging karna hai salt lake kolkata mein", "expect_status": ["ok", "partial", "not_recommended"], "activity": "running"}
+{"q": "is it okay to cycle to work at 9 am?", "expect_status": ["clarification_needed"]}
+{"q": "where can I go this weekend?", "expect_status": ["clarification_needed"]}
+{"q": "book me a cab to the airport", "expect_status": ["out_of_scope"]}
+{"q": "running near Xyzzyqwop Nagar tomorrow", "expect_status": ["clarification_needed"]}
+{"q": "hike on 25 december near Manali", "expect_status": ["not_available", "ok", "partial", "not_recommended"]}
+{"q": "pregnant, gentle stroll in Vile Parle this evening?", "expect_status": ["ok", "partial", "not_recommended", "not_available"], "activity": "walking", "profiles": ["pregnancy"]}

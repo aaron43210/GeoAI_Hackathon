@@ -1,0 +1,42 @@
+# Sub-score curves (each maps a live value to 0..1) and other scoring parameters used by scoring/grid.py.
+thermal:            # apparent temperature vs the activity comfort band [lo, hi]
+  zero_below_lo_by: 10      # score reaches 0 this many °C below lo
+  zero_above_hi_by: 8       # ...and this many °C above hi
+rain:
+  mm_full_penalty: 2.0      # ≥ this much rain in the hour → rain sub-score 0
+wind:
+  zero_at_gust_limit: true  # gusts at the activity gust_max → 0, at wind_comfort → 1
+uv:
+  full_until: 3
+  floor_at: 11
+  floor: 0.2
+  shade_mitigation: 0.5     # effective UV = UV × (1 − mitigation × green_fraction)
+air:                        # US AQI → sub-score
+  full_until: 50
+  zero_at: 200
+  exertion_exponent: {low: 1.0, moderate: 1.3, high: 1.7}
+access:                     # rush-adjusted travel / user's travel limit
+  full_until_ratio: 0.3
+  zero_at_ratio: 1.6
+light:
+  day: 1.0
+  night_lit: 0.7
+  night: 0.2
+  golden: 1.0
+  golden_day: 0.55
+  golden_window_h: 1.0       # within this many hours after sunrise / before sunset
+  good_cloud_min: 15
+  good_cloud_max: 60
+  bad_cloud_factor: 0.8
+setting:
+  water_full_m: 300
+  quiet_road_len_ref_m: 600  # major-road length inside 300 m at which "quiet" reaches 0
+preference_boost: 2.0        # user preference (quiet/shade/water/avoid_traffic) multiplies that weight
+min_reportable_score: 35     # windows below this are reported as "poor" even if not gated
+alternatives: 2
+contrast_min_gap: 8          # report a "why not then" contrast only if the score gap is at least this
+storm_codes: [95, 96, 99]    # WMO weather codes for thunderstorms (Open-Meteo weather_code)
+aqi_rising_delta: 20         # rise in US AQI within a window that triggers a "worsening" note
+water_litres_per_30min: {low: 0.25, moderate: 0.35, high: 0.5}
+hot_water_factor: 1.5
+hot_threshold_apparent: 32

@@ -1,0 +1,162 @@
+GeoAI Hackathon @ CSRE, IIT Bombay
+Build an AI assistant (SLM) that recommends where and when to head outdoors
+The challenge
+Weather forecasts and maps tell you what the conditions will be. What people really want to
+know is more specific: which nearby place, at what time, is best for me, and what should I keep
+in mind before I go?
+Build an AI assistant (Small Language Model), powered by a small language model, that
+advises a person on an outdoor activity: the best nearby place and time to go, what to prepare,
+what to watch for, and when to avoid it. The assistant should reason over geospatial context
+and live weather to arrive at its recommendation.
+Given a free-form question, the assistant should:
+● identify the activity, the area or search radius, the time range, and any personal detail
+such as age or a health condition;
+● consider several nearby places across the upcoming hours, rather than a single
+location;
+● account for geospatial context, including wind direction, roads and traffic, nearby
+industry, water bodies and green cover;
+● return a clear recommendation together with practical advice: what to carry, what to
+watch for, and when to avoid going;
+● support every claim with the live data it actually used, without inventing weather or
+places;
+● present the response in whatever form works best, whether plain text or something
+richer with maps and images.
+What makes the problem interesting: the right answer depends on both the hour and the
+place. A ground that lies downwind of an expressway at 8 AM may be pleasant by evening
+once the wind shifts, and a venue forty minutes away at rush hour may not be worth the trip.
+The assistant has to reason about place and time together, for this particular person.
+At a glance
+Nothing is supplied in advance. For each question, the assistant fetches what it needs in real
+time, reasons about place and time using a small language model, and returns a grounded
+recommendation with supporting advice.
+Activities to support
+Treat the following as your reference set. Your assistant should support at least these ten
+outdoor activities:
+● Running or jogging
+● Cycling (leisure or commute)
+● Golf
+● Cricket (recreational match or practice)
+● Outdoor football or five-a-side
+● Outdoor tennis
+● Hiking or a nature walk
+● Picnic or park outing
+● Outdoor event or gathering (for example a wedding or fair)
+● Outdoor photography session
+Each activity has its own sensitivities to weather, air quality and daylight, so the same
+conditions can suit one and rule out another. Personal profiles, such as asthma, a senior, a
+child or pregnancy, should tighten the limits further for that user.
+Example Queries
+The following are the kinds of free-form questions your assistant should handle. They illustrate
+the input only; how you shape the response is up to you.
+● "Where can I go running tomorrow evening near Koregaon Park?"
+● "Best time this weekend for a kids' cricket match within 15 km of Whitefield?"
+● "I have mild asthma, where's good for a morning walk near Powai in the next two
+days?"
+● "Is it okay to cycle to work at 8 AM?"
+● "Planning an outdoor birthday party on Sunday afternoon in Pune, what should I keep in
+mind?"
+● "Good place and time for golf on Saturday within 40 km of Andheri?"
+● "Where can I take sunset photos this evening around Bandra?"
+● "Is Saturday or Sunday better for a hike near Lonavala?"
+● "When is it safe for my parents to walk outdoors tomorrow in Bengaluru?"
+● "Outdoor tennis after work today near Hinjewadi, any good spots?"
+Expect incomplete or messy questions as well: a missing location, a vague time such as "this
+weekend", or a request that falls outside the scope. Handle these gracefully rather than
+guessing. This is just for your understanding the evaluation queries would be different
+then these.
+Data: fetch it live
+No dataset is provided. We supply no map files, no weather files and no server. Your
+assistant must fetch everything it needs live, at query time, from free and open sources.
+Sourcing and handling that data is part of the challenge, since a real assistant has to do the
+same.
+The sources below are a starting point, not a requirement. You may use any free source,
+provided you disclose it. Respect each service's rate limits, and cache responses sensibly.
+Maps, places and features (venues, roads, industrial zones, water, parks, power lines)
+● OpenStreetMap via the Overpass API.
+● Geofabrik: downloadable regional OSM extracts
+● Nominatim: geocoding (place name - coordinates)
+Weather and air quality
+● Open-Meteo: forecast + air-quality APIs
+● OpenAQ: open air-quality measurements
+● WAQI: real-time AQI, free token
+● OpenWeatherMap: free tier, needs a key (alternative)
+Routing and Travel Time
+● OSRM or OpenRouteservice
+Daylight and terrain
+● Sunrise-sunset API, Open-Elevation/ OpenTopoData
+Indian Open data
+● Data.gov.in and CPCP for air quality and IMD for weather
+You are free to use any other free and open source beyond those listed. Whatever you use,
+you must explicitly state your data sources.
+Your model: a small open SLM on Hugging Face
+The language component of your assistant must be a small, open-weights model of at most
+3 billion parameters that you run yourself. A small model cannot memorise the world's
+weather and geography, and that limitation is the point: it forces the system to rely on live data
+rather than recall.
+You are not expected to train a model from scratch; pretraining is beyond the scope of a
+hackathon. You may use an open base model directly (for example Phi-3-mini, Llama-3.2,
+Qwen2.5 or Gemma-2), or fine-tune one (for example with LoRA or QLoRA). Either approach
+is acceptable, and the choice is yours.
+Host your model on the Hugging Face Hub as a public repository. Include the weights (or
+your LoRA adapter together with a pointer to the exact base model), a model card describing
+the base model, your changes and intended use, and an open licence. It should
+load with from_pretrained(...). If you use a base model unchanged, still create a repository with
+your configuration and a model card naming the base model and how you use it.
+Large hosted models, such as GPT-4-class systems, Claude or Gemini Pro, may not be used
+within the running assistant.
+Deliverables
+Each team submits the following:
+1. A live API endpoint: an HTTP endpoint we can call to send questions to your
+assistant, kept available throughout the judging window.
+2. Your model on Hugging Face — a public repository with the model or adapter, a model
+card and an open licence.
+3. A code repository: your complete source code.
+4. A short README: how to run the project, the base model you used, the data sources you
+relied on, and your API endpoint URL.
+5. A presentation (4–6 slides): the problem and your approach, your architecture, a
+worked example, your model and any fine-tuning, and an honest note on limitations.
+Be ready to demonstrate your assistant live during judging.
+Submission
+Submissions will be collected through a Google Form. The link will be made available soon.
+Rules
+Allowed
+● Any open-weights language model of at most 3B parameters (disclose the exact
+model).
+● Fine-tuning that model (LoRA / QLoRA or similar).
+● Any free, openly available data source or API — each disclosed.
+● Any open-source libraries, and AI coding assistants for writing code (disclosed).
+Not allowed
+● Large hosted models (GPT-4-class, Claude, Gemini Pro) anywhere in the running
+assistant.
+● Paid or private data or APIs; scraping behind logins.
+● Hard-coding answers to the example questions.
+● Answering from the model's memory instead of the data it fetched.
+Disclose the models, data sources and tools you used, and be prepared to explain and defend
+your work during judging.
+Timeline and logistics
+Key details for the event:
+● Mode - online.
+● Submission deadline - 24 October, 11:59 PM IST.
+● Finals - The top five teams will be invited to IIT Bombay to present at the conference.
+FAQ
+Do we have to train a model from scratch? No. Use an open model of at most 3 billion
+parameters. Fine-tuning is optional, and pretraining is not expected.
+Can we use ChatGPT, Claude or Gemini? Not within the running assistant. You may use
+them as coding aids while you build, provided you disclose it.
+Where does the data come from? You fetch it live from free, open APIs, listed under Data.
+No dataset is provided.
+Do we need a GPU? Not to run the assistant. If you choose to fine-tune, a free Colab or
+Kaggle GPU is sufficient.
+What if our API endpoint is unavailable during judging? Keep it live for the full judging
+window. If we cannot reach it, we will rely on your code, README and demo, which is less
+ideal, so test your hosting early.
+Can we support more than ten activities? Yes. Ten is the minimum; additional,
+well-handled activities are welcome.
+What is the team size? To be announced.
+Attribution and sources
+If you use OpenStreetMap data, you must credit it as “© OpenStreetMap contributors”. Review
+and respect the terms and rate limits of every source you use.
+● OpenStreetMap · Overpass API · Nominatim
+● Open-Meteo · OpenAQ · WAQI
+● OpenRouteService · OSRM · Sunrise-Sunset API
+● Hugging Face Hub for hosting your model

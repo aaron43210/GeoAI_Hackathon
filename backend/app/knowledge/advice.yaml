@@ -1,0 +1,77 @@
+# Advice rules. Evaluated on window aggregates (see advice/rules.py):
+#   max_apparent, max_uv, max_precip_prob, max_gust, max_us_aqi, max_pm2_5, min_visibility,
+#   rain_prev_12h_mm, minutes_to_sunset_after_end, duration_min, water_within_m, exposure_max
+# plus profile flags (asthma, senior, child, ...) and activity id.
+# `when` uses the same condition syntax as rules.yaml; `profile`/`activity` narrow applicability.
+# {placeholders} are filled from aggregates; each referenced aggregate becomes cited evidence.
+
+carry:
+  - id: water
+    always: true
+    text: "about {water_litres} L of water per person"
+  - id: electrolytes
+    when: {all: [{var: duration_min, op: ">", value: 90}, {var: max_apparent, op: ">=", value: 30}]}
+    text: "ORS/electrolytes (long session, feels-like up to {max_apparent} °C)"
+  - id: sun
+    when: {var: max_uv, op: ">=", value: 6}
+    text: "sunscreen SPF 30+, cap and sunglasses (UV index up to {max_uv})"
+  - id: rain
+    when: {var: max_precip_prob, op: ">=", value: 35}
+    text: "a rain jacket or umbrella (rain chance up to {max_precip_prob}%)"
+  - id: inhaler
+    profile: asthma
+    always: true
+    text: "your reliever inhaler"
+  - id: mask_if_aqi
+    when: {var: max_us_aqi, op: ">", value: 100}
+    text: "an N95 mask for the journey (US AQI up to {max_us_aqi})"
+  - id: torch
+    when: {var: minutes_to_sunset_after_end, op: "<", value: 30}
+    activity: [hiking, birdwatching, cycling, running, walking]
+    text: "a torch/headlamp: you'll finish within 30 min of sunset ({sunset})"
+  - id: repellent
+    when: {all: [{var: water_within_m, op: "<", value: 400}, {var: ends_after_hour, op: ">=", value: 17}]}
+    text: "mosquito repellent (water body {water_within_m} m away, evening)"
+  - id: id_and_contact
+    profile: [senior, cardiac]
+    always: true
+    text: "ID, phone and an emergency contact card"
+  - id: kids_hats_snacks
+    profile: child
+    always: true
+    text: "hats, snacks and extra water for the kids"
+  - id: tent_weights
+    activity: outdoor_event
+    when: {var: max_gust, op: ">=", value: 25}
+    text: "tent/canopy weights and secured decor (gusts up to {max_gust} km/h)"
+  - id: camera_kit
+    activity: photography
+    always: true
+    text: "spare battery and a lens cloth"
+
+watch_for:
+  - id: heat_stress
+    when: {var: max_apparent, op: ">=", value: 32}
+    text: "heat-stress signs (dizziness, cramps, no sweating): feels-like reaches {max_apparent} °C"
+  - id: storm
+    when: {var: storm_in_day, op: "==", value: 1}
+    text: "thunderstorms later that day: head indoors at the first thunder"
+  - id: gusts
+    when: {var: max_gust, op: ">=", value: 30}
+    text: "gusts up to {max_gust} km/h"
+  - id: wet_ground
+    when: {var: rain_prev_12h_mm, op: ">", value: 2}
+    text: "wet or slippery surfaces ({rain_prev_12h_mm} mm of rain in the previous 12 h)"
+  - id: traffic_air
+    when: {var: exposure_max, op: ">=", value: 0.35}
+    text: "traffic/industrial air drifting in on the wind: stay on the side away from {exposure_source}"
+  - id: aqi_trend
+    when: {var: aqi_rising, op: "==", value: 1}
+    text: "air quality worsening through the window (US AQI {aqi_start} → {aqi_end})"
+  - id: sunset
+    when: {var: minutes_to_sunset_after_end, op: "<", value: 60}
+    text: "sunset at {sunset}"
+  - id: rest_breaks
+    profile: [senior, pregnancy, cardiac]
+    always: true
+    text: "pace yourself and take shade breaks every 20–30 min"

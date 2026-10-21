@@ -1,0 +1,70 @@
+# Geospatial context parameters (geospatial/context.py, geospatial/exposure.py, scoring/traffic.py).
+
+context_radius_m: 3000          # industry is searched this far around candidate venues
+road_context_m: 1500            # major roads beyond this contribute < 3 % (e^-1500/400) to exposure
+green_buffer_m: 300
+overpass_rolling_race: 2        # mirrors kept in flight at once
+water_search_m: 1000
+power_line_m: 100
+
+road_classes:                   # weight in the exposure model (relative traffic emission/noise)
+  motorway: 1.0
+  motorway_link: 0.7
+  trunk: 0.85
+  trunk_link: 0.6
+  primary: 0.6
+  primary_link: 0.4
+  secondary: 0.35
+
+road_decay_m: 400               # e-folding distance of near-road pollution (near-road gradients ~100-500 m, HEI 2010)
+industry_decay_m: 1500
+industry_area_ref_m2: 200000    # area at which an industrial polygon counts as weight 1.0
+wind_cone_deg: 60               # sources within ±60° of the upwind direction contribute
+calm_wind_kmh: 5                # below this, dispersion is weak: sources count from any direction at half weight
+exposure_cap: 1.0
+
+green_tags:
+  leisure: [park, garden, nature_reserve, golf_course, pitch, recreation_ground, common]
+  landuse: [forest, grass, meadow, recreation_ground, village_green, orchard]
+  natural: [wood, scrub, grassland, heath, wetland]
+
+water_tags:
+  natural: [water, bay, beach, coastline, wetland]
+  waterway: [river, canal, stream]
+  landuse: [reservoir, basin]
+
+industry_tags:
+  landuse: [industrial, quarry]
+  man_made: [works, chimney, wastewater_plant]
+  power: [plant]
+
+# Travel-time adjustment for traffic. OSRM's public server has no live traffic, so this is a disclosed
+# heuristic for Indian metros, not a measurement.
+traffic:
+  weekday_multiplier:
+    - {start: 8, end: 11, factor: 1.6}
+    - {start: 17, end: 21, factor: 1.7}
+    - {start: 11, end: 17, factor: 1.25}
+  weekend_multiplier:
+    - {start: 11, end: 21, factor: 1.25}
+  default_factor: 1.1
+  exposure_weekday:             # relative traffic intensity used in the exposure model
+    - {start: 7, end: 11, factor: 1.0}
+    - {start: 17, end: 21, factor: 1.0}
+    - {start: 11, end: 17, factor: 0.7}
+  exposure_default: 0.35
+  exposure_weekend: 0.5          # weekend daytime traffic: lighter peaks, flatter profile
+
+# Geocoding: when several places share a name, prefer bigger/urban settlement types; ask only on a true tie.
+place_type_priority: [city, state_district, town, borough, suburb, city_district, quarter, neighbourhood, municipality,
+                      county, village, hamlet, isolated_dwelling]
+
+candidates:
+  max_candidates: 8
+  shortlist_pool: 40             # pre-scored pool before context fetch
+  distance_weight: 1.0           # pre-score = -distance_weight·d/radius + area_weight·log-area + tag_weight·sport match
+  area_weight: 0.3
+  tag_weight: 0.3
+  radius_expand_factor: 2.0      # if nothing is found, search once more at this multiple (≤ MAX_RADIUS_KM)
+  dedupe_m: 200
+  excluded_access: [private, no, customers]

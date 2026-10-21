@@ -1,0 +1,28 @@
+import pytest
+
+from app.agent.rule_parser import parse
+
+
+@pytest.mark.parametrize("q,activity,location,profiles", [
+    ("where should i jog tmrw morning around juhu", "running", "juhu", []),
+    ("My dad is 72, is it fine for him to take a walk near Shivaji Park this evening?", "walking", "Shivaji Park", ["senior"]),
+    ("kal shaam football khelna hai kharghar mein", "football", "kharghar", []),
+    ("good trek near pune for sunday, i have asthma", "hiking", "pune", ["asthma"]),
+    ("need tennis courts within 5 km of Indiranagar tomorrow 7am", "tennis", "Indiranagar", []),
+    ("Is it okay to cycle to work at 8 AM?", "cycling", None, []),
+    ("picnic spots near lalbagh with my 70 year old mother", "picnic", "lalbagh", ["senior"]),
+])
+def test_parse(q, activity, location, profiles):
+    i = parse(q)
+    assert i.activity == activity
+    assert (i.location_text or None) == location
+    assert sorted(i.profiles) == sorted(profiles)
+
+
+def test_radius_and_out_of_scope():
+    assert parse("golf within 40 km of Andheri").radius_km == 40
+    assert parse("suggest an indoor gym").in_scope is False
+
+
+def test_unknown_activity_is_not_defaulted():
+    assert parse("what should I do outside near Powai").activity is None

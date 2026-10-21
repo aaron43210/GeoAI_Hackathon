@@ -1,0 +1,51 @@
+# Vocabulary for the deterministic time resolver (agent/time_resolver.py). Hours are local, 24 h, decimals allowed.
+# Anchors (sunrise/sunset) are resolved from the live Open-Meteo daily forecast, never assumed.
+
+dayparts:
+  early morning: {start: 5.0, end: 7.5}
+  morning: {start: 5.5, end: 10.5}
+  before work: {start: 6.0, end: 9.0}
+  before office: {start: 6.0, end: 9.0}
+  forenoon: {start: 9.0, end: 12.0}
+  noon: {start: 11.5, end: 13.5}
+  lunch: {start: 12.0, end: 14.0}
+  afternoon: {start: 12.0, end: 16.5}
+  after work: {start: 17.5, end: 21.0}
+  after office: {start: 17.5, end: 21.0}
+  evening: {start: 16.5, end: 20.0}
+  night: {start: 19.5, end: 23.0}
+  tonight: {start: 18.0, end: 23.0}
+  sunrise: {anchor: sunrise, before: 1.0, after: 1.25}
+  dawn: {anchor: sunrise, before: 1.0, after: 0.5}
+  sunset: {anchor: sunset, before: 1.25, after: 0.75}
+  dusk: {anchor: sunset, before: 0.5, after: 0.75}
+  golden hour: {anchor: sunset, before: 1.25, after: 0.5}
+  # Hinglish / Hindi-Marathi transliterations
+  subah: {start: 5.5, end: 10.5}
+  dopahar: {start: 12.0, end: 16.0}
+  shaam: {start: 16.5, end: 20.0}
+  sham: {start: 16.5, end: 20.0}
+  raat: {start: 19.5, end: 23.0}
+
+relative_days:
+  today: 0
+  tonight: 0
+  aaj: 0
+  tomorrow: 1
+  tmrw: 1
+  tmr: 1
+  kal: 1
+  day after tomorrow: 2
+  day after: 2
+  parso: 2
+
+weekdays: {monday: 0, mon: 0, tuesday: 1, tue: 1, tues: 1, wednesday: 2, wed: 2, thursday: 3, thu: 3, thurs: 3,
+           friday: 4, fri: 4, saturday: 5, sat: 5, sunday: 6, sun: 6}
+
+months: {jan: 1, january: 1, feb: 2, february: 2, mar: 3, march: 3, apr: 4, april: 4, may: 5, jun: 6, june: 6,
+         jul: 7, july: 7, aug: 8, august: 8, sep: 9, sept: 9, september: 9, oct: 10, october: 10,
+         nov: 11, november: 11, dec: 12, december: 12}
+
+default_window: {start: 5.5, end: 21.0, hours_ahead: 36}   # when no time is given (and we say so)
+weekend_days: [5, 6]
+horizon_days: {weather: 15, air_quality: 4}

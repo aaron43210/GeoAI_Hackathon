@@ -1,0 +1,40 @@
+# Grounding verifier vocabulary (evidence/grounding.py).
+
+# Units recognised after a number. A "number unit" pair in the answer must appear (same number, same unit
+# family) in the fact sheet.
+units:
+  temp: ["°c", "° c", "degrees", "deg c", "c"]
+  percent: ["%", "percent"]
+  speed: ["km/h", "kmph", "kph"]
+  distance_km: ["km", "kms", "kilometres", "kilometers"]
+  distance_m: ["m", "metres", "meters"]
+  minutes: ["min", "mins", "minutes"]
+  litres: ["l", "litre", "litres", "liter", "liters"]
+  pm: ["µg/m³", "ug/m3", "μg/m³"]
+  score: ["/100"]
+
+# Severity alignment: if the fact sheet flags a variable (a caution/avoid line mentions the trigger), the answer
+# must not describe that variable positively.
+polarity:
+  - flag_triggers: ["US AQI", "PM2.5"]
+    flagged_when: ["above", "limit", "N95", "unhealthy", "caution"]
+    forbidden: ["good air", "clean air", "fresh air", "excellent air", "healthy air", "air is good", "air quality is good",
+                "good air quality", "great air", "low pollution", "pollution-free"]
+    forbidden_regex: ['\b(?:low|good|clean|great|excellent|healthy|safe|fine|decent|pleasant|acceptable|moderate|okay|ok|reasonable)\s+(?:us\s+)?(?:aqi|air|pm2\.5)',
+                      '\b(?:air|air quality|aqi)\s+(?:is|looks|remains|stays)\s+(?:good|fine|acceptable|okay|ok|clean|decent|reasonable|healthy|safe)']
+  - flag_triggers: ["feels-like temperature"]
+    flagged_when: ["above", "limit", "warm"]
+    forbidden: ["cool weather", "pleasant temperature", "comfortable temperature", "mild temperature", "nice and cool"]
+    forbidden_regex: ['\b(?:cool|mild|pleasant|comfortable)\s+(?:feels-like|temperature|weather)']
+  - flag_triggers: ["rain probability"]
+    flagged_when: ["caution: rain", "above"]
+    forbidden: ["no rain", "dry conditions", "zero chance of rain"]
+
+# A citation must sit next to its own value: the number nearest to "[E#]" (within this many characters) must
+# appear on that fact's line in the fact sheet.
+citation_window_chars: 14
+
+# When nothing is recommended, the answer must say so and must not present a "best pick".
+not_recommended:
+  required_any: ["not recommended", "not advisable", "avoid", "not safe", "unsafe"]
+  forbidden: ["**best pick:**", "best pick:"]

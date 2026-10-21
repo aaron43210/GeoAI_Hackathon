@@ -1,0 +1,2 @@
+-r requirements-core.txt
+llama-cpp-python>=0.3.2      # local GGUF inference for the ≤3B SLM (CPU)

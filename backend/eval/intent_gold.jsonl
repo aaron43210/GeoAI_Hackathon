@@ -1,0 +1,24 @@
+{"q": "where should i jog tmrw morning around juhu", "activity": "running", "location": "juhu", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "My dad is 72, is it fine for him to take a walk near Shivaji Park this evening?", "activity": "walking", "location": "shivaji park", "profiles": ["senior"], "in_scope": true, "has_time": true}
+{"q": "box cricket with friends saturday night in Thane", "activity": "cricket", "location": "thane", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "good trek near pune for sunday, i have asthma", "activity": "hiking", "location": "pune", "profiles": ["asthma"], "in_scope": true, "has_time": true}
+{"q": "kal shaam football khelna hai kharghar mein", "activity": "football", "location": "kharghar", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "where to see flamingos near Navi Mumbai this week", "activity": "birdwatching", "location": "navi mumbai", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "Is it a good day for a picnic at Cubbon Park with my toddler?", "activity": "picnic", "location": "cubbon park", "profiles": ["child"], "in_scope": true, "has_time": true}
+{"q": "need tennis courts within 5 km of Indiranagar tomorrow 7am", "activity": "tennis", "location": "indiranagar", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "planning my sister's mehendi outdoors in Jaipur on 2 Nov afternoon", "activity": "outdoor_event", "location": "jaipur", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "golden hour shoot at marine drive today?", "activity": "photography", "location": "marine drive", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "can you recommend a good stock to buy", "activity": null, "location": null, "profiles": [], "in_scope": false, "has_time": false}
+{"q": "best cycling route near Gachibowli early morning, I'm a heart patient", "activity": "cycling", "location": "gachibowli", "profiles": ["cardiac"], "in_scope": true, "has_time": true}
+{"q": "golf this sunday near gurgaon, within 30 km", "activity": "golf", "location": "gurgaon", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "yoga at the beach in Besant Nagar before office", "activity": "yoga", "location": "besant nagar", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "run near me tonight", "activity": "running", "location": null, "profiles": [], "in_scope": true, "has_time": true}
+{"q": "I'm pregnant, where can I stroll in Salt Lake Kolkata tomorrow?", "activity": "walking", "location": "salt lake", "profiles": ["pregnancy"], "in_scope": true, "has_time": true}
+{"q": "whats the weather like", "activity": null, "location": null, "profiles": [], "in_scope": true, "has_time": false}
+{"q": "kids football practice near Koramangala, Saturday or Sunday?", "activity": "football", "location": "koramangala", "profiles": ["child"], "in_scope": true, "has_time": true}
+{"q": "hike to sinhagad fort next weekend", "activity": "hiking", "location": "sinhagad", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "I want to go for a walk", "activity": "walking", "location": null, "profiles": [], "in_scope": true, "has_time": false}
+{"q": "Outdoor reception for 200 guests in Udaipur, Friday evening, what to plan for?", "activity": "outdoor_event", "location": "udaipur", "profiles": [], "in_scope": true, "has_time": true}
+{"q": "suggest an indoor gym in andheri", "activity": null, "location": "andheri", "profiles": [], "in_scope": false, "has_time": false}
+{"q": "morning runs this week around Sanjay Gandhi National Park? I get wheezy in pollution", "activity": "running", "location": "sanjay gandhi national park", "profiles": ["asthma"], "in_scope": true, "has_time": true}
+{"q": "where can my grandparents sit in a garden in Chandigarh tomorrow afternoon", "activity": "picnic", "location": "chandigarh", "profiles": ["senior"], "in_scope": true, "has_time": true}

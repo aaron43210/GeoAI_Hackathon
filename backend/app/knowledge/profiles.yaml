@@ -1,0 +1,56 @@
+# Personal profiles. They ONLY tighten limits (min() on upper bounds, max() on lower bounds)
+# and re-weight factors. Triggers are used by the rule-based fallback parser and as SLM hints.
+# Sources: US EPA AQI guidance (sensitive groups avoid prolonged exertion above 150, reduce it above 100) (asthma, heart disease, children, older adults, pregnancy);
+# WHO/NDMA India heat-action guidance (elderly, children, pregnant women, cardiac patients most at risk).
+
+profiles:
+  asthma:
+    label: asthma / respiratory condition
+    triggers: [asthma, asthmatic, wheezing, breathing problem, breathing issues, copd, bronchitis, lung condition, inhaler]
+    limits: {us_aqi_max: 150, us_aqi_unhealthy: 100, us_aqi_caution: 50}
+    weight_multipliers: {air: 1.8, exposure: 1.6}
+    advice: [inhaler, mask_if_aqi]
+
+  senior:
+    label: senior (60+)
+    triggers: [senior, elderly, old age, my parents, parents, grandparents, grandmother, grandfather, grandma, grandpa, aged parents, retired]
+    min_age: 60
+    limits: {apparent_max: 36, apparent_caution: 30, gust_max: 40, us_aqi_max: 150, us_aqi_unhealthy: 100}
+    weight_multipliers: {thermal: 1.4, access: 1.3, air: 1.2}
+    advice: [id_and_contact, rest_breaks]
+
+  child:
+    label: children
+    triggers: [kid, kids, child, children, toddler, toddlers, my son, my daughter, school kids, under-12, junior]
+    max_age: 12
+    limits: {apparent_max: 37, apparent_caution: 31, uv_caution: 6, us_aqi_max: 150, us_aqi_unhealthy: 100}
+    weight_multipliers: {thermal: 1.3, uv: 1.5, air: 1.3}
+    force_daylight: true
+    advice: [kids_hats_snacks]
+
+  pregnancy:
+    label: pregnancy
+    triggers: [pregnant, pregnancy, expecting a baby, trimester]
+    limits: {apparent_max: 33, apparent_caution: 29, us_aqi_max: 150, us_aqi_unhealthy: 100, us_aqi_caution: 50, uv_caution: 6}
+    weight_multipliers: {thermal: 1.6, air: 1.5}
+    advice: [rest_breaks]
+
+  cardiac:
+    label: heart condition
+    triggers: [heart condition, heart patient, cardiac, heart disease, bp patient, hypertension, high blood pressure]
+    limits: {apparent_max: 34, apparent_caution: 29, us_aqi_max: 150, us_aqi_unhealthy: 100, us_aqi_caution: 50, temp_min: 10}
+    weight_multipliers: {thermal: 1.5, air: 1.5}
+    advice: [rest_breaks, id_and_contact]
+
+  heat_sensitive:
+    label: heat-sensitive
+    triggers: [heat sensitive, sensitive to heat, can't handle heat, cannot tolerate heat, get heatstroke]
+    limits: {apparent_max: 34, apparent_caution: 29, uv_caution: 6}
+    weight_multipliers: {thermal: 1.6, uv: 1.3}
+
+  mobility_limited:
+    label: limited mobility
+    triggers: [wheelchair, limited mobility, knee problem, bad knees, walking stick, recovering from surgery]
+    limits: {gust_max: 40}
+    weight_multipliers: {access: 1.5}
+    max_travel_factor: 0.7

@@ -1,0 +1,9 @@
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.venv
+frontend/dist
+training/data
+backend/eval/results
+*.gguf
+.git

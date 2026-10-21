@@ -1,0 +1,13 @@
+services:
+  terrapulse:
+    build: .
+    ports:
+      - "8000:7860"
+    environment:
+      - LOG_LEVEL=INFO
+      - CONTACT_EMAIL=aaronr43210@gmail.com
+      - WAQI_TOKEN=${WAQI_TOKEN:-}
+    volumes:
+      - hf-models:/models
+volumes:
+  hf-models:

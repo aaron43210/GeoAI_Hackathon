@@ -1,0 +1,198 @@
+# Activity profiles: the single source of truth for venue discovery, comfort, gates and weights.
+# Threshold sources:
+#   apparent temperature: NOAA heat-index bands (32-41 °C "extreme caution", >41 °C "danger"), shifted per exertion
+#   us_aqi: US EPA AQI activity guidance: 101-150 sensitive groups reduce exertion; 151-200 everyone reduce
+#           prolonged/heavy exertion, sensitive groups avoid it; 201-300 everyone avoid prolonged exertion; 301+ hazardous
+#   uv_index: WHO UV index (6-7 high, 8-10 very high, 11+ extreme)
+#   gusts: Beaufort 6-8 (39-74 km/h) where play/structures become hard or unsafe
+# Limits: *_max / *_caution are upper bounds, *_min are lower bounds. Profiles may only tighten them.
+
+defaults:
+  daylight: preferred          # required | preferred | any
+  exertion: moderate           # low | moderate | high  -> air-quality sensitivity
+  default_duration_min: 60
+  default_radius_km: 10
+  min_area_m2: 0
+  comfort: {apparent_lo: 15, apparent_hi: 29}
+  wind_comfort_kmh: 25
+  limits:
+    apparent_max: 40
+    apparent_caution: 33
+    temp_min: 3
+    gust_max: 55
+    gust_caution: 38
+    precip_prob_max: 80
+    precip_prob_caution: 40
+    us_aqi_max: 200
+    us_aqi_unhealthy: 150
+    us_aqi_caution: 100
+    uv_caution: 8
+  weights: {thermal: 0.22, rain: 0.15, wind: 0.06, uv: 0.07, air: 0.15, exposure: 0.12, setting: 0.1, access: 0.08, light: 0.05}
+  setting: {green: 0.6, water: 0.2, quiet: 0.2}
+
+activities:
+  running:
+    label: Running / jogging
+    synonyms: [run, running, jog, jogging, sprint, sprints, marathon, 5k, 10k, half marathon]
+    exertion: high
+    nominatim_phrases: [park, running track, garden]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    venues: ['nwr["leisure"="park"]', 'nwr["leisure"="track"]["access"!~"private|no"]', 'nwr["leisure"="nature_reserve"]', 'nwr["leisure"="garden"]']
+    min_area_m2: 8000
+    comfort: {apparent_lo: 10, apparent_hi: 27}
+    limits: {apparent_max: 38, apparent_caution: 31}
+    weights: {thermal: 0.24, rain: 0.12, wind: 0.04, uv: 0.06, air: 0.22, exposure: 0.16, setting: 0.08, access: 0.06, light: 0.02}
+
+  walking:
+    label: Walking / nature walk
+    synonyms: [walk, walking, stroll, morning walk, evening walk, brisk walk, nature walk, promenade]
+    exertion: moderate
+    nominatim_phrases: [park, garden, promenade]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    venues: ['nwr["leisure"="park"]', 'nwr["leisure"="garden"]', 'nwr["leisure"="nature_reserve"]', 'way["highway"="footway"]["name"]', 'way["highway"="pedestrian"]["name"]']
+    min_area_m2: 3000
+    comfort: {apparent_lo: 12, apparent_hi: 29}
+    limits: {apparent_max: 40, apparent_caution: 33}
+    weights: {thermal: 0.24, rain: 0.13, wind: 0.04, uv: 0.07, air: 0.18, exposure: 0.14, setting: 0.12, access: 0.06, light: 0.02}
+
+  cycling:
+    label: Cycling (leisure or commute)
+    synonyms: [cycle, cycling, bike, biking, bicycle, ride to work, cycle to work, commute by bike, mtb]
+    exertion: high
+    nominatim_phrases: [cycleway, park]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    venues: ['way["highway"="cycleway"]["name"]', 'nwr["leisure"="park"]', 'nwr["leisure"="track"]["sport"~"cycling"]']
+    min_area_m2: 20000
+    comfort: {apparent_lo: 10, apparent_hi: 28}
+    wind_comfort_kmh: 20
+    limits: {gust_max: 45, gust_caution: 32, precip_prob_max: 70}
+    weights: {thermal: 0.2, rain: 0.16, wind: 0.12, uv: 0.05, air: 0.17, exposure: 0.16, setting: 0.04, access: 0.08, light: 0.02}
+
+  golf:
+    label: Golf
+    synonyms: [golf, golfing, tee time, driving range, 18 holes, nine holes]
+    daylight: required
+    default_duration_min: 240
+    default_radius_km: 30
+    nominatim_phrases: [golf course]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    require_sport_match: true    # drop venues whose OSM sport tag is a different sport
+    venues: ['nwr["leisure"="golf_course"]']
+    min_area_m2: 150000
+    comfort: {apparent_lo: 15, apparent_hi: 30}
+    wind_comfort_kmh: 20
+    limits: {apparent_max: 41, gust_max: 50, precip_prob_max: 60, recent_rain_mm_caution: 10}
+    weights: {thermal: 0.25, rain: 0.2, wind: 0.14, uv: 0.1, air: 0.08, exposure: 0.04, setting: 0.02, access: 0.12, light: 0.05}
+
+  cricket:
+    label: Cricket (match or practice)
+    synonyms: [cricket, nets, net practice, batting practice, bowling practice, cricket match, box cricket, gully cricket]
+    daylight: required
+    default_duration_min: 180
+    nominatim_phrases: [cricket ground, stadium, sports centre]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    require_sport_match: true    # drop venues whose OSM sport tag is a different sport
+    venues: ['nwr["sport"~"cricket"]', 'nwr["leisure"="pitch"]["sport"~"cricket"]', 'nwr["leisure"="stadium"]["sport"~"cricket"]', 'nwr["leisure"="sports_centre"]["sport"~"cricket"]', 'nwr["leisure"="recreation_ground"]']
+    min_area_m2: 6000
+    comfort: {apparent_lo: 15, apparent_hi: 31}
+    limits: {apparent_max: 40, precip_prob_max: 50, precip_prob_caution: 30, recent_rain_mm_caution: 5}
+    weights: {thermal: 0.26, rain: 0.22, wind: 0.04, uv: 0.12, air: 0.1, exposure: 0.06, setting: 0.02, access: 0.13, light: 0.05}
+
+  football:
+    label: Outdoor football / five-a-side
+    synonyms: [football, soccer, five-a-side, 5-a-side, futsal, turf, kickabout]
+    exertion: high
+    nominatim_phrases: [football ground, sports centre, stadium]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    require_sport_match: true    # drop venues whose OSM sport tag is a different sport
+    venues: ['nwr["sport"~"soccer"]', 'nwr["leisure"="pitch"]["sport"~"soccer"]', 'nwr["leisure"="sports_centre"]["sport"~"soccer"]']
+    min_area_m2: 400
+    comfort: {apparent_lo: 12, apparent_hi: 28}
+    limits: {apparent_max: 38, apparent_caution: 32, precip_prob_max: 70, recent_rain_mm_caution: 10}
+    weights: {thermal: 0.27, rain: 0.18, wind: 0.04, uv: 0.07, air: 0.16, exposure: 0.08, setting: 0.02, access: 0.15, light: 0.03}
+
+  tennis:
+    label: Outdoor tennis
+    synonyms: [tennis, lawn tennis, tennis court, doubles, singles match]
+    exertion: high
+    nominatim_phrases: [tennis court, sports centre]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    require_sport_match: true    # drop venues whose OSM sport tag is a different sport
+    venues: ['nwr["sport"~"tennis"]', 'nwr["leisure"="pitch"]["sport"~"tennis"]', 'nwr["leisure"="sports_centre"]["sport"~"tennis"]']
+    comfort: {apparent_lo: 12, apparent_hi: 28}
+    wind_comfort_kmh: 15
+    limits: {apparent_max: 38, apparent_caution: 32, gust_max: 40, gust_caution: 25, precip_prob_max: 50, recent_rain_mm_caution: 2}
+    weights: {thermal: 0.25, rain: 0.18, wind: 0.14, uv: 0.08, air: 0.13, exposure: 0.06, setting: 0.0, access: 0.14, light: 0.02}
+
+  hiking:
+    label: Hiking / trek
+    synonyms: [hike, hiking, trek, trekking, trail, trails, fort trek, hill climb, nature trail]
+    exertion: high
+    daylight: required
+    default_duration_min: 240
+    default_radius_km: 25
+    nominatim_phrases: [nature reserve, peak, fort, viewpoint]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    venues: ['nwr["leisure"="nature_reserve"]', 'node["natural"="peak"]["name"]', 'nwr["tourism"="viewpoint"]', 'nwr["historic"="fort"]', 'relation["route"="hiking"]', 'nwr["boundary"="protected_area"]["name"]']
+    comfort: {apparent_lo: 8, apparent_hi: 27}
+    limits: {apparent_max: 37, apparent_caution: 31, gust_max: 50, precip_prob_max: 60, precip_prob_caution: 35, recent_rain_mm_caution: 10}
+    weights: {thermal: 0.22, rain: 0.22, wind: 0.08, uv: 0.07, air: 0.08, exposure: 0.03, setting: 0.15, access: 0.1, light: 0.05}
+    setting: {green: 0.7, water: 0.2, quiet: 0.1}
+    travel_tolerance: 2.5     # multiplies the user's travel limit: longer trips are normal for hikes
+
+  picnic:
+    label: Picnic / park outing
+    synonyms: [picnic, park outing, day out in the park, family outing, bbq, barbecue]
+    exertion: low
+    daylight: required
+    default_duration_min: 180
+    nominatim_phrases: [park, garden, picnic site]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    venues: ['nwr["leisure"="park"]', 'nwr["leisure"="garden"]', 'nwr["tourism"="picnic_site"]', 'nwr["leisure"="common"]']
+    min_area_m2: 5000
+    comfort: {apparent_lo: 17, apparent_hi: 30}
+    wind_comfort_kmh: 20
+    limits: {gust_max: 45, precip_prob_max: 50, precip_prob_caution: 30}
+    weights: {thermal: 0.26, rain: 0.22, wind: 0.08, uv: 0.1, air: 0.08, exposure: 0.06, setting: 0.12, access: 0.06, light: 0.02}
+
+  outdoor_event:
+    label: Outdoor event / gathering (wedding, party, fair)
+    synonyms: [event, gathering, wedding, shaadi, reception, birthday party, party, fair, mela, festival, concert, get-together]
+    exertion: low
+    default_duration_min: 240
+    nominatim_phrases: [park, garden, events venue]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    venues: ['nwr["leisure"="park"]', 'nwr["leisure"="garden"]', 'nwr["amenity"="events_venue"]', 'nwr["leisure"="common"]', 'nwr["landuse"="recreation_ground"]']
+    min_area_m2: 2000
+    comfort: {apparent_lo: 18, apparent_hi: 30}
+    wind_comfort_kmh: 18
+    limits: {gust_max: 40, gust_caution: 28, precip_prob_max: 50, precip_prob_caution: 25}
+    weights: {thermal: 0.26, rain: 0.26, wind: 0.12, uv: 0.06, air: 0.08, exposure: 0.04, setting: 0.06, access: 0.1, light: 0.02}
+
+  photography:
+    label: Outdoor photography
+    synonyms: [photo, photos, photography, photoshoot, photo walk, sunset photos, sunrise photos, golden hour, shoot, pictures]
+    exertion: low
+    daylight: any
+    default_duration_min: 90
+    nominatim_phrases: [viewpoint, beach, promenade, fort]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    venues: ['nwr["tourism"="viewpoint"]', 'nwr["natural"="beach"]', 'nwr["leisure"="promenade"]', 'nwr["historic"]["name"]', 'nwr["tourism"="attraction"]', 'nwr["natural"="water"]["name"]', 'nwr["man_made"="pier"]']
+    comfort: {apparent_lo: 5, apparent_hi: 33}
+    limits: {apparent_max: 43, precip_prob_max: 85, precip_prob_caution: 50, us_aqi_max: 300, us_aqi_unhealthy: 200, visibility_min_m: 4000}
+    weights: {thermal: 0.1, rain: 0.15, wind: 0.05, uv: 0.02, air: 0.08, exposure: 0.0, setting: 0.2, access: 0.1, light: 0.3}
+    setting: {green: 0.2, water: 0.6, quiet: 0.2}
+    golden_hour: true
+
+  yoga:
+    label: Outdoor yoga
+    synonyms: [yoga, meditation, tai chi, stretching, pranayama]
+    exertion: low
+    nominatim_phrases: [park, garden, beach]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    venues: ['nwr["leisure"="park"]', 'nwr["leisure"="garden"]', 'nwr["natural"="beach"]']
+    min_area_m2: 3000
+    comfort: {apparent_lo: 15, apparent_hi: 29}
+    limits: {apparent_max: 38, us_aqi_caution: 80}
+    weights: {thermal: 0.24, rain: 0.15, wind: 0.06, uv: 0.07, air: 0.2, exposure: 0.12, setting: 0.12, access: 0.04, light: 0.0}
+
+  birdwatching:
+    label: Birdwatching
+    synonyms: [birdwatching, bird watching, birding, birds, flamingo, flamingos]
+    exertion: low
+    daylight: required
+    default_duration_min: 120
+    nominatim_phrases: [nature reserve, wetland, lake]   # fallback venue search (Nominatim special phrases) if Overpass is down
+    venues: ['nwr["leisure"="nature_reserve"]', 'nwr["natural"="wetland"]', 'nwr["natural"="water"]["name"]', 'nwr["leisure"="bird_hide"]']
+    comfort: {apparent_lo: 10, apparent_hi: 30}
+    limits: {gust_max: 50, precip_prob_max: 70}
+    weights: {thermal: 0.2, rain: 0.18, wind: 0.07, uv: 0.06, air: 0.06, exposure: 0.03, setting: 0.25, access: 0.1, light: 0.05}
+    setting: {green: 0.4, water: 0.5, quiet: 0.1}
