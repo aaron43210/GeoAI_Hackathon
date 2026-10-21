@@ -19,7 +19,8 @@ polarity:
   - flag_triggers: ["US AQI", "PM2.5"]
     flagged_when: ["above", "limit", "N95", "unhealthy", "caution"]
     forbidden: ["good air", "clean air", "fresh air", "excellent air", "healthy air", "air is good", "air quality is good",
-                "good air quality", "great air", "low pollution", "pollution-free"]
+                "good air quality", "great air", "low pollution", "pollution-free", "manageable", "not a concern",
+                "nothing to worry", "safe to play", "safe for exercise"]
     forbidden_regex: ['\b(?:low|good|clean|great|excellent|healthy|safe|fine|decent|pleasant|acceptable|moderate|okay|ok|reasonable)\s+(?:us\s+)?(?:aqi|air|pm2\.5)',
                       '\b(?:air|air quality|aqi)\s+(?:is|looks|remains|stays)\s+(?:good|fine|acceptable|okay|ok|clean|decent|reasonable|healthy|safe)']
   - flag_triggers: ["feels-like temperature"]
@@ -36,6 +37,13 @@ citation_window_chars: 14
 
 # Any stretch of this many characters appearing twice marks the answer as looping (it is then repaired/templated).
 repetition_min_chars: 40
+
+# A fact-sheet HEALTH WARNING must be stated in the answer.
+health_warning:
+  required_any: ["warning", "unhealthy", "reduce", "limit", "light and short", "avoid prolonged", "sensitive"]
+
+# Claims of absence must be true: if the sheet lists OTHER OPTIONS, the answer may not deny them.
+absence_claims: ["no other options", "no alternatives", "no other option", "no other places", "no other venues"]
 
 # When nothing is recommended, the answer must say so and must not present a "best pick".
 not_recommended:

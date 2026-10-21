@@ -68,3 +68,17 @@ def test_looping_answer_fails():
     loop = "Lakeside Garden [E1], Thu 22 Oct 17:00–18:00, score 81/100; " * 3
     r = verify("**Best pick:** " + loop, SHEET, IDS, NAMES, "Lakeside Garden")
     assert any("repeated text" in v for v in r.violations)
+
+
+def test_health_warning_must_be_stated_and_not_softened():
+    sheet = SHEET.replace("FACTS:", "HEALTH WARNING: [E8] US AQI 177 is unhealthy (above 150): keep exertion light and short\nFACTS:")
+    ids = IDS | {"E8"}
+    soft = "**Best pick:** Lakeside Garden [E1]; air is manageable [E5]."
+    r = verify(soft, sheet, ids, NAMES, "Lakeside Garden")
+    assert any("health warning" in v for v in r.violations) and any("manageable" in v for v in r.violations)
+
+
+def test_false_absence_claim_fails():
+    sheet = SHEET + "\nOTHER OPTIONS:\n[E8] Hill Park, Thu 22 Oct 17:00–18:00, score [E9] 70"
+    r = verify("**Best pick:** Lakeside Garden [E1]. No other options available.", sheet, IDS | {"E8", "E9"}, NAMES)
+    assert any("other options" in v for v in r.violations)

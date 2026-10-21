@@ -35,6 +35,8 @@ preference_boost: 2.0        # user preference (quiet/shade/water/avoid_traffic)
 min_reportable_score: 35     # windows below this are reported as "poor" even if not gated
 alternatives: 2
 contrast_min_gap: 8          # report a "why not then" contrast only if the score gap is at least this
+# A high-severity caution (e.g. US AQI > 150) caps that hour's score, so comfort can't mask a health risk.
+severity_score_cap: {high: 55}
 storm_codes: [95, 96, 99]    # WMO weather codes for thunderstorms (Open-Meteo weather_code)
 aqi_rising_delta: 20         # rise in US AQI within a window that triggers a "worsening" note
 water_litres_per_30min: {low: 0.25, moderate: 0.35, high: 0.5}

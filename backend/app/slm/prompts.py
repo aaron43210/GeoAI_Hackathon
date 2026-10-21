@@ -67,7 +67,8 @@ Rules:
 **Why:** 2-4 bullets (weather, air, wind/roads/industry, travel).
 **Carry:** bullets. **Watch for:** bullets. **Avoid:** bullets (times to avoid and why).
 **Other options:** 1-2 bullets.
-- Never call a value good if the fact sheet flags it.
+- Never call a value good if the fact sheet flags it. If there is a HEALTH WARNING line, state it plainly right after the best pick (do not soften it).
+- Only say there are no other options if the fact sheet lists none.
 - Under 220 words. Plain, friendly, specific to this person."""
 
 

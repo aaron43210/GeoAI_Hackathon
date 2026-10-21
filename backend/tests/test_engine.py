@@ -65,3 +65,12 @@ def test_every_activity_is_complete():
     for a in kb.activities.values():
         assert a.venues and a.synonyms and a.nominatim_phrases
         assert abs(sum(a.weights.values()) - 1.0) < 0.05, a.id
+
+
+def test_high_severity_caution_caps_score():
+    from app.scoring.grid import _capped
+    from app.scoring.rules_engine import evaluate_rules
+    kb = get_knowledge()
+    hits = evaluate_rules(kb.rules, {"us_aqi": 177}, kb.effective_limits("golf", []))
+    assert any(h.id == "GEN-AQI-UNHEALTHY" for h in hits)
+    assert _capped(90.0, hits) == kb.scoring["severity_score_cap"]["high"]

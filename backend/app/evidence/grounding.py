@@ -158,6 +158,14 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
             if p in low_answer:
                 violations.append(f"'{p}' used for a not-recommended result")
 
+    if "HEALTH WARNING:" in sheet and not any(w in low_answer for w in cfg["health_warning"]["required_any"]):
+        violations.append("health warning in the fact sheet is not stated in the answer")
+    has_options = any(ln.startswith("OTHER OPTIONS:") for ln in sheet.splitlines()) and \
+        len(sheet.split("OTHER OPTIONS:", 1)[1].split("LIMITATIONS:", 1)[0].strip()) > 0
+    if has_options:
+        for phrase in cfg["absence_claims"]:
+            if phrase in low_answer:
+                violations.append(f"says '{phrase}' but the fact sheet lists other options")
     sheet_lines = [ln.lower() for ln in sheet.splitlines()]
     for rule in cfg["polarity"]:
         triggers = [t.lower() for t in rule["flag_triggers"]]

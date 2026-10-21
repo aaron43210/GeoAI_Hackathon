@@ -52,14 +52,29 @@ async def _collect(request: Request, body: AskRequest) -> Dict[str, Any]:
         raise HTTPException(504, "timed out while fetching live data; please retry")
 
 
+def _as_text(result: Dict[str, Any]) -> str:
+    """Markdown answer + score breakdown + data timestamps + sources (for humans and curl)."""
+    from app.scoring.grid import FACTOR_LABELS
+    parts = [result.get("answer_markdown", "")]
+    pick = result.get("recommendation") or result.get("least_bad")
+    if pick and pick.get("factors"):
+        bits = ", ".join(f"{FACTOR_LABELS.get(k, k)} {round(v * 100)}%" for k, v in pick["factors"].items())
+        parts.append(f"Score {pick['score']}/100 = weighted sub-scores (activity weights in knowledge/activities.yaml): "
+                     f"{bits}" + (f"; status: {pick['status']}" if pick.get("status") else ""))
+    times = sorted({e["retrieved_at"] for e in result.get("evidence", []) if e.get("retrieved_at")})
+    if times:
+        parts.append(f"Live data retrieved {times[0].replace('T', ' ')[:16]} UTC; travel times are OSRM free-flow "
+                     "with a typical-traffic estimate (no live traffic).")
+    return "\n\n".join(parts) + "\n\n---\n" + "\n".join(result.get("sources", []))
+
+
 @router.post("/ask")
 async def ask(body: AskRequest, request: Request, format: str = Query("json", pattern="^(json|text)$")):
     """Ask the assistant. Returns the grounded answer, structured recommendation, evidence and sources.
     `?format=text` returns only the markdown answer (handy for curl)."""
     result = await _collect(request, body)
     if format == "text" or "text/plain" in request.headers.get("accept", ""):
-        text = result.get("answer_markdown", "") + "\n\n---\n" + "\n".join(result.get("sources", []))
-        return PlainTextResponse(text)
+        return PlainTextResponse(_as_text(result))
     return result
 
 

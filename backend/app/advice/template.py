@@ -28,13 +28,15 @@ def render(sheet_text: str) -> str:
     head: Dict[str, str] = {}
     for ln in lines:
         key = ln.split(":", 1)[0]
-        if key in ("BEST", "RESULT", "CARRY", "WATCH FOR", "LIMITATIONS"):
+        if key in ("BEST", "RESULT", "CARRY", "WATCH FOR", "LIMITATIONS", "HEALTH WARNING"):
             head[key] = ln.split(":", 1)[1].strip()
     parts: List[str] = []
     if "BEST" in head:
         parts.append(f"**Best pick:** {head['BEST']}")
     elif "RESULT" in head:
         parts.append(f"**Heads-up:** {head['RESULT']}")
+    if "HEALTH WARNING" in head:
+        parts.append(f"⚠️ **Health warning:** {head['HEALTH WARNING']}")
     facts = _section(lines, "FACTS:")
     if facts:
         parts.append("**Why (live data):**\n" + "\n".join(f"- {f}" for f in facts))

@@ -198,6 +198,11 @@ class FactSheetBuilder:
                          key=f"score:{v.id}:{focus.start}", method="weighted sub-scores (knowledge/scoring.yaml)")
         if g.best:
             lines.append(f"BEST: [{vid}] {v.name}, {fmt_window(focus)}, score [{sid}] {fmt(focus.score)}/100")
+            severe = [h for h in focus.concerns if h.severity == "high"]
+            for h in severe:
+                hid = self.L.add(h.id, h.value, None, "rule " + h.id + " on forecast values", None, "derived",
+                                 key=f"warn:{h.id}:{v.id}:{focus.start}")
+                lines.append(f"HEALTH WARNING: [{hid}] {h.text}")
         else:
             lines.append(f"RESULT: NOT RECOMMENDED in the requested time: every hour hits a safety limit. "
                          f"Least-bad option: [{vid}] {v.name}, {fmt_window(focus)} (score [{sid}] {fmt(focus.score)})")
@@ -264,6 +269,11 @@ class FactSheetBuilder:
         if others:
             lines.append("OTHER OPTIONS:")
             lines += others
+        oh = g.venues[focus.venue].features.opening_hours if focus else None
+        avail = ("opening hours (OSM: " + oh + ") and bookings were not checked live") if oh else \
+            "opening hours, entry rules and bookings (e.g. tee times, court slots) were not checked"
+        if avail not in self.limitations:
+            self.limitations.append(avail)
         if self.limitations:
             lines.append("LIMITATIONS: " + "; ".join(self.limitations))
 

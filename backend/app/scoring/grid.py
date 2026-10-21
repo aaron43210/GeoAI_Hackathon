@@ -244,7 +244,7 @@ def build_grid(venues: List[VenueCtx], windows: List[Window], act: ActivityProfi
             status = "avoid" if any(h.decision == "avoid" and h.state == Tri.TRUE for h in hits) else (
                 "caution" if any(h.decision == "caution" and h.state == Tri.TRUE for h in hits) else "ok")
             row.append(Cell(venue=vi, ts=ts, dt=dt, vars=v, factors=factors, exposure=expo, hits=hits,
-                            travel_min=travel_min, score=round(max(0.0, min(100.0, base - penalty)), 1), status=status))
+                            travel_min=travel_min, score=_capped(base - penalty, hits), status=status))
         cells[vi] = row
 
     # group into activity-length windows inside each resolved window
@@ -303,6 +303,14 @@ def build_grid(venues: List[VenueCtx], windows: List[Window], act: ActivityProfi
     return GridResult(venues=venues, cells=cells, windows=picks, best=best, alternatives=alternatives,
                       alt_time=alt_time, least_bad=least_bad, compare=compare, avoid_ranges=avoid_ranges,
                       contrast=contrast, limits=limits, weights=weights)
+
+
+def _capped(score: float, hits: List[RuleHit]) -> float:
+    caps = get_knowledge().scoring.get("severity_score_cap", {})
+    for h in hits:
+        if h.decision == "caution" and h.state == Tri.TRUE and h.severity in caps:
+            score = min(score, caps[h.severity])
+    return round(max(0.0, min(100.0, score)), 1)
 
 
 def _dedupe(hits: List[RuleHit]) -> List[RuleHit]:
