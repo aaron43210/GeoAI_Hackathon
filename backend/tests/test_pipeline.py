@@ -169,3 +169,31 @@ def test_missing_location_asks():
 
 def test_out_of_scope():
     assert _ask("can you recommend a good stock to buy")["status"] == "out_of_scope"
+
+
+class _QuotaExhaustedSLM:
+    """Behaves like ZeroGPU after the caller's free runs are used up."""
+    ready = True
+
+    def complete(self, *a, **k):
+        raise RuntimeError("You have exceeded your ZeroGPU runs limit")
+
+    def stream(self, *a, **k):
+        raise RuntimeError("You have exceeded your ZeroGPU runs limit")
+        yield  # pragma: no cover
+
+    def describe(self):
+        return {"backend": "stub", "loaded": True, "path_used": "finetuned"}
+
+
+@respx.mock(assert_all_called=False)
+def test_gpu_quota_exhausted_still_answers(respx_mock):
+    _mock(respx_mock)
+    from app.main import app
+    with TestClient(app) as c:
+        app.state.pipeline.slm = _QuotaExhaustedSLM()
+        r = c.post("/api/v1/ask", json={"question": "running tomorrow evening near Testville"})
+        assert r.status_code == 200
+        body = r.json()
+        assert body["status"] in ("ok", "partial") and body["grounding"]["status"] == "templated"
+        assert body["intent"]["path"] == "rules (SLM failed)" and body["answer_markdown"]

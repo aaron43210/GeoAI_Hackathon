@@ -283,15 +283,22 @@ class Pipeline:
             draft = strip_think(draft)
             g1 = verify(draft, sheet.text, sheet.ledger.ids(), sheet.allowed_names, must, recommended=grid.best is not None,
                         ledger_values={e.id: e.value for e in sheet.ledger.items})
-            if g1.status == "passed":
+            if not draft.strip():
+                # the model produced nothing (e.g. GPU quota exhausted): don't retry, use the data template
+                grounding = {"status": "templated", "reason": "language model unavailable for this request"}
+            elif g1.status == "passed":
                 answer, grounding, path = draft, {"status": "passed", **_g(g1)}, "slm"
             else:
                 yield _stage("verify", "Fixing facts that didn't match the data…")
                 msgs = compose_messages(sheet.text) + [{"role": "assistant", "content": draft},
                                                        {"role": "user", "content": REPAIR_NOTE.format(
                                                            violations="; ".join(g1.violations))}]
-                fixed = strip_think(await asyncio.to_thread(self.slm.complete, msgs,
-                                                            max_tokens=self.settings.SLM_MAX_TOKENS_ANSWER))
+                try:
+                    fixed = strip_think(await asyncio.to_thread(self.slm.complete, msgs,
+                                                                max_tokens=self.settings.SLM_MAX_TOKENS_ANSWER))
+                except Exception as exc:  # noqa: BLE001 - e.g. GPU quota; never fail the request over phrasing
+                    logger.warning("SLM repair failed (%s); using the data template", exc)
+                    fixed = ""
                 g2 = verify(fixed, sheet.text, sheet.ledger.ids(), sheet.allowed_names, must, recommended=grid.best is not None,
                         ledger_values={e.id: e.value for e in sheet.ledger.items})
                 if g2.status == "passed":
