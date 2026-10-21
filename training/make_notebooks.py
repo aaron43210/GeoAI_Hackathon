@@ -57,7 +57,7 @@ Open this notebook in VS Code with the **Colab extension** and pick a **T4 GPU**
 
 1. intent data: generated with exact labels (`training/gen_intent_data.py`)
 2. real fact sheets: the live pipeline (SLM off) on ~160 generated questions (`training/build_compose_data.py`)
-3. answer drafts: an **open** teacher (Qwen3-8B, 4-bit) writes answers from each fact sheet; only drafts that pass
+3. answer drafts: an **open** teacher (Qwen3-4B, fp16, batched) writes answers from each fact sheet; only drafts that pass
    the runtime **grounding verifier** are kept. No hosted/proprietary LLM is used anywhere.
 '''),
     ("code", "!nvidia-smi --query-gpu=name,memory.total --format=csv"),
@@ -67,44 +67,60 @@ Open this notebook in VS Code with the **Colab extension** and pick a **T4 GPU**
     ("code", "!python training/build_compose_data.py --n 160 --pause 2 --out training/data/factsheets.jsonl"),
     ("markdown", "### Open teacher drafts → keep only answers that pass the grounding verifier"),
     ("code", r'''
-!pip -q install -U "transformers>=4.51" accelerate bitsandbytes
+!pip -q install -U "transformers>=4.51" accelerate
 import json, torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
 from app.slm.prompts import compose_messages
 from app.evidence.grounding import verify
 
-TEACHER = "Qwen/Qwen3-8B"          # Apache-2.0 open weights
-tok = AutoTokenizer.from_pretrained(TEACHER)
-teacher = AutoModelForCausalLM.from_pretrained(TEACHER, device_map="auto",
-            quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.float16))
+# Open teacher in fp16 with batched generation: ~10-15 min for 160 sheets on a T4.
+# (Qwen3-8B in 4-bit was ~9 min per sheet on a T4, far too slow.)
+TEACHER = "Qwen/Qwen3-4B"          # Apache-2.0 open weights
+tok = AutoTokenizer.from_pretrained(TEACHER, padding_side="left")
+teacher = AutoModelForCausalLM.from_pretrained(TEACHER, torch_dtype=torch.float16, device_map="cuda")
 
-def draft(sheet, temperature=0.6):
-    msgs = compose_messages(sheet)
-    text = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True, enable_thinking=False)
-    ids = tok(text, return_tensors="pt").to(teacher.device)
-    out = teacher.generate(**ids, max_new_tokens=420, do_sample=True, temperature=temperature, top_p=0.9)
-    return tok.decode(out[0][ids["input_ids"].shape[1]:], skip_special_tokens=True).strip()
+def draft_batch(sheets, temperature):
+    texts = [tok.apply_chat_template(compose_messages(s), tokenize=False, add_generation_prompt=True,
+                                     enable_thinking=False) for s in sheets]
+    enc = tok(texts, return_tensors="pt", padding=True).to("cuda")
+    with torch.no_grad():
+        out = teacher.generate(**enc, max_new_tokens=320, do_sample=True, temperature=temperature,
+                               top_p=0.9, pad_token_id=tok.pad_token_id)
+    return [tok.decode(o[enc["input_ids"].shape[1]:], skip_special_tokens=True).strip() for o in out]
 '''),
     ("code", r'''
+import os
 rows = [json.loads(l) for l in open("training/data/factsheets.jsonl")]
 kept, stats = [], {"teacher": 0, "template": 0, "dropped": 0}
-for i, r in enumerate(rows):
-    best = None
-    for t in (0.5, 0.8):
-        a = draft(r["fact_sheet"], t)
-        g = verify(a, r["fact_sheet"], set(r["evidence_ids"]), r["known_names"], r["must_mention"], r["recommended"], r.get("evidence_values"))
-        if g.status == "passed":
-            best = ("teacher", a); break
-    if best is None and stats["template"] < 0.25 * len(rows):
-        best = ("template", r["template_answer"])        # grounded by construction; capped so style stays natural
-    if best is None:
-        stats["dropped"] += 1; continue
-    stats[best[0]] += 1
-    msgs = compose_messages(r["fact_sheet"]) + [{"role": "assistant", "content": best[1]}]
-    kept.append({"task": "compose", "source": best[0], "messages": msgs})
-    if i % 10 == 0: print(i, stats)
-with open("training/data/compose.jsonl", "w") as fh:
-    for k in kept: fh.write(json.dumps(k, ensure_ascii=False) + "\n")
+if os.path.exists("training/data/compose.jsonl"):           # resume after an interruption
+    kept = [json.loads(l) for l in open("training/data/compose.jsonl")]
+    for k in kept: stats[k["source"]] += 1
+done = {k["messages"][1]["content"] for k in kept}
+todo = [r for r in rows if r["fact_sheet"] not in done]
+print(len(kept), "kept so far,", len(todo), "to go")
+
+def ok(r, a):
+    return verify(a, r["fact_sheet"], set(r["evidence_ids"]), r["known_names"], r["must_mention"],
+                  r["recommended"], r.get("evidence_values")).status == "passed"
+
+def save(r, src, ans):
+    msgs = compose_messages(r["fact_sheet"]) + [{"role": "assistant", "content": ans}]
+    item = {"task": "compose", "source": src, "messages": msgs}
+    kept.append(item); stats[src] += 1
+    with open("training/data/compose.jsonl", "a") as fh: fh.write(json.dumps(item, ensure_ascii=False) + "\n")
+
+B = 8                                   # lower to 4 if CUDA runs out of memory
+for i in range(0, len(todo), B):
+    batch = todo[i:i + B]
+    retry = []
+    for r, a in zip(batch, draft_batch([r["fact_sheet"] for r in batch], 0.5)):
+        save(r, "teacher", a) if ok(r, a) else retry.append(r)
+    if retry:
+        for r, a in zip(retry, draft_batch([r["fact_sheet"] for r in retry], 0.8)):
+            if ok(r, a): save(r, "teacher", a)
+            elif stats["template"] < 0.25 * len(rows): save(r, "template", r["template_answer"])
+            else: stats["dropped"] += 1
+    print(f"{min(i + B, len(todo))}/{len(todo)}", stats)
 print("final", stats, "kept", len(kept))
 '''),
     ("code", HF_LOGIN),

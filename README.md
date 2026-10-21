@@ -109,7 +109,7 @@ docker compose up --build                  # http://localhost:8000
   SmolLM3 (3.08 B), Gemma-3n-E2B (5.4 B). Script: [backend/eval/bakeoff.py](backend/eval/bakeoff.py).
 * Training runs **only in Google Colab** (VS Code Colab extension, free T4):
   1. [training/01_build_data_colab.ipynb](training/01_build_data_colab.ipynb): ~3,000 generated intent examples with exact
-     labels + ~160 real fact sheets from the live pipeline; answer drafts from the open **Qwen3-8B**, kept only if they
+     labels + ~160 real fact sheets from the live pipeline; answer drafts from the open **Qwen3-4B** (fp16, batched), kept only if they
      pass the grounding verifier.
   2. [training/02_finetune_lora_colab.ipynb](training/02_finetune_lora_colab.ipynb): Unsloth LoRA (r=16, α=32, 2 epochs,
      completion-only loss), before/after eval, push adapter + merged model + GGUF + model card.
@@ -139,7 +139,7 @@ Map data © OpenStreetMap contributors (ODbL). Weather data by Open-Meteo.com (C
 
 ## Disclosures
 * Runtime model: Qwen3-1.7B (+ our LoRA), run locally with llama.cpp. No hosted LLM in the running assistant.
-* Training-data teacher: Qwen3-8B (open weights), run in Colab.
+* Training-data teacher: Qwen3-4B (open weights, Apache-2.0), run in Colab.
 * AI coding assistants used during development: Claude Code (Anthropic) for code and docs. ‹add any others you used›.
 
 ## Repo map

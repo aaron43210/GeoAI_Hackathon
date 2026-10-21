@@ -42,7 +42,7 @@ Decisions, Findings, Open questions, Session log. Newest first. Keep it under ~2
   avoid >200; sensitive profiles: avoid >150, caution >100 (asthma/pregnancy/cardiac from 50).
 - **2026-10-21: No preloaded datasets** (user spec). Geofabrik fallback dropped; Nominatim category search is the live
   fallback for venues.
-- **2026-10-21: Training only in Colab** (user instruction). Teacher = open Qwen3-8B; drafts kept only if they pass the
+- **2026-10-21: Training only in Colab** (user instruction). Teacher = open Qwen3-4B fp16, batched (Qwen3-8B 4-bit took ~9 min/sheet on a T4, too slow); drafts kept only if they pass the
   runtime verifier.
 - **2026-10-21: Single container** serving UI + API (port 7860 in Docker, 8000 locally).
 - **2026-10-21: Clarify genuinely ambiguous places** (equal-rank same-type places in different states, e.g. Jayanagar);

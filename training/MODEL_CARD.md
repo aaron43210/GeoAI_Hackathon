@@ -33,7 +33,7 @@ are repaired once or replaced by a template.
   - intent: programmatically generated questions with exact labels (Indian localities, 13 activities, profiles,
     Hinglish, typos, out-of-scope, follow-ups);
   - compose: fact sheets produced by the live pipeline; target answers drafted by the **open** model
-    `Qwen/Qwen3-8B` and kept **only if they pass the grounding verifier**, plus a minority of template answers.
+    `Qwen/Qwen3-4B` and kept **only if they pass the grounding verifier**, plus a minority of template answers.
   - No proprietary/hosted LLM was used to create data. The hackathon's example questions and our eval gold set are excluded.
 - Prompt format: ChatML with an empty `<think></think>` block (thinking disabled), identical at train and inference.
 
