@@ -65,10 +65,17 @@ Open this notebook in VS Code with the **Colab extension** and pick a **T4 GPU**
     ("code", "!python training/gen_intent_data.py --n 3000 --out training/data/intent.jsonl\n!head -c 600 training/data/intent.jsonl"),
     ("markdown", "### Real fact sheets from live APIs (≈15–25 min, paced to respect free-API limits)"),
     ("code", "!python training/build_compose_data.py --n 160 --pause 2 --out training/data/factsheets.jsonl"),
-    ("markdown", "### Open teacher drafts → keep only answers that pass the grounding verifier"),
+    ("markdown", "### Open teacher drafts → keep only answers that pass the grounding verifier\n"
+                 "Batched fp16 Qwen3-4B: about 10–15 min for 160 sheets. Safe to interrupt and re-run: the next cell "
+                 "resumes from `training/data/compose.jsonl`. If CUDA runs out of memory, set `B = 4`."),
     ("code", r'''
 !pip -q install -U "transformers>=4.51" accelerate
-import json, torch
+import json, gc, torch
+# If an earlier teacher (e.g. the old Qwen3-8B cell) is still in GPU memory, free it first.
+for _name in ("teacher", "model"):
+    if _name in globals():
+        del globals()[_name]
+gc.collect(); torch.cuda.empty_cache()
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from app.slm.prompts import compose_messages
 from app.evidence.grounding import verify
@@ -91,6 +98,15 @@ def draft_batch(sheets, temperature):
     ("code", r'''
 import os
 rows = [json.loads(l) for l in open("training/data/factsheets.jsonl")]
+# Keep answers from an interrupted earlier run that are still in memory but not yet on disk.
+_mem = list(globals().get("kept") or [])
+_disk = [json.loads(l) for l in open("training/data/compose.jsonl")] if os.path.exists("training/data/compose.jsonl") else []
+_seen = {k["messages"][1]["content"] for k in _disk}
+_extra = [k for k in _mem if k["messages"][1]["content"] not in _seen]
+if _extra:
+    with open("training/data/compose.jsonl", "a") as fh:
+        for k in _extra: fh.write(json.dumps(k, ensure_ascii=False) + "\n")
+    print("saved", len(_extra), "answers from the interrupted run")
 kept, stats = [], {"teacher": 0, "template": 0, "dropped": 0}
 if os.path.exists("training/data/compose.jsonl"):           # resume after an interruption
     kept = [json.loads(l) for l in open("training/data/compose.jsonl")]
