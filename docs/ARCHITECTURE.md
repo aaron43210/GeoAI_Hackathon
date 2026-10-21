@@ -1,6 +1,6 @@
-# CONNECTIONS.md — how everything in TerraPulse AI connects
+# Architecture: how TerraPulse AI connects
 
-Wiring reference for the system: external APIs, internal modules, model artifacts, frontend↔backend contract, env vars, ports and failure behaviour. Plan: [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). Rules: [AGENTS.md](AGENTS.md).
+Wiring reference for the system: external APIs, internal modules, model artifacts, frontend↔backend contract, environment variables, ports and failure behaviour.
 
 **State (21 Oct 2026, evening): everything below is implemented** unless marked *(planned)*. Endpoints marked "verified" were called live from the dev machine.
 

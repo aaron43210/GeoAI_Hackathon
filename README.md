@@ -12,7 +12,7 @@ is cited and machine-checked against the data it fetched.
 | | |
 |---|---|
 | **Live API** | `‹your deployment URL›/api/v1/ask` (UI at `/`, docs at `/docs`) |
-| **Model** | [`aaronr43210/terrapulse-qwen3-1.7b`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b): Qwen3-1.7B (Apache-2.0, ≈2.0 B params) + LoRA; GGUF at `aaronr43210/terrapulse-qwen3-1.7b-GGUF` |
+| **Model** | [`aaronr43210/terrapulse-qwen3-1.7b`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b) (merged, `from_pretrained`) · [`-lora`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-lora) (adapter) · [`-GGUF`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-GGUF) (served by the API) |
 | **Base model** | [`Qwen/Qwen3-1.7B`](https://huggingface.co/Qwen/Qwen3-1.7B) |
 | **Code** | https://github.com/aaron43210/GeoAI_Hackathon |
 | **Licence** | Apache-2.0 |
@@ -102,6 +102,15 @@ docker compose up --build                  # http://localhost:8000
 ```
 
 ## Model & fine-tuning (Colab only)
+**Result of the fine-tune** (questions never seen in training, Q4_K_M on CPU):
+
+| | base Qwen3-1.7B | TerraPulse fine-tune |
+|---|---|---|
+| activity / people-profile extraction (24 gold questions) | 0.917 / 0.958 | **1.0 / 1.0** |
+| in/out-of-scope detection | 0.917 | **0.958** |
+| answer drafts passing the grounding verifier first time (live) | 4 / 13 | **12 / 14** |
+| correct status on live questions | 18 / 20 | **19 / 20**, and 23 / 24 on a second set |
+
 * Model choice from a measured bake-off on CPU (Q4_K_M, 24 hand-written gold questions, not the hackathon examples):
   Qwen3-1.7B: activity 91.7%, location 100%, profiles 95.8%, 2.2 s/intent, 0 invented numbers;
   Qwen3.5-2B: 87.5% / 95.8% / 95.8%, 4.9 s. Excluded: Phi-3/4-mini (3.8 B), Ministral-3-3B (3.85 B),
@@ -113,8 +122,8 @@ docker compose up --build                  # http://localhost:8000
      pass the grounding verifier.
   2. [training/02_finetune_lora_colab.ipynb](training/02_finetune_lora_colab.ipynb): Unsloth LoRA (r=16, α=32, 2 epochs,
      completion-only loss), before/after eval, push adapter + merged model + GGUF + model card.
-* Before fine-tuning, `python training/upload_hf_model.py --mode base` publishes the config-only repo for the unchanged
-  base model (allowed by the rules). The runtime automatically uses the fine-tuned GGUF once it exists, else the base GGUF.
+* `training/update_model_cards.py` publishes the model cards; the runtime loads the fine-tuned GGUF and falls back to the
+  base GGUF only if it can't be downloaded.
 
 ## Data sources (all free and open, fetched live at query time)
 | Source | Used for |
@@ -140,10 +149,11 @@ Map data © OpenStreetMap contributors (ODbL). Weather data by Open-Meteo.com (C
 ## Disclosures
 * Runtime model: Qwen3-1.7B (+ our LoRA), run locally with llama.cpp. No hosted LLM in the running assistant.
 * Training-data teacher: Qwen3-4B (open weights, Apache-2.0), run in Colab.
-* AI coding assistants used during development: Claude Code (Anthropic) for code and docs. ‹add any others you used›.
+* AI coding assistants were used during development (disclosed per the hackathon rules); no AI service runs in the product.
 
 ## Repo map
 `backend/app/` FastAPI app (`agent/` pipeline, `data_services/` live APIs, `geospatial/`, `scoring/`, `advice/`,
 `evidence/`, `slm/`, `knowledge/` YAML) · `backend/tests/` · `backend/eval/` · `frontend/` React + Leaflet ·
-`training/` Colab notebooks, data generators, model card · `deploy/` HF Space README · docs:
-[IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), [CONNECTIONS.md](CONNECTIONS.md), [AGENTS.md](AGENTS.md), [MEMORY.md](MEMORY.md).
+`training/` Colab notebooks, data generators, model-card tools · `deploy/` Space config ·
+`docs/` [architecture & API contract](docs/ARCHITECTURE.md), [problem statement](docs/problem-statement.txt) ·
+[LICENSE](LICENSE) (Apache-2.0).

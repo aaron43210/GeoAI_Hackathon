@@ -8,3 +8,10 @@ backend/eval/results/
 *.gguf
 .env
 .DS_Store
+
+# local working notes (kept on the developer machine, not published)
+CLAUDE.md
+AGENTS.md
+MEMORY.md
+IMPLEMENTATION_PLAN.md
+MASTER_PRODUCTION_PROMPT.md

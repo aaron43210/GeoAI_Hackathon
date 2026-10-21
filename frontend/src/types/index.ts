@@ -1,4 +1,4 @@
-// Mirrors the backend AskResponse (see CONNECTIONS.md §4).
+// Mirrors the backend AskResponse (see docs/ARCHITECTURE.md §4).
 
 export interface Venue {
   id: string;
