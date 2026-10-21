@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     SLM_CTX: int = 4096
     SLM_USE_MMAP: bool = True                        # False = read the whole GGUF into RAM at startup (slow disks)
     SLM_TEMPERATURE: float = 0.2
-    SLM_MAX_TOKENS_ANSWER: int = 380
+    SLM_MAX_TOKENS_ANSWER: int = 520
 
     # Data sources (all free/open)
     CONTACT_EMAIL: str = "aaronr43210@gmail.com"   # Nominatim usage policy requires a contact
