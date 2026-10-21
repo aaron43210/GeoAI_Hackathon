@@ -178,6 +178,11 @@ def to_pc(r):   # prompt = exactly what the runtime sends (ChatML + empty <think
     return {"prompt": render_chatml(r["messages"][:-1]), "completion": r["messages"][-1]["content"] + "<|im_end|>",
             "task": r["task"]}
 data = [to_pc(r) for r in rows]
+# Hold out the last 20 live fact sheets for the grounding eval and keep them OUT of training (no leakage).
+_held = {json.loads(l)["fact_sheet"] for l in list(open("training/data/factsheets.jsonl"))[-20:]} \
+    if os.path.exists("training/data/factsheets.jsonl") else set()
+data = [d for d in data if not any(h in d["prompt"] for h in _held)]
+print("held out", len(_held), "fact sheets for evaluation")
 n_val = max(40, len(data) // 20)
 val, train = data[:n_val], data[n_val:]
 print(len(train), "train /", len(val), "val;", sum(d["task"] == "compose" for d in train), "compose")
