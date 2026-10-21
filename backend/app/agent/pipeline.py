@@ -341,7 +341,7 @@ class Pipeline:
         mark("compose")
 
         status = "ok" if grid.best else "not_recommended"
-        if (not osm_ok or aq is None or routes is None) and grid.best:
+        if (not osm_ok or aq is None or routes is None or (venues_feat and ctx is None)) and grid.best:
             status = "partial"
         yield final(status, _place=place.to_dict(), answer_markdown=answer, answer_path=path, grounding=grounding,
                     fact_sheet=sheet.text, evidence=sheet.ledger.to_list(), notes=notes, limitations=limitations,
@@ -387,20 +387,20 @@ class Pipeline:
         synonyms = {s.lower() for s in act.synonyms} | {act.id}
         scored = []
         for f in feats:
-            if not f.name or len(f.name.strip()) < 3 or f.tags.get("access") in excluded:
+            if not f.name or len(f.name.strip()) < cfg["min_name_chars"] or f.tags.get("access") in excluded:
                 continue
             sport_tag = f.tags.get("sport", "").lower()
             if act.require_sport_match and sport_tag and not any(s in sport_tag for s in synonyms | {act.id}):
                 continue
             d_km = haversine_m(place.latitude, place.longitude, f.lat, f.lon) / 1000
-            if d_km > radius_km * 1.05:
+            if d_km > radius_km * cfg["radius_slack"]:
                 continue
             a = area_m2(f, LocalProjection(f.lat, f.lon)) if f.kind != "node" else None
             if a is not None and act.min_area_m2 and a < act.min_area_m2:
                 continue
             sport = f.tags.get("sport", "").lower()
             tag_hit = 1.0 if sport and any(s in sport for s in synonyms) else 0.0
-            area_term = min(1.0, math.log10(a) / 6) if a and a > 1 else 0.0
+            area_term = min(1.0, math.log10(a) / cfg["area_log_scale"]) if a and a > 1 else 0.0
             pre = -cfg["distance_weight"] * d_km / radius_km + cfg["area_weight"] * area_term + cfg["tag_weight"] * tag_hit
             scored.append((pre, f))
         scored.sort(key=lambda x: -x[0])

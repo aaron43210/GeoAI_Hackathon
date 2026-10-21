@@ -58,6 +58,7 @@ class TimeResolver:
 
     # ------------------------------------------------------------------ public
     def resolve(self, text: Optional[str], now: datetime) -> Resolution:
+        r = self.lex["rules"]
         t = (text or "").lower().strip()
         days, compare, notes = self._days(t, now)
         part, part_label = self._daypart(t)
@@ -72,7 +73,7 @@ class TimeResolver:
             d = now.date()
             windows = []
             while d <= end.date():
-                s = max(dw["start"], now.hour + now.minute / 60 + 0.25) if d == now.date() else dw["start"]
+                s = max(dw["start"], now.hour + now.minute / 60 + r["min_lead_h"]) if d == now.date() else dw["start"]
                 e = dw["end"] if d < end.date() else min(dw["end"], end.hour + end.minute / 60)
                 if e - s >= 1:
                     windows.append(Window(d, s, e, "next hours"))
@@ -93,9 +94,10 @@ class TimeResolver:
         for d in days:
             if part and part.get("now"):
                 start = now.hour + now.minute / 60
-                windows.append(Window(d, start, min(23.5, start + part["hours"]), "now"))
+                windows.append(Window(d, start, min(r["day_end_h"], start + part["hours"]), "now"))
             elif hour is not None:
-                windows.append(Window(d, max(0.0, hour - 0.5), min(23.5, hour + 1.5), f"around {_fmt_h(hour)}"))
+                windows.append(Window(d, max(0.0, hour - r["explicit_before_h"]),
+                                      min(r["day_end_h"], hour + r["explicit_after_h"]), f"around {_fmt_h(hour)}"))
             elif part:
                 if part.get("anchor"):
                     windows.append(Window(d, 0, 0, part_label, anchor=part["anchor"],
@@ -111,8 +113,8 @@ class TimeResolver:
         trimmed = []
         for w in windows:
             if w.day == now.date() and not w.anchor:
-                w.start_h = max(w.start_h, cur + 0.25)
-                if w.end_h - w.start_h < 0.75:
+                w.start_h = max(w.start_h, cur + r["min_lead_h"])
+                if w.end_h - w.start_h < r["min_window_h"]:
                     continue
             trimmed.append(w)
         if not trimmed and windows:
@@ -152,20 +154,21 @@ class TimeResolver:
         if m:
             words = {"two": 2, "three": 3, "four": 4, "five": 5, "couple of": 2}
             n = int(m.group(1)) if m.group(1).isdigit() else words[m.group(1)]
-            start = today if now.hour < 20 else today + timedelta(days=1)
+            start = today if now.hour < self.lex["rules"]["late_evening_hour"] else today + timedelta(days=1)
             found = [start + timedelta(days=i) for i in range(n)]
             compare = True
 
         if "weekend" in t:
-            wk = self.lex["weekend_days"]
-            offset = 7 if "next weekend" in t and today.weekday() not in wk else 0
-            base = today + timedelta(days=offset)
-            for wd in wk:
-                delta = (wd - base.weekday()) % 7
-                d = base + timedelta(days=delta)
-                if "next weekend" in t and today.weekday() in wk:
-                    d += timedelta(days=7)
-                found.append(d)
+            wk = sorted(self.lex["weekend_days"])
+            nxt = "next weekend" in t
+            if today.weekday() in wk and not nxt:
+                # "this weekend" asked during the weekend = the rest of this weekend (not next Saturday)
+                found += [today + timedelta(days=wd - today.weekday()) for wd in wk if wd >= today.weekday()]
+            else:
+                first = today + timedelta(days=(wk[0] - today.weekday()) % 7)
+                if nxt and today.weekday() not in wk:
+                    first += timedelta(days=7)   # on a weekday, "next weekend" skips the coming one; at the weekend it is the coming one
+                found += [first + timedelta(days=wd - wk[0]) for wd in wk]
             compare = True
 
         for phrase, offset in sorted(self.lex["relative_days"].items(), key=lambda kv: -len(kv[0])):

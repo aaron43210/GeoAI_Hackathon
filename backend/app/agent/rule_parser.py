@@ -113,11 +113,14 @@ def parse(question: str) -> Intent:
         age = int(m.group(1))
     else:
         m = re.search(r"\b(?:is|aged|age|turning)\s+(\d{1,3})\b(?!\s*(?:km|kms|min|mins|minutes|am|pm|%|°|hours?|hrs?|people|guests))", q)
-        if m and 4 <= int(m.group(1)) <= 110:
+        lo, hi = _lang()["age_bounds"]
+        if m and lo <= int(m.group(1)) <= hi:
             age = int(m.group(1))
 
     radius = None
-    m = re.search(r"(?:within|under|less than|upto|up to)?\s*(\d+(?:\.\d+)?)\s*(?:km|kms|kilomet)", q)
+    # a search radius needs a spatial cue: "within 15 km", "15 km radius", "10 km from/of/around" (not "a 5 km run")
+    m = re.search(r"(?:within|under|less than|upto|up to|radius of)\s*(\d+(?:\.\d+)?)\s*(?:km|kms|kilomet)", q) or \
+        re.search(r"(\d+(?:\.\d+)?)\s*(?:km|kms|kilomet\w*)\s+(?:radius|of|from|around|away)", q)
     if m:
         radius = float(m.group(1))
     travel = None

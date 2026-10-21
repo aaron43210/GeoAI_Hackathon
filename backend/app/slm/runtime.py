@@ -133,7 +133,7 @@ class SLMRuntime:
             self.info.calls += 1
             if self.settings.SLM_BACKEND == "transformers":
                 return strip_think(self._hf_generate(prompt, max_tokens, temp))
-            kwargs: Dict[str, Any] = {"max_tokens": max_tokens, "temperature": temp, "top_p": 0.9,
+            kwargs: Dict[str, Any] = {"max_tokens": max_tokens, "temperature": temp, "top_p": self.settings.SLM_TOP_P,
                                       "repeat_penalty": self.settings.SLM_REPETITION_PENALTY,
                                       "stop": ["<|im_end|>", "<|endoftext|>"]}
             if json_schema is not None:
@@ -142,10 +142,11 @@ class SLMRuntime:
             out = self._llm.create_completion(prompt, **kwargs)
             return strip_think(out["choices"][0]["text"])
 
-    def stream(self, messages: List[Dict[str, str]], *, max_tokens: int = 380,
+    def stream(self, messages: List[Dict[str, str]], *, max_tokens: Optional[int] = None,
                temperature: Optional[float] = None) -> Iterator[str]:
         if not self.ready:
             raise RuntimeError("SLM not loaded")
+        max_tokens = max_tokens or self.settings.SLM_MAX_TOKENS_ANSWER
         if self.settings.SLM_BACKEND == "transformers":
             yield self.complete(messages, max_tokens=max_tokens, temperature=temperature)
             return
@@ -153,7 +154,7 @@ class SLMRuntime:
         with self._lock:
             self.info.calls += 1
             for chunk in self._llm.create_completion(render_chatml(messages), max_tokens=max_tokens, temperature=temp,
-                                                     top_p=0.9, repeat_penalty=self.settings.SLM_REPETITION_PENALTY,
+                                                     top_p=self.settings.SLM_TOP_P, repeat_penalty=self.settings.SLM_REPETITION_PENALTY,
                                                      stop=["<|im_end|>", "<|endoftext|>"], stream=True):
                 yield chunk["choices"][0]["text"]
 

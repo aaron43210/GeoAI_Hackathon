@@ -64,18 +64,22 @@ def exposure(sources: List[SourcePoint], wind_from_deg: Optional[float], wind_km
                           upwind_compass=compass(wind_from_deg))
 
 
+def _is_weekend(weekday: int) -> bool:
+    return weekday in get_knowledge().time["weekend_days"]
+
+
 def traffic_exposure_factor(hour: float, weekday: int) -> float:
     t = get_knowledge().geo["traffic"]
-    if weekday < 5:
+    if not _is_weekend(weekday):
         for band in t["exposure_weekday"]:
             if band["start"] <= hour < band["end"]:
                 return band["factor"]
-    return t["exposure_default"] if weekday < 5 else t["exposure_weekend"]
+    return t["exposure_weekend"] if _is_weekend(weekday) else t["exposure_default"]
 
 
 def travel_multiplier(hour: float, weekday: int) -> float:
     t = get_knowledge().geo["traffic"]
-    bands = t["weekday_multiplier"] if weekday < 5 else t["weekend_multiplier"]
+    bands = t["weekend_multiplier"] if _is_weekend(weekday) else t["weekday_multiplier"]
     for band in bands:
         if band["start"] <= hour < band["end"]:
             return band["factor"]

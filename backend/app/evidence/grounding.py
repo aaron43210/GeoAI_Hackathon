@@ -70,6 +70,22 @@ def _numeric(v) -> bool:
     return False
 
 
+def _comparison_errors(text: str, cfg: Optional[Dict[str, object]]) -> List[str]:
+    """Check 'A <exceeds|above|below|within> B' clauses: the stated order of the two numbers must be true."""
+    if not cfg:
+        return []
+    out: List[str] = []
+    gap = int(cfg.get("max_gap_chars", 60))
+    for kind, words in (("greater", cfg.get("greater", [])), ("lower", cfg.get("lower", []))):
+        alt = "|".join(re.escape(w) for w in sorted(words, key=len, reverse=True))
+        rx = re.compile(r"(\d+(?:\.\d+)?)[^.;\n\d]{0,%d}?\b(?:%s)\b[^.;\n\d]{0,%d}?(\d+(?:\.\d+)?)" % (gap, alt, gap), re.I)
+        for m in rx.finditer(text):
+            a, b = float(m.group(1)), float(m.group(2))
+            if (kind == "greater" and not a > b) or (kind == "lower" and not a <= b):
+                out.append(f"false comparison: '{m.group(0).strip()[:70]}'")
+    return out
+
+
 def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str],
            must_mention: Optional[str] = None, recommended: bool = True,
            ledger_values: Optional[Dict[str, object]] = None) -> GroundingResult:
@@ -145,10 +161,10 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
         if low in known_terms or low in sheet_lower:
             continue
         checked += 1
-        if not any(fuzz.partial_ratio(low, n) >= 88 for n in names_lower):
+        if not any(fuzz.partial_ratio(low, n) >= cfg["name_match_ratio"] for n in names_lower):
             violations.append(f"place/name '{name}' not in fact sheet")
 
-    if must_mention and fuzz.partial_ratio(must_mention.lower(), low_answer) < 85:
+    if must_mention and fuzz.partial_ratio(must_mention.lower(), low_answer) < cfg["mention_match_ratio"]:
         violations.append(f"place '{must_mention}' not mentioned")
     if not recommended:
         nr = cfg["not_recommended"]
@@ -166,6 +182,7 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
         for phrase in cfg["absence_claims"]:
             if phrase in low_answer:
                 violations.append(f"says '{phrase}' but the fact sheet lists other options")
+    violations += _comparison_errors(_CITE.sub(" ", answer), cfg.get("comparisons"))
     sheet_lines = [ln.lower() for ln in sheet.splitlines()]
     for rule in cfg["polarity"]:
         triggers = [t.lower() for t in rule["flag_triggers"]]

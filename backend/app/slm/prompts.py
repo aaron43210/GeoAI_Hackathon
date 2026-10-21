@@ -19,7 +19,8 @@ Fields:
 - activity_raw: the user's words for the activity.
 - location_text: the place name exactly as written (fix obvious typos only). No time words. null if none.
 - use_user_location: true if they say near me / from home / to work without naming a place.
-- radius_km, max_travel_min, duration_min, age, group_size: numbers if stated, else null.
+- radius_km, max_travel_min, duration_min, age, group_size: numbers if stated, else null. radius_km is a search
+  distance ("within 10 km of X"), never the length of a run or ride ("a 5 km run" has no radius).
 - time_text: copy the time expression verbatim (e.g. "tomorrow evening", "this weekend", "kal subah"). null if none. Never compute dates.
 - profiles: any of [{profs}] that apply to the people going ("my parents" -> senior, "kids" -> child).
 - preferences: any of quiet, shade, water, avoid_traffic, close_by, scenic if asked for.

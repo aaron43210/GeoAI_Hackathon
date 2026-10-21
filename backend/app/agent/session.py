@@ -5,7 +5,7 @@ import time
 import uuid
 from typing import Any, Dict, Optional
 
-TTL_S = 1800
+from app.config import get_settings
 
 
 class SessionStore:
@@ -16,7 +16,7 @@ class SessionStore:
         if not session_id:
             return None
         item = self._data.get(session_id)
-        if not item or time.monotonic() - item["ts"] > TTL_S:
+        if not item or time.monotonic() - item["ts"] > get_settings().SESSION_TTL_S:
             self._data.pop(session_id, None)
             return None
         return item
@@ -27,7 +27,7 @@ class SessionStore:
         item.update(values)
         item["ts"] = time.monotonic()
         self._data[sid] = item
-        if len(self._data) > 2000:
+        if len(self._data) > get_settings().SESSION_MAX:
             oldest = min(self._data, key=lambda k: self._data[k]["ts"])
             self._data.pop(oldest, None)
         return sid

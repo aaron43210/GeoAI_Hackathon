@@ -138,7 +138,7 @@ class OSMService:
         sel = " ".join(f"{k}(id:{','.join(n)});" for k, n in ids.items() if n)
         roads = "|".join(geo["road_classes"].keys())
         r_ind, r_road = geo["context_radius_m"], geo["road_context_m"]
-        r_water, r_green = geo["water_search_m"], geo["green_buffer_m"] + 200
+        r_water, r_green = geo["water_search_m"], geo["green_buffer_m"] + geo["green_query_margin_m"]
         stmts = [f'way["highway"~"^({roads})$"](around.c:{r_road});']
         for k, vals in geo["industry_tags"].items():
             stmts.append(f'nwr["{k}"~"^({"|".join(vals)})$"](around.c:{r_ind});')

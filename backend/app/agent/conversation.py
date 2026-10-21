@@ -96,7 +96,7 @@ async def explain(question: str, last: Dict[str, Any], slm: SLMRuntime) -> Tuple
     if slm.ready:
         try:
             draft = strip_think(await asyncio.to_thread(slm.complete, explain_messages(sheet, question),
-                                                        max_tokens=260))
+                                                        max_tokens=slm.settings.SLM_MAX_TOKENS_EXPLAIN))
             g = verify(draft, sheet, ids, names, None, True, values)
             if draft.strip() and g.status == "passed":
                 return draft, {"status": "passed", "facts_checked": g.facts_checked, "violations": []}, "slm"
@@ -105,7 +105,7 @@ async def explain(question: str, last: Dict[str, Any], slm: SLMRuntime) -> Tuple
                 msgs = explain_messages(sheet, question) + [
                     {"role": "assistant", "content": draft},
                     {"role": "user", "content": REPAIR_NOTE.format(violations="; ".join(g.violations))}]
-                fixed = strip_think(await asyncio.to_thread(slm.complete, msgs, max_tokens=260))
+                fixed = strip_think(await asyncio.to_thread(slm.complete, msgs, max_tokens=slm.settings.SLM_MAX_TOKENS_EXPLAIN))
                 g2 = verify(fixed, sheet, ids, names, None, True, values)
                 if fixed.strip() and g2.status == "passed":
                     return fixed, {"status": "repaired", "first_violations": g.violations,

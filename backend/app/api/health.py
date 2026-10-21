@@ -27,10 +27,10 @@ async def health_check(request: Request, deep: bool = True, probe: bool = False)
         http = state.http
         probes = await asyncio.gather(
             _probe(http, "open_meteo_forecast", "GET", f"{s.WEATHER_API_URL}/forecast",
-                   params={"latitude": 19.07, "longitude": 72.88, "hourly": "temperature_2m", "forecast_days": 1}),
+                   params={"latitude": s.HEALTH_PROBE_LAT, "longitude": s.HEALTH_PROBE_LON, "hourly": "temperature_2m", "forecast_days": 1}),
             _probe(http, "open_meteo_air_quality", "GET", f"{s.AIR_QUALITY_API_URL}/air-quality",
-                   params={"latitude": 19.07, "longitude": 72.88, "hourly": "pm2_5", "forecast_days": 1}),
-            _probe(http, "osrm", "GET", f"{s.OSRM_URL}/nearest/v1/driving/72.88,19.07"),
+                   params={"latitude": s.HEALTH_PROBE_LAT, "longitude": s.HEALTH_PROBE_LON, "hourly": "pm2_5", "forecast_days": 1}),
+            _probe(http, "osrm", "GET", f"{s.OSRM_URL}/nearest/v1/driving/{s.HEALTH_PROBE_LON},{s.HEALTH_PROBE_LAT}"),
             _probe(http, "overpass", "POST", s.overpass_mirrors[0], data={"data": "[out:json][timeout:5];node(1);out;"}),
         )
         _cache.update(at=time.monotonic(), upstream=dict(probes))

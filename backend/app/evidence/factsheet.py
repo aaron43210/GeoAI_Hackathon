@@ -112,7 +112,8 @@ class FactSheetBuilder:
         expos = [c.exposure for c in p.cells if c.exposure]
         if expos:
             e = max(expos, key=lambda x: x.index)
-            src = f", main upwind source: {e.dominant_source}" if e.dominant_source and e.index >= 0.05 else \
+            src = f", main upwind source: {e.dominant_source}" \
+                if e.dominant_source and e.index >= get_knowledge().geo["exposure_significant"] else \
                 ", no significant upwind road/industry"
             eid = self.L.add("modelled exposure index", e.index, "0–1", "computed from OSM roads/industry + forecast wind",
                              None, "modelled", key=f"expo:{v.id}:{p.start}", venue=v.name, method=EXPOSURE_FORMULA)
@@ -132,7 +133,8 @@ class FactSheetBuilder:
             eid = self.L.add("green cover", round(f.green_fraction * 100), "%", "OpenStreetMap (Overpass)", None,
                              "computed", key=f"green:{v.id}", venue=v.name,
                              method="area of OSM park/forest/grass polygons ∩ 300 m buffer ÷ buffer area")
-            lines.append(f"[{eid}] green cover within 300 m: {round(f.green_fraction * 100)}%")
+            lines.append(f"[{eid}] green cover within {get_knowledge().geo['green_buffer_m']} m: "
+                         f"{round(f.green_fraction * 100)}%")
         if f.nearest_water_m is not None:
             eid = self.L.add("nearest water", f.nearest_water_m, "m", "OpenStreetMap (Overpass)", None, "osm",
                              key=f"water:{v.id}", venue=v.name)

@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     SLM_USE_MMAP: bool = True                        # False = read the whole GGUF into RAM at startup (slow disks)
     SLM_TEMPERATURE: float = 0.2
     SLM_MAX_TOKENS_ANSWER: int = 520
+    SLM_MAX_TOKENS_INTENT: int = 260
+    SLM_MAX_TOKENS_EXPLAIN: int = 260
+    SLM_TOP_P: float = 0.9
     SLM_REPETITION_PENALTY: float = 1.15             # discourages small-model loops ("X; X; X; ...")
 
     # Data sources (all free/open)
@@ -52,11 +55,18 @@ class Settings(BaseSettings):
 
     # Cache TTLs (seconds)
     TTL_GEOCODE: int = 30 * 86400
+    TTL_NEGATIVE: int = 600            # "not found" answers are retried after 10 min, not cached for a month
     TTL_OSM: int = 24 * 3600
     TTL_WEATHER: int = 1800
     TTL_AIR: int = 3600
     TTL_ROUTE: int = 6 * 3600
     TTL_WAQI: int = 1800
+
+    # Sessions (conversation memory) and health probe
+    SESSION_TTL_S: int = 1800
+    SESSION_MAX: int = 2000
+    HEALTH_PROBE_LAT: float = 0.0     # any point works; probes only check that the upstream answers
+    HEALTH_PROBE_LON: float = 0.0
 
     # Search defaults (used only when the user gives none, and always reported)
     DEFAULT_RADIUS_KM: float = 10.0

@@ -26,7 +26,8 @@ async def understand(question: str, slm: SLMRuntime, previous: Optional[Dict[str
         return rules, "rules"
     try:
         raw = await asyncio.to_thread(slm.complete, intent_messages(question, previous),
-                                      json_schema=intent_json_schema(), max_tokens=260, temperature=0.0)
+                                      json_schema=intent_json_schema(), max_tokens=slm.settings.SLM_MAX_TOKENS_INTENT,
+                                      temperature=0.0)
         model = Intent.from_model_output(json.loads(raw)).normalised()
     except Exception as exc:  # noqa: BLE001 - fall back to rules, and say so in the response
         logger.warning("SLM intent extraction failed (%s); using rule parser", exc)

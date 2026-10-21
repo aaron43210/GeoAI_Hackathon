@@ -53,6 +53,7 @@ class Cell:
     travel_min: Optional[float]
     score: float
     status: str                      # ok | caution | avoid
+    raw_score: float = 0.0           # before the severity cap; breaks ties between capped windows
 
 
 @dataclass
@@ -160,7 +161,7 @@ def sub_scores(act: ActivityProfile, v: Dict[str, Any], feats: VenueFeatures, ex
     is_day = v.get("is_day")
     if act.golden_hour and sun:
         sunrise, sunset = sun
-        golden = (sunrise <= hour <= sunrise + li["golden_window_h"]) or (sunset - li["golden_window_h"] <= hour + 0.5 <= sunset + 0.25)
+        golden = is_golden(hour, sunrise, sunset, li["golden_window_h"])
         light = li["golden"] if golden else (li["golden_day"] if is_day else li["night"])
         cc = v.get("cloud_cover")
         if golden and cc is not None and not (li["good_cloud_min"] <= cc <= li["good_cloud_max"]):
@@ -171,6 +172,11 @@ def sub_scores(act: ActivityProfile, v: Dict[str, Any], feats: VenueFeatures, ex
     else:
         out["light"] = li["day"] if is_day else (li["night_lit"] if feats.lit == "yes" else li["night"])
     return out
+
+
+def is_golden(hour: float, sunrise: float, sunset: float, window_h: float) -> bool:
+    """The hour slot [hour, hour+1) overlaps the golden window after sunrise or before sunset."""
+    return (hour < sunrise + window_h and hour + 1 > sunrise) or (hour < sunset and hour + 1 > sunset - window_h)
 
 
 # ---------------------------------------------------------------------- grid
@@ -189,8 +195,10 @@ def _cell_vars(wx: PointSeries, aq: Optional[PointSeries], i: int, daylight_requ
         j = aq.times.index(wx.times[i])
         for k, vals in aq.hourly.items():
             v[k] = vals[j] if j < len(vals) else None
-    prev = [x for x in wx.hourly.get("precipitation", [])[max(0, i - 12):i] if x is not None]
-    v["rain_prev_12h_mm"] = round(sum(prev), 1) if len(prev) >= 6 else None
+    sc = get_knowledge().scoring
+    window = sc["recent_rain_window_h"]
+    prev = [x for x in wx.hourly.get("precipitation", [])[max(0, i - window):i] if x is not None]
+    v["rain_prev_12h_mm"] = round(sum(prev), 1) if len(prev) >= sc["recent_rain_min_hours"] else None
     v["daylight_required"] = 1 if daylight_required else 0
     return v
 
@@ -216,7 +224,7 @@ def build_grid(venues: List[VenueCtx], windows: List[Window], act: ActivityProfi
         sun = _sun_hours(ven.wx)
         wanted = set()
         for w in windows:
-            first = math.ceil(w.start_h - 0.25)
+            first = math.ceil(w.start_h - kb.time["rules"]["min_lead_h"])
             h = first
             while h < w.end_h:
                 wanted.add(datetime.combine(w.day, datetime.min.time()) + timedelta(hours=h))
@@ -244,15 +252,17 @@ def build_grid(venues: List[VenueCtx], windows: List[Window], act: ActivityProfi
             status = "avoid" if any(h.decision == "avoid" and h.state == Tri.TRUE for h in hits) else (
                 "caution" if any(h.decision == "caution" and h.state == Tri.TRUE for h in hits) else "ok")
             row.append(Cell(venue=vi, ts=ts, dt=dt, vars=v, factors=factors, exposure=expo, hits=hits,
-                            travel_min=travel_min, score=_capped(base - penalty, hits), status=status))
+                            travel_min=travel_min, score=_capped(base - penalty, hits), status=status,
+                            raw_score=round(max(0.0, min(100.0, base - penalty)), 1)))
         cells[vi] = row
 
     # group into activity-length windows inside each resolved window
     n = max(1, math.ceil(duration_min / 60))
     picks: List[WindowPick] = []
+    lead = kb.time["rules"]["min_lead_h"]
     for vi, row in cells.items():
         for w in windows:
-            seg = [c for c in row if c.dt.date() == w.day and math.ceil(w.start_h - 0.25) <= c.dt.hour < w.end_h]
+            seg = [c for c in row if c.dt.date() == w.day and math.ceil(w.start_h - lead) <= c.dt.hour < w.end_h]
             if not seg:
                 continue
             size = min(n, len(seg))
@@ -268,8 +278,9 @@ def build_grid(venues: List[VenueCtx], windows: List[Window], act: ActivityProfi
                                         status=status, label=w.label, concerns=_dedupe(concerns), unknowns=unknown))
 
     def rank_key(p: WindowPick):
-        t = venues[p.venue].travel["minutes"] if venues[p.venue].travel else 999
-        return (-p.score, t, p.start)
+        t = venues[p.venue].travel["minutes"] if venues[p.venue].travel else float("inf")
+        raw = sum(c.raw_score for c in p.cells) / len(p.cells)
+        return (-p.score, -raw, t, p.start)
 
     eligible = sorted([p for p in picks if p.status != "avoid"], key=rank_key)
     best = eligible[0] if eligible else None

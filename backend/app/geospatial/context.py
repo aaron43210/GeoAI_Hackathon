@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
 from shapely.geometry import LineString, Point, Polygon
-from shapely.ops import unary_union
+from shapely.ops import nearest_points, unary_union
 
 from app.data_services.osm_service import OSMBundle, OSMFeature
 from app.knowledge import get_knowledge
@@ -118,7 +118,7 @@ def compute_features(venue: OSMFeature, ctx: OSMBundle) -> VenueFeatures:
     # Roads
     nearest_road = (None, None, None)
     major_len = 0.0
-    buf300 = origin.buffer(300)
+    buf_road = origin.buffer(geo["road_length_buffer_m"])
     sources: List[SourcePoint] = []
     for road in ctx.roads:
         shape = to_shape(road, proj)
@@ -127,13 +127,13 @@ def compute_features(venue: OSMFeature, ctx: OSMBundle) -> VenueFeatures:
         d = shape.distance(origin)
         if nearest_road[0] is None or d < nearest_road[0]:
             nearest_road = (d, road.name or road.tags.get("ref"), cls)
-        major_len += shape.intersection(buf300).length
+        major_len += shape.intersection(buf_road).length
         if isinstance(shape, LineString) and d < geo["context_radius_m"]:
-            n = max(1, int(shape.length // 50))
+            n = max(1, int(shape.length // geo["road_sample_m"]))
             for i in range(n + 1):
                 p = shape.interpolate(i / n, normalized=True)
                 if p.distance(origin) < geo["context_radius_m"]:
-                    sources.append(SourcePoint(p.x, p.y, weight / (n + 1) * max(1.0, shape.length / 500), "road",
+                    sources.append(SourcePoint(p.x, p.y, weight / (n + 1) * max(1.0, shape.length / geo["road_length_norm_m"]), "road",
                                                road.name or road.tags.get("ref") or cls))
 
     # Industry
@@ -144,13 +144,14 @@ def compute_features(venue: OSMFeature, ctx: OSMBundle) -> VenueFeatures:
         if d > geo["context_radius_m"]:
             continue
         a = shape.area if isinstance(shape, Polygon) else 0.0
-        c = shape.centroid
+        # use the point of the site nearest the venue (not its centroid): distance, bearing and exposure must agree
+        c = nearest_points(shape, origin)[0] if d > 0 else shape.centroid
         lat, lon = proj.latlon(c.x, c.y)
         industry.append({"name": ind.name or ind.tags.get("landuse") or ind.tags.get("man_made") or "industrial site",
                          "distance_m": round(d), "bearing_deg": round(bearing_deg(venue.lat, venue.lon, lat, lon)),
                          "lat": round(lat, 5), "lon": round(lon, 5),
                          "area_m2": round(a), "osm_id": ind.osm_id})
-        w = min(1.0, max(0.15, a / geo["industry_area_ref_m2"])) if a else 0.3
+        w = min(1.0, max(geo["industry_weight_min"], a / geo["industry_area_ref_m2"])) if a else geo["industry_weight_point"]
         sources.append(SourcePoint(c.x, c.y, w, "industry", industry[-1]["name"]))
     industry.sort(key=lambda r: r["distance_m"])
 

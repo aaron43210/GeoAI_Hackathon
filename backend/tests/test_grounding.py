@@ -87,3 +87,11 @@ def test_false_absence_claim_fails():
 def test_known_terms_are_not_places():
     r = verify("Lakeside Garden [E1]: the Air Quality Index is 72 [E5].", SHEET, IDS, NAMES)
     assert not any("Air Quality Index" in v for v in r.violations)
+
+
+def test_inverted_comparison_is_rejected():
+    sheet = SHEET + "\nLIMITS USED: US AQI ≤ 200"
+    bad = verify("Lakeside Garden [E1]: US AQI 72 [E5], exceeding the acceptable limit of 200.", sheet, IDS, NAMES)
+    assert any("false comparison" in v for v in bad.violations)
+    good = verify("Lakeside Garden [E1]: US AQI 72 [E5], well below the limit of 200.", sheet, IDS, NAMES)
+    assert not any("false comparison" in v for v in good.violations)

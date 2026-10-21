@@ -62,7 +62,7 @@ class GeocodingService:
         places.sort(key=lambda p: (self._type_rank(p), -p.importance))
         result = GeocodeResult(query=cleaned, best=places[0] if places else None, candidates=places,
                                ambiguous=self._is_ambiguous(places))
-        await self.cache.set(key, result, ttl=self.settings.TTL_GEOCODE)
+        await self.cache.set(key, result, ttl=self.settings.TTL_GEOCODE if places else self.settings.TTL_NEGATIVE)
         return result
 
     async def search_category(self, phrase: str, lat: float, lon: float, radius_km: float) -> List[Dict[str, Any]]:
@@ -130,4 +130,5 @@ class GeocodingService:
         a, b = places[0], places[1]
         if not a.state or not b.state or a.state == b.state or cls._type_rank(a) != cls._type_rank(b):
             return False
-        return b.importance >= 0.8 * a.importance
+        from app.knowledge import get_knowledge
+        return b.importance >= get_knowledge().geo["place_ambiguity_ratio"] * a.importance

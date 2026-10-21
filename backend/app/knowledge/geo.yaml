@@ -3,6 +3,14 @@
 context_radius_m: 3000          # industry is searched this far around candidate venues
 road_context_m: 1500            # major roads beyond this contribute < 3 % (e^-1500/400) to exposure
 green_buffer_m: 300
+road_length_buffer_m: 300       # "major-road length within X m" feature
+green_query_margin_m: 200       # fetch green polygons this far beyond the buffer so edges intersect correctly
+road_sample_m: 50               # road lines are sampled every X m as exposure sources
+road_length_norm_m: 500         # a road this long carries its class weight once; longer roads proportionally more
+industry_weight_min: 0.15       # smallest weight of an industrial polygon (by area)
+industry_weight_point: 0.3      # weight of an industrial node with no area (chimney, works)
+exposure_significant: 0.05      # below this the answer says "no significant upwind road/industry"
+place_ambiguity_ratio: 0.8      # 2nd geocoder hit counts as a tie at ≥ this share of the 1st hit's importance
 overpass_rolling_race: 4        # mirrors queried at once (all of them: fastest valid answer wins)
 water_search_m: 1000
 power_line_m: 100
@@ -61,7 +69,10 @@ place_type_priority: [city, state_district, town, borough, suburb, city_district
 
 candidates:
   max_candidates: 8
-  shortlist_pool: 40             # pre-scored pool before context fetch
+  radius_slack: 1.05             # accept candidates up to 5 % beyond the radius (polygon centres)
+  shortlist_pool: 40
+  min_name_chars: 3              # ignore OSM names shorter than this ("nm", "x")
+  area_log_scale: 6              # area term = log10(area m²) / scale, capped at 1 (10⁶ m² → 1)             # pre-scored pool before context fetch
   distance_weight: 1.0           # pre-score = -distance_weight·d/radius + area_weight·log-area + tag_weight·sport match
   area_weight: 0.3
   tag_weight: 0.3

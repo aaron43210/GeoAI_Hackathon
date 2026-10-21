@@ -70,6 +70,9 @@ async def chat_fn(message: str, history: list, request: gr.Request):
             elif ev["event"] == "final":
                 data = ev["data"]
                 _chat_sessions[key] = data.get("session_id")
+                if len(_chat_sessions) > 5000:          # bounded: drop the oldest browser sessions
+                    for old in list(_chat_sessions)[:1000]:
+                        _chat_sessions.pop(old, None)
                 md = data.get("answer_markdown", "")
                 clar = data.get("clarification")
                 if clar and clar.get("options"):

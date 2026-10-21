@@ -52,6 +52,11 @@ months: {jan: 1, january: 1, feb: 2, february: 2, mar: 3, march: 3, apr: 4, apri
 # words that, on their own, are never a place ("right now", "this weekend", "near me")
 filler_words: [right, this, next, coming, weekend, week, here, me, home, outside, outdoors, nearby]
 
+# Resolver rules (hours): skip slots starting within min_lead of now; drop windows shorter than min_window;
+# "at 8 am" means [8 - before, 8 + after]; after late_evening, "next N days" starts tomorrow; latest end of day.
+rules: {min_lead_h: 0.25, min_window_h: 0.75, explicit_before_h: 0.5, explicit_after_h: 1.5, late_evening_hour: 20,
+        day_end_h: 23.5}
+
 default_window: {start: 5.5, end: 21.0, hours_ahead: 36}   # when no time is given (and we say so)
 weekend_days: [5, 6]
 horizon_days: {weather: 15, air_quality: 4}

@@ -37,7 +37,9 @@ alternatives: 2
 contrast_min_gap: 8          # report a "why not then" contrast only if the score gap is at least this
 # A high-severity caution (e.g. US AQI > 150) caps that hour's score, so comfort can't mask a health risk.
 severity_score_cap: {high: 55}
-storm_codes: [95, 96, 99]    # WMO weather codes for thunderstorms (Open-Meteo weather_code)
+storm_codes: [95, 96, 99]
+recent_rain_window_h: 12     # "rain in the previous 12 h" (wet outfields, slippery trails)
+recent_rain_min_hours: 6     # need at least this many hourly values to state it    # WMO weather codes for thunderstorms (Open-Meteo weather_code)
 aqi_rising_delta: 20         # rise in US AQI within a window that triggers a "worsening" note
 water_litres_per_30min: {low: 0.25, moderate: 0.35, high: 0.5}
 hot_water_factor: 1.5

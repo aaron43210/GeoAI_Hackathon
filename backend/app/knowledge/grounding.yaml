@@ -45,6 +45,16 @@ health_warning:
 # Claims of absence must be true: if the sheet lists OTHER OPTIONS, the answer may not deny them.
 absence_claims: ["no other options", "no alternatives", "no other option", "no other places", "no other venues"]
 
+# Comparative claims between two numbers in one clause must be true ("45 exceeds 200" is rejected).
+comparisons:
+  greater: [exceeds, exceeding, exceeded, exceed, above, over, higher than, more than, greater than, beyond]
+  lower: [below, under, within, less than, lower than]
+  max_gap_chars: 60
+
+# Fuzzy-match thresholds (0-100) for place names in answers and for the must-mention recommended place.
+name_match_ratio: 88
+mention_match_ratio: 85
+
 # Capitalised terms that are not place names (never flagged as invented places).
 known_terms: [Best Pick, Other Options, Watch For, Not Recommended, Health Warning, Feels Like, US AQI, Air Quality,
               Air Quality Index, United States, Environmental Protection Agency, World Health Organization,

@@ -63,7 +63,8 @@ class Intent(BaseModel):
                 if prof.max_age and data["age"] <= prof.max_age and pid not in data["profiles"]:
                     data["profiles"].append(pid)
         if data["radius_km"] is not None:
-            data["radius_km"] = max(0.5, min(float(data["radius_km"]), 50.0))
+            from app.config import get_settings
+            data["radius_km"] = max(0.5, min(float(data["radius_km"]), get_settings().MAX_RADIUS_KM))
         if data["location_text"]:
             data["location_text"] = data["location_text"].strip(" ,.?!") or None
         if data["location_text"]:

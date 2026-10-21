@@ -54,6 +54,8 @@ location_terminators: [for, with, "on", at, by, this, next, tomorrow, today, ton
 # Words that make a request about outdoor plans even when no specific activity is named.
 in_scope_cues: [outdoor, outdoors, outside, activity, activities, weather, aqi, air quality, rain, sunny, park, trek]
 
+age_bounds: [4, 110]            # "is 72" is read as an age only within these bounds
+
 # How many trailing words to try as a place when no spatial cue is present ("... kal shaam dwarka delhi").
 tail_place_max_words: 3
 
