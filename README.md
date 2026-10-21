@@ -63,6 +63,11 @@ curl -X POST https://aaronr43210-terrapulse-ai.hf.space/api/v1/ask -H 'content-t
 curl -X POST https://aaronr43210-terrapulse-ai.hf.space/api/v1/ask -d '{"question":"what about Sunday?","session_id":"<from previous>"}' -H 'content-type: application/json'
 ```
 
+> **Tip for evaluators:** the endpoint runs on a Hugging Face ZeroGPU Space, where free GPU runs are metered per
+> caller. Adding your own Hugging Face token (`-H "Authorization: Bearer hf_..."`, read access is enough) moves you to
+> your account's larger quota, so every answer is written by the fine-tuned model. Without it, once an IP's free runs
+> are used up the API still answers from the same live data via its rule parser and data template.
+
 | Endpoint | Purpose |
 |---|---|
 | `POST /api/v1/ask` · `GET /api/v1/ask?q=` | main endpoint (`?format=text` for markdown only) |
