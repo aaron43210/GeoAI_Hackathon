@@ -23,6 +23,21 @@ logger = logging.getLogger(__name__)
 THINK_OFF = "<think>\n\n</think>\n\n"
 
 
+def cpu_budget() -> int:
+    """CPUs this process may actually use. Containers often report the host's core count, and oversubscribing
+    llama.cpp threads on a 2-CPU quota makes inference crawl, so read the cgroup quota first."""
+    try:
+        quota, period = open("/sys/fs/cgroup/cpu.max").read().split()[:2]
+        if quota != "max":
+            return max(1, int(int(quota) / int(period)))
+    except (OSError, ValueError):
+        pass
+    try:
+        return max(1, len(os.sched_getaffinity(0)))
+    except (AttributeError, OSError):
+        return os.cpu_count() or 2
+
+
 def render_chatml(messages: List[Dict[str, str]]) -> str:
     parts = [f"<|im_start|>{m['role']}\n{m['content']}<|im_end|>\n" for m in messages]
     return "".join(parts) + "<|im_start|>assistant\n" + THINK_OFF
@@ -90,8 +105,10 @@ class SLMRuntime:
     def _load_llama_cpp(self) -> None:
         from llama_cpp import Llama
         path, repo, fname, which = self._resolve_gguf()
-        threads = self.settings.SLM_THREADS or os.cpu_count() or 4
-        self._llm = Llama(model_path=path, n_ctx=self.settings.SLM_CTX, n_threads=threads, verbose=False)
+        threads = self.settings.SLM_THREADS or cpu_budget()
+        self.info.extra["threads"] = threads
+        self._llm = Llama(model_path=path, n_ctx=self.settings.SLM_CTX, n_threads=threads, verbose=False,
+                          use_mmap=self.settings.SLM_USE_MMAP)
         self.info.repo, self.info.file, self.info.path_used = repo, fname, which
 
     def _load_transformers(self) -> None:
@@ -99,9 +116,10 @@ class SLMRuntime:
         from transformers import AutoModelForCausalLM, AutoTokenizer
         repo = self.settings.SLM_HF_MODEL
         self._tok = AutoTokenizer.from_pretrained(repo)
-        self._llm = AutoModelForCausalLM.from_pretrained(
-            repo, torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-            device_map="auto" if torch.cuda.is_available() else None)
+        cuda = torch.cuda.is_available()
+        self._llm = AutoModelForCausalLM.from_pretrained(repo, torch_dtype=torch.float16 if cuda else torch.float32)
+        if cuda:
+            self._llm = self._llm.to("cuda")
         self.info.repo, self.info.file, self.info.path_used = repo, None, "finetuned"
 
     # ------------------------------------------------------------------ inference
@@ -146,4 +164,4 @@ class SLMRuntime:
     def describe(self) -> Dict[str, Any]:
         return {"backend": self.info.backend, "repo": self.info.repo, "file": self.info.file,
                 "path_used": self.info.path_used if self.ready else "none", "loaded": self.ready,
-                "load_ms": self.info.load_ms, "error": self.info.error}
+                "load_ms": self.info.load_ms, "error": self.info.error, "threads": self.info.extra.get("threads")}

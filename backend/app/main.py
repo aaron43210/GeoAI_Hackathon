@@ -21,7 +21,7 @@ from app.data_services.weather_service import WeatherService
 from app.slm.runtime import SLMRuntime
 
 settings = get_settings()
-logging.basicConfig(level=settings.LOG_LEVEL, format="%(asctime)s %(name)s %(levelname)s %(message)s")
+logging.basicConfig(level=settings.LOG_LEVEL, format="%(asctime)s %(name)s %(levelname)s %(message)s", force=True)
 logger = logging.getLogger("terrapulse")
 
 # Per-host etiquette: Nominatim ≤1 req/s (usage policy), OSRM demo ≤1 req/s, Overpass ≤2 concurrent slots.
@@ -43,8 +43,9 @@ async def lifespan(app: FastAPI):
     http = HttpGateway(user_agent=f"TerraPulseAI/{settings.API_VERSION} (GeoAI hackathon; {settings.CONTACT_EMAIL})",
                        policies=HOST_POLICIES)
     cache = InMemoryCache()
-    slm = SLMRuntime()
-    await slm.load()
+    slm = getattr(app.state, "preloaded_slm", None) or SLMRuntime()   # a host may load the model before startup
+    if not slm.ready:
+        await slm.load()
     app.state.http, app.state.cache, app.state.slm = http, cache, slm
     app.state.pipeline = Pipeline(
         geocoder=GeocodingService(http, cache), osm=OSMService(http, cache), weather=WeatherService(http, cache),

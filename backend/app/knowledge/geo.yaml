@@ -3,7 +3,7 @@
 context_radius_m: 3000          # industry is searched this far around candidate venues
 road_context_m: 1500            # major roads beyond this contribute < 3 % (e^-1500/400) to exposure
 green_buffer_m: 300
-overpass_rolling_race: 2        # mirrors kept in flight at once
+overpass_rolling_race: 4        # mirrors queried at once (all of them: fastest valid answer wins)
 water_search_m: 1000
 power_line_m: 100
 

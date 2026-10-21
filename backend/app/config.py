@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     SLM_LOCAL_PATH: str = ""                         # optional explicit GGUF path
     SLM_THREADS: int = 0                             # 0 = os.cpu_count()
     SLM_CTX: int = 4096
+    SLM_USE_MMAP: bool = True                        # False = read the whole GGUF into RAM at startup (slow disks)
     SLM_TEMPERATURE: float = 0.2
     SLM_MAX_TOKENS_ANSWER: int = 380
 
@@ -40,8 +41,8 @@ class Settings(BaseSettings):
         "https://overpass.kumi.systems/api/interpreter,"
         "https://overpass.private.coffee/api/interpreter"
     )
-    OVERPASS_TIMEOUT_S: float = 25.0
-    OVERPASS_BREAKER_S: int = 300
+    OVERPASS_TIMEOUT_S: float = 15.0
+    OVERPASS_BREAKER_S: int = 900
     WEATHER_API_URL: str = "https://api.open-meteo.com/v1"
     AIR_QUALITY_API_URL: str = "https://air-quality-api.open-meteo.com/v1"
     OSRM_URL: str = "https://router.project-osrm.org"

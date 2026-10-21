@@ -19,7 +19,7 @@ async def _probe(http, name: str, method: str, url: str, **kw) -> tuple:
 
 
 @router.get("/health")
-async def health_check(request: Request, deep: bool = True):
+async def health_check(request: Request, deep: bool = True, probe: bool = False):
     """Liveness + real upstream probes (cached for 60 s) + model status."""
     s = get_settings()
     state = request.app.state
@@ -34,8 +34,20 @@ async def health_check(request: Request, deep: bool = True):
             _probe(http, "overpass", "POST", s.overpass_mirrors[0], data={"data": "[out:json][timeout:5];node(1);out;"}),
         )
         _cache.update(at=time.monotonic(), upstream=dict(probes))
+    slm_probe = None
+    if probe and state.slm.ready:
+        started = time.monotonic()
+        try:
+            text = await asyncio.wait_for(asyncio.to_thread(
+                state.slm.complete, [{"role": "user", "content": "Say OK."}], max_tokens=5, temperature=0.0), 60)
+            slm_probe = {"ok": True, "ms": round((time.monotonic() - started) * 1000), "text": text[:40]}
+        except asyncio.TimeoutError:
+            slm_probe = {"ok": False, "error": "no output within 60 s"}
+        except Exception as exc:  # noqa: BLE001
+            slm_probe = {"ok": False, "error": f"{type(exc).__name__}: {exc}"[:200]}
     return {
         "status": "healthy",
+        "slm_probe": slm_probe,
         "service": s.API_TITLE,
         "version": s.API_VERSION,
         "time": datetime.now(timezone.utc).isoformat(timespec="seconds"),
