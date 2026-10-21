@@ -48,7 +48,7 @@ def headline(sheet_text: str) -> str:
 
 def body_of(draft: str) -> str:
     """Drop any headline the model wrote itself; keep its explanation (from **Why** onwards)."""
-    idx = draft.find("**Why")
+    idx = draft.lower().find("**why")
     if idx >= 0:
         return draft[idx:].strip()
     keep = [ln for ln in draft.splitlines()

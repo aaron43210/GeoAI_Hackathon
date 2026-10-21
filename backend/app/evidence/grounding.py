@@ -23,7 +23,6 @@ _TIME = re.compile(r"\b([01]?\d|2[0-3]):([0-5]\d)\b")
 _AMPM = re.compile(r"\b(1[0-2]|0?[1-9])(?::([0-5]\d))?\s*(am|pm|a\.m\.|p\.m\.)", re.I)
 _CITE = re.compile(r"\[(E\d+)\]")
 _NAME = re.compile(r"(?<![.!?:*]\s)(?<!^)\b([A-Z][a-z]+(?:\s+(?:[A-Z][a-z]+|of|the|de)){1,5})")
-_STRUCTURE = {"best pick", "other options", "watch for", "not recommended", "us aqi", "feels like"}
 
 
 @dataclass
@@ -138,11 +137,12 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
             violations.append(f"number {m.group(1)} not in fact sheet")
 
     sheet_lower = sheet.lower()
+    known_terms = {t.lower() for t in cfg.get("known_terms", [])}
     names_lower = [n.lower() for n in known_names if n]
     for m in _NAME.finditer(_CITE.sub(" ", answer)):
         name = m.group(1)
         low = name.lower()
-        if low in _STRUCTURE or low in sheet_lower:
+        if low in known_terms or low in sheet_lower:
             continue
         checked += 1
         if not any(fuzz.partial_ratio(low, n) >= 88 for n in names_lower):

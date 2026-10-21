@@ -82,3 +82,8 @@ def test_false_absence_claim_fails():
     sheet = SHEET + "\nOTHER OPTIONS:\n[E8] Hill Park, Thu 22 Oct 17:00–18:00, score [E9] 70"
     r = verify("**Best pick:** Lakeside Garden [E1]. No other options available.", sheet, IDS | {"E8", "E9"}, NAMES)
     assert any("other options" in v for v in r.violations)
+
+
+def test_known_terms_are_not_places():
+    r = verify("Lakeside Garden [E1]: the Air Quality Index is 72 [E5].", SHEET, IDS, NAMES)
+    assert not any("Air Quality Index" in v for v in r.violations)

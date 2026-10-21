@@ -93,3 +93,12 @@ def test_conversation_greeting_followup_and_why(respx_mock):
         assert later["understood_as"]["activity"] == "running"
         day2 = (datetime.now(ZoneInfo("Asia/Kolkata")).date() + timedelta(days=2)).isoformat()
         assert later["recommendation"]["label"] and day2[-2:] in later["recommendation"]["label"]
+
+
+def test_fallback_explanation_includes_the_reason():
+    from app.agent.conversation import _fallback_explanation
+    sheet = ("RESULT: NOT RECOMMENDED in the requested time: every hour hits a safety limit. Least-bad option: [E1] X\n"
+             "FACTS:\n[E4] rain probability up to 100 % (17:00–18:00)\nAVOID / TIMING:\n"
+             "[E14] Thu 17:00–20:00: rain probability 100% is above 80%\nLIMITATIONS: none")
+    out = _fallback_explanation(sheet, "why is it not recommended?")
+    assert "NOT RECOMMENDED" in out and "rain probability 100% is above 80%" in out

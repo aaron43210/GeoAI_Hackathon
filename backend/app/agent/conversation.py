@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from app.agent.rule_parser import detect_activity
 from app.evidence.grounding import verify
 from app.knowledge import get_knowledge
-from app.slm.prompts import explain_messages
+from app.slm.prompts import REPAIR_NOTE, explain_messages
 from app.slm.runtime import SLMRuntime, strip_think
 
 logger = logging.getLogger(__name__)
@@ -66,12 +66,24 @@ def smalltalk_reply(kind: str) -> str:
 
 
 def _fallback_explanation(sheet: str, question: str) -> str:
-    """Deterministic answer: the fact-sheet lines that best match the question's words."""
-    q = set(_words(question)) - {"why", "what", "the", "is", "a", "not", "how", "you", "did", "does", "at"}
-    lines = [ln for ln in sheet.splitlines() if ln.startswith("[E") or ln.startswith(("BEST", "HEALTH", "RESULT"))]
-    scored = sorted(lines, key=lambda ln: -len(q & set(_words(ln))))
-    top = [ln for ln in scored[:5] if q & set(_words(ln))] or lines[:5]
-    return "Here is what the data behind my last answer shows:\n" + "\n".join(f"- {ln}" for ln in top)
+    """Deterministic answer: the decision, its avoid/timing reasons, then the facts closest to the question."""
+    lines = sheet.splitlines()
+    decision = [ln for ln in lines if ln.startswith(("BEST:", "RESULT:", "HEALTH WARNING:"))]
+    reasons, in_avoid = [], False
+    for ln in lines:
+        if ln.startswith("AVOID / TIMING:"):
+            in_avoid = True
+            continue
+        if in_avoid:
+            if ln.startswith("[E"):
+                reasons.append(ln)
+            else:
+                break
+    q = set(_words(question)) - set(get_knowledge().language["stop_words"]) - {"why", "what", "how", "not"}
+    facts = [ln for ln in lines if ln.startswith("[E") and ln not in reasons]
+    related = [ln for ln in sorted(facts, key=lambda ln: -len(q & set(_words(ln)))) if q & set(_words(ln))][:3]
+    shown = decision + reasons + related
+    return "Here is what the data behind my last answer shows:\n" + "\n".join(f"- {ln}" for ln in shown)
 
 
 async def explain(question: str, last: Dict[str, Any], slm: SLMRuntime) -> Tuple[str, Dict[str, Any], str]:
@@ -89,6 +101,15 @@ async def explain(question: str, last: Dict[str, Any], slm: SLMRuntime) -> Tuple
             if draft.strip() and g.status == "passed":
                 return draft, {"status": "passed", "facts_checked": g.facts_checked, "violations": []}, "slm"
             logger.info("explanation failed grounding: %s", g.violations)
+            if draft.strip():
+                msgs = explain_messages(sheet, question) + [
+                    {"role": "assistant", "content": draft},
+                    {"role": "user", "content": REPAIR_NOTE.format(violations="; ".join(g.violations))}]
+                fixed = strip_think(await asyncio.to_thread(slm.complete, msgs, max_tokens=260))
+                g2 = verify(fixed, sheet, ids, names, None, True, values)
+                if fixed.strip() and g2.status == "passed":
+                    return fixed, {"status": "repaired", "first_violations": g.violations,
+                                   "facts_checked": g2.facts_checked, "violations": []}, "slm (repaired)"
         except Exception as exc:  # noqa: BLE001
             logger.warning("SLM explanation failed (%s); using fact-sheet lines", exc)
     return _fallback_explanation(sheet, question), {"status": "templated"}, "template"

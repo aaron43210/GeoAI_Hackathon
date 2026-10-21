@@ -45,6 +45,12 @@ health_warning:
 # Claims of absence must be true: if the sheet lists OTHER OPTIONS, the answer may not deny them.
 absence_claims: ["no other options", "no alternatives", "no other option", "no other places", "no other venues"]
 
+# Capitalised terms that are not place names (never flagged as invented places).
+known_terms: [Best Pick, Other Options, Watch For, Not Recommended, Health Warning, Feels Like, US AQI, Air Quality,
+              Air Quality Index, United States, Environmental Protection Agency, World Health Organization,
+              Open Meteo, OpenStreetMap, Open Street Map, Copernicus, Copernicus Atmosphere Monitoring Service,
+              Project OSRM, Particulate Matter, Heat Index, Ultra Violet, Rain Probability, Data Note]
+
 # When nothing is recommended, the answer must say so and must not present a "best pick".
 not_recommended:
   required_any: ["not recommended", "not advisable", "avoid", "not safe", "unsafe"]
