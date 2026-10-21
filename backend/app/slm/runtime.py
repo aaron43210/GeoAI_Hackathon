@@ -134,6 +134,7 @@ class SLMRuntime:
             if self.settings.SLM_BACKEND == "transformers":
                 return strip_think(self._hf_generate(prompt, max_tokens, temp))
             kwargs: Dict[str, Any] = {"max_tokens": max_tokens, "temperature": temp, "top_p": 0.9,
+                                      "repeat_penalty": self.settings.SLM_REPETITION_PENALTY,
                                       "stop": ["<|im_end|>", "<|endoftext|>"]}
             if json_schema is not None:
                 from llama_cpp import LlamaGrammar
@@ -152,13 +153,15 @@ class SLMRuntime:
         with self._lock:
             self.info.calls += 1
             for chunk in self._llm.create_completion(render_chatml(messages), max_tokens=max_tokens, temperature=temp,
-                                                     top_p=0.9, stop=["<|im_end|>", "<|endoftext|>"], stream=True):
+                                                     top_p=0.9, repeat_penalty=self.settings.SLM_REPETITION_PENALTY,
+                                                     stop=["<|im_end|>", "<|endoftext|>"], stream=True):
                 yield chunk["choices"][0]["text"]
 
     def _hf_generate(self, prompt: str, max_tokens: int, temperature: float) -> str:
         inputs = self._tok(prompt, return_tensors="pt").to(self._llm.device)
         out = self._llm.generate(**inputs, max_new_tokens=max_tokens, do_sample=temperature > 0,
-                                 temperature=max(temperature, 1e-3))
+                                 temperature=max(temperature, 1e-3),
+                                 repetition_penalty=self.settings.SLM_REPETITION_PENALTY)
         return self._tok.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
 
     def describe(self) -> Dict[str, Any]:

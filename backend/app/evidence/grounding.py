@@ -172,5 +172,14 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
                 if m:
                     violations.append(f"says '{m.group(0)}' but the data flags {rule['flag_triggers'][0]}")
 
+    # repetition: a small model looping on one phrase ("X; X; X; ...") is a failed answer even if X is true
+    plain = re.sub(r"\s+", " ", _CITE.sub("", answer))
+    min_len = int(cfg.get("repetition_min_chars", 40))
+    for i in range(0, max(0, len(plain) - 2 * min_len), 10):
+        chunk = plain[i:i + min_len]
+        if plain.count(chunk) >= 2 and chunk.strip():
+            violations.append(f"repeated text: '{chunk.strip()[:40]}…'")
+            break
+
     return GroundingResult(status="failed" if violations else "passed", violations=violations[:12],
                            facts_checked=checked)

@@ -62,3 +62,9 @@ def test_soft_positive_air_words_are_caught():
     sheet = SHEET + "\nCARRY: an N95 mask for the journey (US AQI up to 175)"
     r = verify("Lakeside Garden [E1]: air quality is acceptable [E5].", sheet, IDS, NAMES)
     assert any("acceptable" in v for v in r.violations)
+
+
+def test_looping_answer_fails():
+    loop = "Lakeside Garden [E1], Thu 22 Oct 17:00–18:00, score 81/100; " * 3
+    r = verify("**Best pick:** " + loop, SHEET, IDS, NAMES, "Lakeside Garden")
+    assert any("repeated text" in v for v in r.violations)

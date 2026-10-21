@@ -34,6 +34,9 @@ polarity:
 # appear on that fact's line in the fact sheet.
 citation_window_chars: 14
 
+# Any stretch of this many characters appearing twice marks the answer as looping (it is then repaired/templated).
+repetition_min_chars: 40
+
 # When nothing is recommended, the answer must say so and must not present a "best pick".
 not_recommended:
   required_any: ["not recommended", "not advisable", "avoid", "not safe", "unsafe"]

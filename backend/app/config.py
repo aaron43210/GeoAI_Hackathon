@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     SLM_USE_MMAP: bool = True                        # False = read the whole GGUF into RAM at startup (slow disks)
     SLM_TEMPERATURE: float = 0.2
     SLM_MAX_TOKENS_ANSWER: int = 520
+    SLM_REPETITION_PENALTY: float = 1.15             # discourages small-model loops ("X; X; X; ...")
 
     # Data sources (all free/open)
     CONTACT_EMAIL: str = "aaronr43210@gmail.com"   # Nominatim usage policy requires a contact
