@@ -103,3 +103,17 @@ def test_alarm_about_unflagged_air_quality_is_rejected():
     flagged_sheet = SHEET + "\nCARRY: an N95 mask for the journey (US AQI up to 175)"
     ok = verify("Lakeside Garden [E1]: unhealthy air today [E5].", flagged_sheet, IDS, NAMES)
     assert not any("does not flag" in v for v in ok.violations)
+
+
+def test_false_time_comparison_is_rejected():
+    sheet = SHEET.replace("sunset 18:05", "sunset 17:49")
+    bad = verify("Lakeside Garden [E1]: play 19:00–20:00, well before sunset at 17:49 [E7].", sheet, IDS, NAMES)
+    assert any("false time comparison" in v for v in bad.violations)
+    ok = verify("Lakeside Garden [E1]: play 17:00–18:00, before sunset at 18:05 [E7].", SHEET, IDS, NAMES)
+    assert not any("false time comparison" in v for v in ok.violations)
+
+
+def test_within_safe_limits_is_softening_when_flagged():
+    sheet = SHEET + "\n[E8] caution: US AQI 129 (above 100)"
+    r = verify("Lakeside Garden [E1]: US AQI 129 [E8] is still within safe limits.", sheet, IDS | {"E8"}, NAMES)
+    assert any("within safe limits" in v for v in r.violations)

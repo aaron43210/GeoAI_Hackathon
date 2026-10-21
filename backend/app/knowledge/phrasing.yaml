@@ -1,0 +1,51 @@
+# Plain-language phrasing for chat answers (advice/friendly.py). Bands are inclusive upper bounds.
+# Sources: US EPA AQI category names; heat bands follow the feels-like ranges used in activities.yaml.
+
+aqi_bands:
+  - {max: 50, word: good}
+  - {max: 100, word: moderate}
+  - {max: 150, word: unhealthy for sensitive groups}
+  - {max: 200, word: unhealthy}
+  - {max: 300, word: very unhealthy}
+  - {max: 100000, word: hazardous}
+
+feels_bands:
+  - {max: 12, word: chilly}
+  - {max: 18, word: cool}
+  - {max: 26, word: pleasant}
+  - {max: 32, word: warm}
+  - {max: 38, word: hot}
+  - {max: 1000, word: very hot}
+
+rain_bands:
+  - {max: 10, word: dry}
+  - {max: 35, word: a small chance of rain}
+  - {max: 60, word: some chance of rain}
+  - {max: 100, word: rain likely}
+
+wind_bands:          # by gusts, km/h
+  - {max: 15, word: calm}
+  - {max: 30, word: breezy}
+  - {max: 45, word: windy}
+  - {max: 1000, word: very windy}
+
+pollutant_names: {PM2.5: "fine dust (PM2.5)", PM10: "dust (PM10)", ozone: "ozone", NO2: "traffic fumes (NO₂)"}
+
+# Opening sentence by outcome. {venue}, {when}, {activity}, {area} are filled from the result.
+openers:
+  ok: "Good news! **{venue}** {when} looks like your best bet for {activity}."
+  caution: "**{venue}** {when} is your best option for {activity}, with one thing to watch."
+  not_recommended: "Not a great time for {activity} near {area}, sorry. 😕"
+
+least_bad: "If you still want to go, the least-bad option is **{venue}** {when}."
+
+next_steps:
+  ok: "Ask me *“why?”* for the reasoning, or *“somewhere closer?”* / *“what about another day?”*."
+  caution: "Ask me *“why?”* for the details, or *“what about another day?”* to look for cleaner air."
+  not_recommended: "Want me to check another time? Try *“what about tomorrow morning?”* or another day."
+
+data_heading: "The data behind this"
+checked_note: "✔ every number above was checked against these live sources"
+
+# Day words relative to today
+day_words: {0: today, 1: tomorrow, 2: day after tomorrow}

@@ -72,8 +72,10 @@ def test_model_cannot_overwrite_the_decision(respx_mock):
     with c:
         app.state.pipeline.slm = _LyingSLM("**Best pick:** Somewhere Lovely, perfect all day!\n**Why:** great weather.")
         r = c.post("/api/v1/ask", json={"question": "running tomorrow evening near Testville"}).json()
-    assert "Somewhere Lovely" not in r["answer_markdown"]
-    assert r["answer_markdown"].startswith("**Best pick:** [E")       # code-rendered decision line
+    assert "Somewhere Lovely" not in r["answer_markdown"] and "Somewhere Lovely" not in r["answer_detailed"]
+    assert r["answer_detailed"].startswith("**Best pick:** [E")       # code-rendered decision line
+    best = r["recommendation"]["venue"]["name"]
+    assert best in r["answer_markdown"].split("\n")[0]                # chat opener names the code's pick
 
 
 @respx.mock(assert_all_called=False)
@@ -87,7 +89,7 @@ def test_conversation_greeting_followup_and_why(respx_mock):
         plan = c.post("/api/v1/chat", json={"message": "running tomorrow evening near Testville", "session_id": sid}).json()
         assert plan["status"] in ("ok", "partial") and plan["recommendation"]
         why = c.post("/api/v1/chat", json={"message": "why that time?", "session_id": sid}).json()
-        assert why["status"] == "explanation" and "[E" in why["reply"]
+        assert why["status"] == "explanation" and "[1]" in why["reply"] and "The data behind this" in why["reply"]
         later = c.post("/api/v1/chat", json={"message": "what about the day after tomorrow?", "session_id": sid}).json()
         assert later["status"] in ("ok", "partial", "not_recommended")
         assert later["understood_as"]["activity"] == "running"

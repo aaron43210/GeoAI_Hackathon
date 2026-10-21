@@ -86,6 +86,24 @@ def _comparison_errors(text: str, cfg: Optional[Dict[str, object]]) -> List[str]
     return out
 
 
+def _time_comparison_errors(text: str, cfg: Optional[Dict[str, object]]) -> List[str]:
+    if not cfg:
+        return []
+    out: List[str] = []
+    gap = int(cfg.get("max_gap_chars", 60))
+    t = r"([01]?\d|2[0-3]):([0-5]\d)"
+    for kind, words in (("before", cfg.get("time_before", [])), ("after", cfg.get("time_after", []))):
+        alt = "|".join(re.escape(w) for w in sorted(words, key=len, reverse=True))
+        rx = re.compile(t + r"(?:\s*[–-]\s*" + t + r")?[^.;\n]{0,%d}?\b(?:%s)\b[^.;\n\d]{0,%d}?" % (gap, alt, gap) + t, re.I)
+        for m in rx.finditer(text):
+            first = int(m.group(1)) * 60 + int(m.group(2))
+            last = int(m.group(3)) * 60 + int(m.group(4)) if m.group(3) else first
+            ref = int(m.group(5)) * 60 + int(m.group(6))
+            if (kind == "before" and not last <= ref) or (kind == "after" and not first >= ref):
+                out.append(f"false time comparison: '{m.group(0).strip()[:70]}'")
+    return out
+
+
 def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str],
            must_mention: Optional[str] = None, recommended: bool = True,
            ledger_values: Optional[Dict[str, object]] = None) -> GroundingResult:
@@ -183,6 +201,7 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
             if phrase in low_answer:
                 violations.append(f"says '{phrase}' but the fact sheet lists other options")
     violations += _comparison_errors(_CITE.sub(" ", answer), cfg.get("comparisons"))
+    violations += _time_comparison_errors(_CITE.sub(" ", answer), cfg.get("comparisons"))
     sheet_lines = [ln.lower() for ln in sheet.splitlines()]
     for rule in cfg["polarity"]:
         triggers = [t.lower() for t in rule["flag_triggers"]]

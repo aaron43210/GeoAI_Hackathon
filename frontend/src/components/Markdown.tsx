@@ -8,7 +8,7 @@ interface Props {
 
 function inline(s: string, onCite?: (id: string) => void, keyBase = ''): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
-  const re = /(\*\*[^*]+\*\*|_[^_]+_|\*[^*]+\*|\[E\d+\])/g;
+  const re = /(\[[^\]]+\]\(https?:\/\/[^)\s]+\)|<sub>.*?<\/sub>|\*\*[^*]+\*\*|_[^_]+_|\*[^*]+\*|\[E\d+\]|\[\d+\])/g;
   let last = 0;
   let m: RegExpExecArray | null;
   let i = 0;
@@ -16,7 +16,11 @@ function inline(s: string, onCite?: (id: string) => void, keyBase = ''): React.R
     if (m.index > last) parts.push(s.slice(last, m.index));
     const tok = m[0];
     const key = `${keyBase}-${i++}`;
-    if (tok.startsWith('**')) parts.push(<strong key={key}>{tok.slice(2, -2)}</strong>);
+    const link = /^\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)$/.exec(tok);
+    if (link) parts.push(<a key={key} href={link[2]} target="_blank" rel="noreferrer">{link[1]}</a>);
+    else if (tok.startsWith('<sub>')) parts.push(<small key={key} className="muted">{tok.slice(5, -6)}</small>);
+    else if (/^\[\d+\]$/.test(tok)) parts.push(<sup key={key} className="fn">{tok}</sup>);
+    else if (tok.startsWith('**')) parts.push(<strong key={key}>{tok.slice(2, -2)}</strong>);
     else if (tok.startsWith('[E')) {
       const id = tok.slice(1, -1);
       parts.push(

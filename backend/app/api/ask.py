@@ -69,18 +69,21 @@ def _as_text(result: Dict[str, Any]) -> str:
 
 
 @router.post("/ask")
-async def ask(body: AskRequest, request: Request, format: str = Query("json", pattern="^(json|text)$")):
+async def ask(body: AskRequest, request: Request, format: str = Query("json", pattern="^(json|text|detailed)$")):
     """Ask the assistant. Returns the grounded answer, structured recommendation, evidence and sources.
     `?format=text` returns only the markdown answer (handy for curl)."""
     result = await _collect(request, body)
+    if format == "detailed":
+        return PlainTextResponse(_as_text({**result, "answer_markdown": result.get("answer_detailed")
+                                           or result.get("answer_markdown", "")}))
     if format == "text" or "text/plain" in request.headers.get("accept", ""):
-        return PlainTextResponse(_as_text(result))
+        return PlainTextResponse(result.get("answer_markdown", ""))
     return result
 
 
 @router.get("/ask")
 async def ask_get(request: Request, q: str = Query(..., min_length=2, max_length=600),
-                  session_id: Optional[str] = None, format: str = Query("json", pattern="^(json|text)$")):
+                  session_id: Optional[str] = None, format: str = Query("json", pattern="^(json|text|detailed)$")):
     """GET convenience: /api/v1/ask?q=...&format=text"""
     return await ask(AskRequest(question=q, session_id=session_id), request, format)
 

@@ -28,7 +28,7 @@ carry:
   - id: torch_dark
     when: {var: minutes_to_sunset_after_end, op: "<", value: 0}
     activity: [hiking, birdwatching, cycling, running, walking]
-    text: "a torch/headlamp and light-coloured or reflective clothing: it will be dark (sunset {sunset})"
+    text: "a torch/headlamp and light-coloured or reflective clothing: it gets dark during your slot (sunset {sunset})"
   - id: torch_dusk
     when: {all: [{var: minutes_to_sunset_after_end, op: ">=", value: 0}, {var: minutes_to_sunset_after_end, op: "<", value: 30}]}
     activity: [hiking, birdwatching, cycling, running, walking]

@@ -126,3 +126,6 @@ a { color: var(--accent-2); }
 .timeline td.win, .timeline th.win { box-shadow: inset 0 0 0 1px var(--accent); }
 .timeline td.avoid { background: repeating-linear-gradient(45deg, rgba(244, 63, 94, 0.55) 0 3px, rgba(244, 63, 94, 0.15) 3px 6px); }
 .ind-icon { font-size: 15px; line-height: 18px; text-align: center; }
+
+.fn { color: var(--accent-2); font-size: 0.65rem; margin-left: 1px; }
+.md hr, .md p:has(> small) { opacity: 0.85; }

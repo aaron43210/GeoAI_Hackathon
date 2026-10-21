@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 from typing import Any, AsyncIterator, Dict, List, Optional, Tuple
 from zoneinfo import ZoneInfo
 
+from app.advice.friendly import friendly_explanation, render_friendly
 from app.advice.template import body_of, headline, render as render_template
 from app.agent.conversation import classify_turn, explain, smalltalk_reply
 from app.agent.session import SessionStore
@@ -30,7 +31,7 @@ from app.evidence.grounding import verify
 from app.geospatial.context import LocalProjection, VenueFeatures, area_m2, compute_features
 from app.knowledge import get_knowledge
 from app.scoring.grid import GridResult, VenueCtx, build_grid
-from app.slm.prompts import REPAIR_NOTE, compose_messages
+from app.slm.prompts import REPAIR_NOTE, chat_messages
 from app.slm.runtime import SLMRuntime, strip_think
 
 logger = logging.getLogger(__name__)
@@ -76,6 +77,7 @@ class Pipeline:
             if turn == "explain":
                 yield _stage("explain", "Looking at the data behind my last answer…")
                 answer, grounding, path = await explain(question, last, self.slm)
+                answer = friendly_explanation(answer, last.get("evidence") or [])
                 status, extra = "explanation", {"grounding": grounding, "answer_path": path,
                                                 "evidence": last.get("evidence")}
             else:
@@ -299,7 +301,7 @@ class Pipeline:
         answer, grounding, path = None, None, "template"
         if self.slm.ready and (grid.best or grid.least_bad):
             draft = ""
-            async for tok in _stream(self.slm, compose_messages(sheet.text), self.settings.SLM_MAX_TOKENS_ANSWER):
+            async for tok in _stream(self.slm, chat_messages(sheet.text), self.settings.SLM_MAX_TOKENS_ANSWER):
                 draft += tok
                 yield {"event": "token", "data": {"t": tok}}
             draft = strip_think(draft)
@@ -315,7 +317,7 @@ class Pipeline:
                 answer, grounding, path = draft, {"status": "passed", **_g(g1)}, "slm"
             else:
                 yield _stage("verify", "Fixing facts that didn't match the data…")
-                msgs = compose_messages(sheet.text) + [{"role": "assistant", "content": draft},
+                msgs = chat_messages(sheet.text) + [{"role": "assistant", "content": draft},
                                                        {"role": "user", "content": REPAIR_NOTE.format(
                                                            violations="; ".join(g1.violations))}]
                 try:
@@ -338,12 +340,21 @@ class Pipeline:
             answer = render_template(sheet.text)
             grounding = grounding or {"status": "templated", "reason": "SLM unavailable" if not self.slm.ready else
                                       "no recommendation to phrase"}
+        # chat answer: code-rendered decision + (verified model prose | deterministic friendly text) + data behind it
+        parts = render_friendly(grid, sheet, act, place.display_name.split(",")[0] if place.display_name else place.name,
+                                now, limitations)
+        if path.startswith("slm"):
+            prose = body_of(answer)
+            chat = parts.compose(parts.notes.convert(prose))
+        else:
+            chat = parts.compose()
         mark("compose")
 
         status = "ok" if grid.best else "not_recommended"
         if (not osm_ok or aq is None or routes is None or (venues_feat and ctx is None)) and grid.best:
             status = "partial"
-        yield final(status, _place=place.to_dict(), answer_markdown=answer, answer_path=path, grounding=grounding,
+        yield final(status, _place=place.to_dict(), answer_markdown=chat, answer_detailed=answer,
+                    answer_path=path, grounding=grounding,
                     fact_sheet=sheet.text, evidence=sheet.ledger.to_list(), notes=notes, limitations=limitations,
                     place=place.to_dict(), origin={"lat": origin[0], "lon": origin[1]},
                     resolved_windows=[w.to_dict() for w in windows], **_structured(grid, sheet, ctxs))
@@ -382,6 +393,10 @@ class Pipeline:
                                         lat=float(r["lat"]), lon=float(r["lon"]), kind=r.get("osm_type", "node"),
                                         bounds={"minlat": float(bb[0]), "maxlat": float(bb[1]), "minlon": float(bb[2]),
                                                 "maxlon": float(bb[3])} if bb else None))
+        if act.require_sport_match:
+            words = {s.lower() for s in act.synonyms if " " not in s and len(s) > 3} | {act.id}
+            feats = [f for f in feats if any(w in (f.tags.get("sport", "") + " " + (f.name or "")).lower()
+                                             for w in words)]
         return self._select(feats, place, radius_km, act)
 
     def _select(self, feats: List[OSMFeature], place: Place, radius_km: float, act) -> List[OSMFeature]:

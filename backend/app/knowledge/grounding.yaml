@@ -20,7 +20,8 @@ polarity:
     flagged_when: ["above", "limit", "N95", "unhealthy", "caution"]
     forbidden: ["good air", "clean air", "fresh air", "excellent air", "healthy air", "air is good", "air quality is good",
                 "good air quality", "great air", "low pollution", "pollution-free", "manageable", "not a concern",
-                "nothing to worry", "safe to play", "safe for exercise"]
+                "nothing to worry", "safe to play", "safe for exercise", "within safe limits", "within the safe",
+                "still safe", "safe limits", "acceptable levels", "safe for outdoor"]
     forbidden_regex: ['\b(?:low|good|clean|great|excellent|healthy|safe|fine|decent|pleasant|acceptable|moderate|okay|ok|reasonable)\s+(?:us\s+)?(?:aqi|air|pm2\.5)',
                       '\b(?:air|air quality|aqi)\s+(?:is|looks|remains|stays)\s+(?:good|fine|acceptable|okay|ok|clean|decent|reasonable|healthy|safe)']
     # the mirror rule: when the data does NOT flag air quality, alarm language about it is false
@@ -54,6 +55,9 @@ comparisons:
   greater: [exceeds, exceeding, exceeded, exceed, above, over, higher than, more than, greater than, beyond]
   lower: [below, under, within, less than, lower than]
   max_gap_chars: 60
+  # the same check for clock times: "19:00 … before sunset at 17:49" is false
+  time_before: [before, earlier than, ahead of, prior to]
+  time_after: [after, later than, past]
 
 # Fuzzy-match thresholds (0-100) for place names in answers and for the must-mention recommended place.
 name_match_ratio: 88
