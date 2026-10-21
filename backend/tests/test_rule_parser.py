@@ -32,3 +32,11 @@ def test_time_words_are_not_a_location():
     from app.schemas.intent import Intent
     assert Intent(activity="running", location_text="right now").normalised().location_text is None
     assert parse("Is it a good idea to go jogging right now?").location_text is None
+
+
+def test_shorthand_and_trailing_place():
+    from app.agent.rule_parser import tail_place_candidates
+    assert parse("picnic tmrw w/ family nr cubbon prk").location_text == "cubbon park"
+    assert parse("Is it okay to cycle to work at 8 AM from Wakad?").location_text == "Wakad"
+    assert tail_place_candidates("football 5 a side kal shaam dwarka delhi")[0] == "dwarka delhi"
+    assert parse("recommend a good restaurant in Bandra").in_scope is False

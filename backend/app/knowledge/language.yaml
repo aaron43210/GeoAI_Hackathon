@@ -1,0 +1,50 @@
+# Vocabulary for the rule-based parser (agent/rule_parser.py): the fallback when the SLM is unavailable (e.g. GPU
+# quota) and a cross-check of its output. No place names here: candidate places are only accepted if the live
+# geocoder resolves them to a real settlement.
+
+# Shorthand expanded before parsing (whole words only).
+abbreviations:
+  nr: near
+  "nr.": near
+  opp: near
+  tmrw: tomorrow
+  tmr: tomorrow
+  tmrow: tomorrow
+  2moro: tomorrow
+  tdy: today
+  wknd: weekend
+  eve: evening
+  mrng: morning
+  prk: park
+  pk: park
+  rd: road
+  stn: station
+  "w/": with
+
+# Spatial cues, strongest first ("within 5 km of X" > "near X" > "in X" > "from X").
+prepositions:
+  - {pattern: 'within \d+(?:\.\d+)?\s*(?:km|kms)\s+of', strength: 4}
+  - {pattern: 'near|around|close to|next to', strength: 4}
+  - {pattern: 'in|at', strength: 3}
+  - {pattern: 'from|of|towards|to', strength: 2}
+
+# Hindi/Marathi/Kannada postpositions that come after the place ("<place> mein", "<place> ke paas").
+postpositions: [mein, me, ke paas, ke pass, ke aas paas, ke najdik, madhe, madhye, alli]
+
+# Words that are never part of a place name.
+stop_words: [me, my, home, work, office, the, a, an, here, us, it, this, that, to, next, coming, go, do, be, place,
+             places, spot, spots, kids, family, friends, parents, okay, ok, safe, good, best, outdoors, outdoor, outside,
+             any, some, area, city, side, team, match, game, with, and, or, is, if, for, at, on, by, near, around,
+             within, from, in, into, of, towards, via, km, kms, minutes, min, mins, hours, hour, hrs, days, day, week, after, before, am, pm,
+             # Hinglish function words and verbs
+             karna, karne, hai, hain, ke, ka, ki, ko, jana, jaana, mujhe, kya, kahan, kab, acha, accha, liye, chahiye,
+             tha, thi, khelna, khelne, khelenge, khel, chalna, chalne, ghoomna, ghumne, ghumna, daudna, daudne,
+             karenge, karte, jayenge, jaenge, hum, main, mai, apne, saath]
+
+# A request with one of these and no outdoor activity is out of scope.
+out_of_scope_hints: [indoor, gym, netflix, movie, cinema, flight, train ticket, stock, recipe, bank, crypto, code,
+                     homework, loan, hotel, restaurant, cafe, food, eat, dinner, lunch place, shopping, mall, salon,
+                     book a cab, taxi, uber, pizza, doctor, hospital]
+
+# How many trailing words to try as a place when no spatial cue is present ("... kal shaam dwarka delhi").
+tail_place_max_words: 3

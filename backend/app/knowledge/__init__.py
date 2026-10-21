@@ -103,6 +103,7 @@ class Knowledge:
         self.geo: Dict[str, Any] = _load("geo.yaml")
         self.scoring: Dict[str, Any] = _load("scoring.yaml")
         self.grounding: Dict[str, Any] = _load("grounding.yaml")
+        self.language: Dict[str, Any] = _load("language.yaml")
 
     def effective_limits(self, activity: str, profile_ids: List[str]) -> Dict[str, float]:
         """Activity limits tightened by every active personal profile (never loosened)."""

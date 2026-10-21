@@ -68,6 +68,7 @@ class Pipeline:
             timings[name] = round((time.monotonic() - t0) * 1000)
 
         prev = self.sessions.get(session_id)
+        assumed_place_note: Optional[str] = None
         yield _stage("understand", "Reading your question…")
         intent, intent_path = await understand(question, self.slm, prev.get("intent") if prev else None)
         if prev:
@@ -107,6 +108,11 @@ class Pipeline:
         # ------------------------------------------------------------ location
         place: Optional[Place] = None
         origin: Optional[Tuple[float, float]] = None
+        if not intent.location_text and not user_location and not (prev and prev.get("place")):
+            guessed = await self._tail_place(question)
+            if guessed:
+                intent = type(intent)(**{**intent.model_dump(), "location_text": guessed})
+                assumed_place_note = f"I took “{guessed}” as the place; tell me if you meant somewhere else."
         if intent.location_text:
             yield _stage("locate", f"Finding “{intent.location_text}” on the map…")
             try:
@@ -155,6 +161,8 @@ class Pipeline:
         tt = intent.time_text if intent.time_text and intent.time_text.lower() not in question.lower() else ""
         res: Resolution = self.resolver.resolve(f"{question} {tt}".strip(), now)
         notes = list(res.notes)
+        if assumed_place_note:
+            notes.append(assumed_place_note)
         horizon = self.resolver.horizon_check(res, now)
         if "beyond_weather_horizon" in horizon or not res.windows:
             yield final("not_available", _place=place.to_dict(), answer_markdown=(
@@ -307,6 +315,20 @@ class Pipeline:
                     resolved_windows=[w.to_dict() for w in windows], **_structured(grid, sheet, ctxs))
 
     # ------------------------------------------------------------------ helpers
+    async def _tail_place(self, question: str) -> Optional[str]:
+        """A trailing place name with no spatial cue ("… kal shaam dwarka delhi"), accepted only if the live
+        geocoder resolves it to a settlement type from geo.yaml (never a shop/POI that happens to share the words)."""
+        from app.agent.rule_parser import tail_place_candidates
+        settlement = set(self.kb.geo["place_type_priority"])
+        for cand in tail_place_candidates(question)[:2]:
+            try:
+                geo = await self.geocoder.geocode(cand)
+            except UpstreamError:
+                return None
+            if geo.best and geo.best.osm_type in settlement:
+                return cand
+        return None
+
     async def _nominatim_candidates(self, act, place: Place, radius_km: float) -> List[OSMFeature]:
         feats: List[OSMFeature] = []
         for phrase in act.nominatim_phrases:

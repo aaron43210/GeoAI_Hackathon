@@ -12,27 +12,21 @@ from typing import List, Optional
 from app.knowledge import get_knowledge
 from app.schemas.intent import Intent
 
-# Spatial cues, strongest first. Hinglish postpositions ("<place> mein", "<place> ke paas") come after the place.
-_PREPOSITIONS = [(r"within \d+(?:\.\d+)?\s*(?:km|kms)\s+of", 4), (r"near|around|close to|nearby|next to", 4),
-                 (r"in|at", 3), (r"from|of|towards|to", 1)]
-_POSTPOSITIONS = r"(?:mein|me|ke paas|ke pass|ke aas paas|ke najdik|madhe|madhye|alli)"
-_STOP_WORDS = {"me", "my", "home", "work", "office", "the", "a", "an", "here", "us", "it", "this", "that", "to",
-               "next", "coming", "go", "do", "be", "place", "places", "spot", "spots", "kids", "parents", "okay",
-               "ok", "safe", "good", "best", "outdoors", "outdoor", "outside", "any", "some", "area", "city",
-               # Hinglish function words
-               "karna", "karne", "hai", "hain", "ke", "ka", "ki", "ko", "jana", "jaana", "mujhe", "kya", "kahan",
-               "kab", "acha", "accha", "liye", "chahiye", "tha", "thi", "khelna", "khelne", "khelenge", "khel",
-               "chalna", "chalne", "ghoomna", "ghumne", "ghumna", "daudna", "daudne", "karenge", "karte", "jayenge",
-               "jaenge", "hum", "main", "mai", "apne", "saath"}
-OUT_OF_SCOPE_HINTS = ["indoor", "gym", "netflix", "movie", "flight", "stock", "recipe", "bank", "crypto", "code",
-                      "homework", "loan", "hotel booking", "book a cab"]
+def _lang() -> dict:
+    return get_knowledge().language
+
+
+def expand_abbreviations(text: str) -> str:
+    """Whole-word shorthand expansion ("nr cubbon prk" → "near cubbon park"); vocabulary in language.yaml."""
+    for short, full in sorted(_lang()["abbreviations"].items(), key=lambda kv: -len(kv[0])):
+        text = re.sub(r"(?<![\w])" + re.escape(short) + r"(?![\w])", full, text, flags=re.IGNORECASE)
+    return text
 
 
 def _time_words() -> List[str]:
     lex = get_knowledge().time
     words = list(lex["dayparts"]) + list(lex["relative_days"]) + list(lex["weekdays"]) + list(lex["months"])
-    words += ["weekend", "this", "next", "coming", "days", "day", "week", "after", "before", "work", "evening", "today",
-              "within", "km", "minutes", "min", "hours", "hour", "for", "with", "and", "or", "is", "it", "safe", "ok"]
+    words += list(lex.get("filler_words", []))
     return sorted(set(words), key=len, reverse=True)
 
 
@@ -53,18 +47,44 @@ def _clean_candidate(chunk: str, junk: set) -> Optional[str]:
     return cand if len(cand) > 2 else None
 
 
+def _junk_words() -> set:
+    junk = set(_time_words()) | set(_lang()["stop_words"])
+    for prof in get_knowledge().activities.values():
+        junk.update(syn.lower() for syn in prof.synonyms if " " not in syn)
+    return junk
+
+
+def tail_place_candidates(question: str) -> List[str]:
+    """Trailing words that could be a place when no spatial cue exists ("… kal shaam dwarka delhi").
+    Longest first; the pipeline accepts one only if the live geocoder resolves it to a settlement."""
+    junk = _junk_words()
+    tokens = re.findall(r"[A-Za-z][\w'.\-]*", expand_abbreviations(question))
+    run: List[str] = []
+    for tok in reversed(tokens):
+        if tok.lower() in junk:
+            if run:
+                break
+            continue
+        run.insert(0, tok)
+        if len(run) >= _lang()["tail_place_max_words"]:
+            break
+    return [" ".join(run[i:]) for i in range(len(run))] if run else []
+
+
 def detect_location(question: str) -> Optional[str]:
     kb = get_knowledge()
-    junk = set(_time_words()) | _STOP_WORDS
-    for prof in kb.activities.values():
-        junk.update(syn.lower() for syn in prof.synonyms if " " not in syn)
+    junk = _junk_words()
     found = []
-    for pattern, strength in _PREPOSITIONS:
-        for m in re.finditer(r"(?<![a-z])(?:" + pattern + r")\s+([A-Za-z][\w'.\- ]{1,60})", question, flags=re.IGNORECASE):
+    for prep in _lang()["prepositions"]:
+        pattern, strength = prep["pattern"], prep["strength"]
+        # lookahead so matches can overlap: "to work at 8 AM from Wakad" must still yield "from Wakad"
+        for m in re.finditer(r"(?<![a-z])(?=(?:" + pattern + r")\s+([A-Za-z][\w'.\- ]{1,60}))", question,
+                             flags=re.IGNORECASE):
             cand = _clean_candidate(m.group(1), junk)
             if cand:
                 found.append((strength, m.start(), cand))
-    for m in re.finditer(r"((?:[A-Za-z][\w'.\-]*\s+){1,3})" + _POSTPOSITIONS + r"(?![a-z])", question, flags=re.IGNORECASE):
+    post = "(?:" + "|".join(re.escape(p) for p in _lang()["postpositions"]) + ")"
+    for m in re.finditer(r"((?:[A-Za-z][\w'.\-]*\s+){1,3})" + post + r"(?![a-z])", question, flags=re.IGNORECASE):
         cand = _clean_candidate(m.group(1), junk)
         if cand:
             found.append((3, m.start(), cand))
@@ -76,6 +96,7 @@ def detect_location(question: str) -> Optional[str]:
 
 def parse(question: str) -> Intent:
     kb = get_knowledge()
+    question = expand_abbreviations(question)
     q = question.lower()
     activity, raw = detect_activity(q)
 
@@ -116,7 +137,8 @@ def parse(question: str) -> Intent:
         if re.search(pat, q):
             prefs.append(pref)
 
-    in_scope = activity is not None or not any(h in q for h in OUT_OF_SCOPE_HINTS)
+    in_scope = activity is not None or not any(
+        re.search(r"(?<![a-z])" + re.escape(h) + r"(?![a-z])", q) for h in _lang()["out_of_scope_hints"])
     return Intent(
         in_scope=in_scope,
         out_of_scope_reason=None if in_scope else "not an outdoor activity request",

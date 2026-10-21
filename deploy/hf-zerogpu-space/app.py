@@ -86,7 +86,9 @@ with gr.Blocks(title="TerraPulse AI") as demo:
     btn.click(ask_terrapulse, inputs=inp, outputs=out)
     inp.submit(ask_terrapulse, inputs=inp, outputs=out)
 
-app = gr.mount_gradio_app(fastapi_app, demo, path="/")
+# Client-side rendering: Spaces set GRADIO_SSR_MODE=true, but SSR needs a separate Node server that a mounted app
+# does not have (assets under /_app would 404).
+app = gr.mount_gradio_app(fastapi_app, demo, path="/", ssr_mode=False)
 
 if __name__ == "__main__":
     # ZeroGPU registers @spaces.GPU functions from gr.Blocks.launch(); we serve with uvicorn to keep the FastAPI
