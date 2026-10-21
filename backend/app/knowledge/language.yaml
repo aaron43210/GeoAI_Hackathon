@@ -56,3 +56,16 @@ in_scope_cues: [outdoor, outdoors, outside, activity, activities, weather, aqi, 
 
 # How many trailing words to try as a place when no spatial cue is present ("... kal shaam dwarka delhi").
 tail_place_max_words: 3
+
+# Conversation layer (agent/conversation.py). Small-talk is recognised only in short messages with no activity,
+# so "good morning walk near X" is still a plan request.
+conversation:
+  smalltalk_max_words: 5
+  greetings: [hi, hello, hey, hii, hiya, namaste, namaskar, hola, yo, good evening, good afternoon, sup]
+  thanks: [thanks, thank you, thx, ty, thanks a lot, great thanks, ok thanks, cool thanks, awesome, perfect, great]
+  help: [help, what can you do, how does this work, who are you, what are you, how do i use this, what do you do,
+         capabilities]
+  # follow-ups that ask about the previous answer rather than for a new plan
+  explain_starts: [why, how come, explain, what does, what do you mean, how did you, how is, how was, what is the score,
+                   where does, which data, what data, source, sources]
+  history_turns: 6

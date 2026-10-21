@@ -51,40 +51,49 @@ async def _zerogpu_request_context(request, call_next):
         LocalContext.request.reset(token)
 
 
-# ---------------------------------------------------------------- small web demo at "/" (the API lives at /api/v1)
-async def ask_terrapulse(question: str):
-    if not question or not question.strip():
-        return "Please enter a question, e.g. *'evening run near Baner tomorrow'*"
+# ---------------------------------------------------------------- chat UI at "/" (the API lives at /api/v1)
+_chat_sessions: dict = {}        # Gradio browser session -> TerraPulse session_id (keeps follow-ups in context)
+
+
+async def chat_fn(message: str, history: list, request: gr.Request):
     pipeline = getattr(fastapi_app.state, "pipeline", None)
     if pipeline is None:
-        return "Service is still starting. Please try again in a few seconds."
+        yield "Service is still starting. Please try again in a few seconds."
+        return
+    key = getattr(request, "session_hash", None) or "anon"
+    progress = []
     try:
-        async for ev in pipeline.run(question.strip()):
-            if ev.get("event") == "final":
-                data = ev.get("data", {})
+        async for ev in pipeline.run(message.strip(), _chat_sessions.get(key)):
+            if ev["event"] == "stage":
+                progress.append("⏳ " + ev["data"]["message"])
+                yield "\n".join(progress[-3:])
+            elif ev["event"] == "final":
+                data = ev["data"]
+                _chat_sessions[key] = data.get("session_id")
                 md = data.get("answer_markdown", "")
-                if data.get("sources"):
-                    md += "\n\n---\n**Data sources:** " + " · ".join(data["sources"])
-                return md
-        return "No answer was produced. Please rephrase the question."
+                clar = data.get("clarification")
+                if clar and clar.get("options"):
+                    md += "\n\n" + " · ".join(f"*{o}*" for o in clar["options"][:6])
+                g = (data.get("grounding") or {}).get("status")
+                if g in ("passed", "repaired"):
+                    md += f"\n\n<sub>✔ every number checked against live data · {round(data['timings_ms']['total'] / 1000)} s</sub>"
+                yield md
     except Exception as exc:  # noqa: BLE001
-        return f"Error: {exc}"
+        yield f"Sorry, something went wrong: {exc}"
 
 
-with gr.Blocks(title="TerraPulse AI") as demo:
-    gr.Markdown("# 🌍 TerraPulse AI\nWhere and when to head outdoors, grounded in live open data. "
-                "API: `POST /api/v1/ask` · docs at `/docs`.")
-    with gr.Row():
-        inp = gr.Textbox(label="Your question", placeholder="e.g. Kids' football practice near Koramangala, "
-                         "Saturday or Sunday?", lines=2, scale=4)
-        btn = gr.Button("Ask", variant="primary", scale=1)
-    out = gr.Markdown()
-    gr.Examples(examples=[["Evening jog near Indiranagar Bengaluru tomorrow?"],
-                          ["I have mild asthma, any good spot for a morning walk near Malleshwaram tomorrow?"],
-                          ["Box cricket Saturday or Sunday near Thane?"],
-                          ["Kal subah jogging karna hai Salt Lake Kolkata mein"]], inputs=inp)
-    btn.click(ask_terrapulse, inputs=inp, outputs=out)
-    inp.submit(ask_terrapulse, inputs=inp, outputs=out)
+demo = gr.ChatInterface(
+    fn=chat_fn,
+    type="messages",
+    title="🌍 TerraPulse AI",
+    description=("Where and when to head outdoors, grounded in live weather, air quality and OpenStreetMap. "
+                 "Ask, then follow up: *why?* · *what about Sunday?* · *somewhere quieter?* "
+                 "API: `POST /api/v1/chat` or `/api/v1/ask` · docs at `/docs`."),
+    examples=["Hi! What can you do?", "Evening jog near Indiranagar Bengaluru tomorrow?",
+              "I have mild asthma, any good spot for a morning walk near Malleshwaram tomorrow?",
+              "Box cricket Saturday or Sunday near Thane?", "Kal subah jogging karna hai Salt Lake Kolkata mein"],
+    cache_examples=False,
+)
 
 # Client-side rendering: Spaces set GRADIO_SSR_MODE=true, but SSR needs a separate Node server that a mounted app
 # does not have (assets under /_app would 404).

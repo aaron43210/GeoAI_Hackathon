@@ -85,3 +85,14 @@ def compose_messages(fact_sheet: str) -> List[Dict[str, str]]:
 
 REPAIR_NOTE = ("Your previous answer contained facts that are not in the fact sheet: {violations}. Rewrite it using "
                "only fact-sheet values and ids.")
+
+
+EXPLAIN_SYSTEM = """You are TerraPulse, an outdoor-activity advisor, answering a follow-up question about your previous recommendation.
+Use ONLY the facts in the FACT SHEET of that recommendation. Cite fact ids in square brackets like [E4].
+Every number, time and place you mention must appear in the fact sheet. If the fact sheet does not contain the answer,
+say so plainly. Never weaken a safety warning or a 'not recommended' decision. Answer in 2-5 short sentences."""
+
+
+def explain_messages(fact_sheet: str, question: str) -> List[Dict[str, str]]:
+    return [{"role": "system", "content": EXPLAIN_SYSTEM},
+            {"role": "user", "content": f"FACT SHEET:\n{fact_sheet}\n\nFOLLOW-UP QUESTION: {question}"}]

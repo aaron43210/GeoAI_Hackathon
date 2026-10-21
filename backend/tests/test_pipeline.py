@@ -13,16 +13,6 @@ OVERPASS = "https://overpass.test/api/interpreter"
 LAT, LON = 10.0, 76.0
 
 
-@pytest.fixture(autouse=True)
-def _env(monkeypatch):
-    monkeypatch.setenv("OVERPASS_MIRRORS", OVERPASS)
-    monkeypatch.setenv("SLM_ENABLED", "false")
-    from app.config import get_settings
-    get_settings.cache_clear()
-    yield
-    get_settings.cache_clear()
-
-
 def _hours():
     today = datetime.now(ZoneInfo("Asia/Kolkata")).date()
     start = datetime.combine(today - timedelta(days=1), datetime.min.time())
@@ -87,7 +77,7 @@ NOMINATIM = [{"lat": str(LAT), "lon": str(LON), "name": "Testville", "display_na
               "address": {"city": "Testville", "state": "Kerala"}}]
 
 
-def _mock(router, overpass_ok=True, weather_ok=True):
+def _mock(router, overpass_ok=True, weather_ok=True, aq_ok=True, candidates=None):
     router.get(url__regex=r"https://nominatim\.openstreetmap\.org/search.*").mock(
         side_effect=lambda req: httpx.Response(200, json=NOMINATIM if "viewbox" not in str(req.url) else [
             {"lat": "10.005", "lon": "76.005", "name": "Nominatim Test Garden", "osm_type": "way", "osm_id": 555,
@@ -97,7 +87,7 @@ def _mock(router, overpass_ok=True, weather_ok=True):
         if not overpass_ok:
             return httpx.Response(504)
         body = req.content.decode()
-        return httpx.Response(200, json=CONTEXT if "around.c" in body else CANDIDATES)
+        return httpx.Response(200, json=CONTEXT if "around.c" in body else (candidates or CANDIDATES))
     router.post(OVERPASS).mock(side_effect=overpass)
 
     def wx(req):
@@ -107,7 +97,8 @@ def _mock(router, overpass_ok=True, weather_ok=True):
         return httpx.Response(200, json=_forecast(n))
     router.get(url__regex=r"https://api\.open-meteo\.com/v1/forecast.*").mock(side_effect=wx)
     router.get(url__regex=r"https://air-quality-api\.open-meteo\.com/v1/air-quality.*").mock(
-        side_effect=lambda req: httpx.Response(200, json=_air(len(req.url.params["latitude"].split(",")))))
+        side_effect=lambda req: httpx.Response(200, json=_air(len(req.url.params["latitude"].split(","))))
+        if aq_ok else httpx.Response(503))
 
     def osrm(req):
         n = str(req.url).split("/driving/")[1].split("?")[0].count(";")

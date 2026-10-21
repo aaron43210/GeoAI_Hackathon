@@ -23,20 +23,44 @@ def _section(lines: List[str], header: str) -> List[str]:
     return out
 
 
-def render(sheet_text: str) -> str:
-    lines = sheet_text.splitlines()
+def _heads(lines: List[str]) -> Dict[str, str]:
     head: Dict[str, str] = {}
     for ln in lines:
         key = ln.split(":", 1)[0]
         if key in ("BEST", "RESULT", "CARRY", "WATCH FOR", "LIMITATIONS", "HEALTH WARNING"):
             head[key] = ln.split(":", 1)[1].strip()
+    return head
+
+
+def headline(sheet_text: str) -> str:
+    """The decision itself, rendered by code: the language model never writes (or softens) it."""
+    head = _heads(sheet_text.splitlines())
     parts: List[str] = []
     if "BEST" in head:
         parts.append(f"**Best pick:** {head['BEST']}")
     elif "RESULT" in head:
-        parts.append(f"**Heads-up:** {head['RESULT']}")
+        result = head["RESULT"].replace("NOT RECOMMENDED in the requested time: ", "")
+        parts.append(f"**Not recommended:** {result}")
     if "HEALTH WARNING" in head:
         parts.append(f"⚠️ **Health warning:** {head['HEALTH WARNING']}")
+    return "  \n".join(parts)
+
+
+def body_of(draft: str) -> str:
+    """Drop any headline the model wrote itself; keep its explanation (from **Why** onwards)."""
+    idx = draft.find("**Why")
+    if idx >= 0:
+        return draft[idx:].strip()
+    keep = [ln for ln in draft.splitlines()
+            if not ln.lstrip().startswith(("**Best pick", "**Not recommended", "Best pick", "Not recommended",
+                                           "⚠", "**Heads-up", "**Health warning"))]
+    return "\n".join(keep).strip()
+
+
+def render(sheet_text: str) -> str:
+    lines = sheet_text.splitlines()
+    head = _heads(lines)
+    parts: List[str] = [headline(sheet_text)] if headline(sheet_text) else []
     facts = _section(lines, "FACTS:")
     if facts:
         parts.append("**Why (live data):**\n" + "\n".join(f"- {f}" for f in facts))

@@ -88,7 +88,8 @@ export interface AdviceItem {
 }
 
 export interface AskResponse {
-  status: 'ok' | 'partial' | 'not_recommended' | 'clarification_needed' | 'out_of_scope' | 'not_available' | 'error';
+  status: 'ok' | 'partial' | 'not_recommended' | 'clarification_needed' | 'out_of_scope' | 'not_available' | 'error'
+    | 'chat' | 'explanation';
   session_id: string;
   question: string;
   answer_markdown: string;

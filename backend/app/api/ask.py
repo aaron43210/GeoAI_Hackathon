@@ -165,3 +165,28 @@ async def venues(request: Request, activity: str, place: Optional[str] = None, l
     return {"centre": {"lat": p.latitude, "lon": p.longitude, "name": p.name}, "source": source,
             "venues": [{"name": v.name, "lat": v.lat, "lon": v.lon, "osm_id": v.osm_id,
                         "osm_url": f"https://www.openstreetmap.org/{v.osm_id}", "tags": v.tags} for v in chosen]}
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(..., min_length=1, max_length=600, description="What the user says")
+    session_id: Optional[str] = Field(None, description="Send back the session_id you received to continue a chat")
+    user_location: Optional[LatLon] = None
+
+
+@router.post("/chat")
+async def chat(body: ChatRequest, request: Request):
+    """Conversational endpoint: plans, follow-ups ("what about Sunday?", "somewhere closer?"), "why?" questions
+    about the last answer, greetings and help. Returns a compact reply; GET /explain gives the full evidence."""
+    result = await _collect(request, AskRequest(question=body.message, session_id=body.session_id,
+                                                user_location=body.user_location))
+    pick = result.get("recommendation") or result.get("least_bad")
+    return {
+        "session_id": result.get("session_id"),
+        "status": result.get("status"),
+        "reply": result.get("answer_markdown", ""),
+        "clarification": result.get("clarification"),
+        "recommendation": {k: pick.get(k) for k in ("venue", "label", "score", "status", "concerns")} if pick else None,
+        "grounding": result.get("grounding"),
+        "understood_as": {k: (result.get("intent") or {}).get(k) for k in
+                          ("activity", "location_text", "time_text", "profiles", "path")},
+    }

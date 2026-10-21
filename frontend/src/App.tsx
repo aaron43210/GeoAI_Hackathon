@@ -36,6 +36,7 @@ const FACTOR_LABEL: Record<string, string> = {
 const STATUS_LABEL: Record<string, string> = {
   ok: 'Recommended', partial: 'Recommended (some data missing)', not_recommended: 'Not recommended',
   clarification_needed: 'Need one detail', out_of_scope: 'Out of scope', not_available: 'Not available', error: 'Error',
+  chat: 'TerraPulse', explanation: 'From the data behind my last answer',
 };
 
 export default function App() {

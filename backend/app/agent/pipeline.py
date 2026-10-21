@@ -13,7 +13,8 @@ from datetime import datetime, timedelta
 from typing import Any, AsyncIterator, Dict, List, Optional, Tuple
 from zoneinfo import ZoneInfo
 
-from app.advice.template import render as render_template
+from app.advice.template import body_of, headline, render as render_template
+from app.agent.conversation import classify_turn, explain, smalltalk_reply
 from app.agent.session import SessionStore
 from app.agent.time_resolver import Resolution, TimeResolver
 from app.agent.understand import understand
@@ -69,6 +70,23 @@ class Pipeline:
 
         prev = self.sessions.get(session_id)
         assumed_place_note: Optional[str] = None
+        last = (prev or {}).get("last") or {}
+        turn = classify_turn(question, bool(last.get("fact_sheet")))
+        if turn != "plan":
+            if turn == "explain":
+                yield _stage("explain", "Looking at the data behind my last answer…")
+                answer, grounding, path = await explain(question, last, self.slm)
+                status, extra = "explanation", {"grounding": grounding, "answer_path": path,
+                                                "evidence": last.get("evidence")}
+            else:
+                answer, status, extra = smalltalk_reply(turn), "chat", {}
+            sid = self.sessions.save(session_id, history=_history(prev, question, answer))
+            mark("total")
+            yield {"event": "final", "data": {"status": status, "session_id": sid, "question": question,
+                                              "answer_markdown": answer, "intent": {"path": turn},
+                                              "model": self.slm.describe(), "timings_ms": timings,
+                                              "sources": SOURCES, **extra}}
+            return
         yield _stage("understand", "Reading your question…")
         intent, intent_path = await understand(question, self.slm, prev.get("intent") if prev else None)
         if prev:
@@ -79,10 +97,14 @@ class Pipeline:
         mark("understand")
 
         def final(status: str, **kw: Any) -> Dict[str, Any]:
-            sid = self.sessions.save(session_id, intent=intent.model_dump(), place=kw.get("_place"),
-                                     user_location=user_location,
-                                     last={k: kw.get(k) for k in ("fact_sheet", "evidence", "answer_markdown",
-                                                                   "grounding", "limitations")})
+            saved: Dict[str, Any] = {"intent": intent.model_dump(), "user_location": user_location,
+                                     "history": _history(prev, question, kw.get("answer_markdown", ""))}
+            if kw.get("_place"):
+                saved["place"] = kw["_place"]
+            if kw.get("fact_sheet"):      # keep the last *recommendation* for "why?" follow-ups
+                saved["last"] = {k: kw.get(k) for k in ("fact_sheet", "evidence", "answer_markdown", "grounding",
+                                                         "limitations")}
+            sid = self.sessions.save(session_id, **saved)
             kw.pop("_place", None)
             mark("total")
             return {"event": "final", "data": {
@@ -281,6 +303,9 @@ class Pipeline:
                 draft += tok
                 yield {"event": "token", "data": {"t": tok}}
             draft = strip_think(draft)
+            head = headline(sheet.text)
+            if draft.strip():
+                draft = f"{head}\n\n{body_of(draft)}" if head else draft   # the decision line is code-rendered
             g1 = verify(draft, sheet.text, sheet.ledger.ids(), sheet.allowed_names, must, recommended=grid.best is not None,
                         ledger_values={e.id: e.value for e in sheet.ledger.items})
             if not draft.strip():
@@ -299,6 +324,8 @@ class Pipeline:
                 except Exception as exc:  # noqa: BLE001 - e.g. GPU quota; never fail the request over phrasing
                     logger.warning("SLM repair failed (%s); using the data template", exc)
                     fixed = ""
+                if fixed.strip() and head:
+                    fixed = f"{head}\n\n{body_of(fixed)}"
                 g2 = verify(fixed, sheet.text, sheet.ledger.ids(), sheet.allowed_names, must, recommended=grid.best is not None,
                         ledger_values={e.id: e.value for e in sheet.ledger.items})
                 if g2.status == "passed":
@@ -386,6 +413,13 @@ class Pipeline:
             if len(chosen) >= cfg["max_candidates"]:
                 break
         return chosen
+
+
+def _history(prev: Optional[Dict[str, Any]], question: str, answer: str) -> List[Dict[str, str]]:
+    turns = list((prev or {}).get("history") or [])
+    turns += [{"role": "user", "content": question}, {"role": "assistant", "content": answer}]
+    keep = get_knowledge().language["conversation"]["history_turns"] * 2
+    return turns[-keep:]
 
 
 def _stage(name: str, message: str) -> Dict[str, Any]:
