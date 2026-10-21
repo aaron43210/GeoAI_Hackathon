@@ -95,3 +95,11 @@ def test_inverted_comparison_is_rejected():
     assert any("false comparison" in v for v in bad.violations)
     good = verify("Lakeside Garden [E1]: US AQI 72 [E5], well below the limit of 200.", sheet, IDS, NAMES)
     assert not any("false comparison" in v for v in good.violations)
+
+
+def test_alarm_about_unflagged_air_quality_is_rejected():
+    bad = verify("Lakeside Garden [E1]: the US AQI exceeds the safe limit and is harmful [E5].", SHEET, IDS, NAMES)
+    assert any("does not flag" in v for v in bad.violations)
+    flagged_sheet = SHEET + "\nCARRY: an N95 mask for the journey (US AQI up to 175)"
+    ok = verify("Lakeside Garden [E1]: unhealthy air today [E5].", flagged_sheet, IDS, NAMES)
+    assert not any("does not flag" in v for v in ok.violations)

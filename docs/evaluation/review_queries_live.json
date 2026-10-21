@@ -1,0 +1,150 @@
+[
+ {
+  "q": "golf this saturday near Gurugram",
+  "http": 200,
+  "s": 29.9,
+  "status": "partial",
+  "intent": "slm+rules",
+  "activity": "golf",
+  "answer_path": "slm",
+  "grounding": "passed",
+  "venue": "DLF Golf and Country Club",
+  "window": "Sat 24 Oct 06:00–10:00",
+  "score": 55.0,
+  "pick_status": "caution",
+  "concerns": [
+   "US AQI 177 is unhealthy (above 150): keep exertion light and short"
+  ],
+  "factors": {
+   "thermal": 1.0,
+   "rain": 1.0,
+   "wind": 1.0,
+   "uv": 1.0,
+   "air": 0.087,
+   "access": 0.957,
+   "light": 1.0
+  },
+  "clarification": null,
+  "answer": "**Best pick:** [E1] DLF Golf and Country Club, Sat 24 Oct 06:00–10:00, score [E2] 55/100  \n⚠️ **Health warning:** [E3] US AQI 177 is unhealthy (above 150): keep exertion light and short\n\n**Why:**  \n- **Weather:** Feels-like temperature 21–28.4 °C [E4], comfortable for play.  \n- **Air:** US AQI up to 177 [E6], which is unhealthy (above 150), so keep exertion light and short.  \n- **Wind/roads/industry:** Gusts up to 12.6 km/h [E9], winds from SW at 3.1 km/h [E8]; roads/industry/green/water around the place: unavailable [E11].  \n- **Travel:** 14.6 min / 11.2 km by road [E12]; 16 min at 06:00 with typical traffic [E13].  \n**Carry:** About 3 L of water per person; an N95 mask for the journey (US AQI up to 177).  \n**Watch for:** US AQI 177 is unhealthy (above 150) [E15]; keep exertion light and short.  \n**Avoid:** Sat 18:00–21:00: after dark: this activity needs daylight [E16].  \n**Other options:**  \n- DLF Golf Links Golf Course, same time, score 55, 15.1 min away; same conditions as above [E17–E20].  \n- Golden Green Golf Course, same time, score 55, 23.9 min away; same conditions as above [E22–E26]."
+ },
+ {
+  "q": "Best time for a 5 km run tomorrow near Gurugram considering weather and AQI",
+  "http": 200,
+  "s": 31.4,
+  "status": "partial",
+  "intent": "slm+rules",
+  "activity": "running",
+  "answer_path": "template",
+  "grounding": "templated",
+  "venue": "Tikona Park",
+  "window": "Thu 22 Oct 06:00–07:00",
+  "score": 53.1,
+  "pick_status": "caution",
+  "concerns": [
+   "US AQI 197 is unhealthy (above 150): keep exertion light and short"
+  ],
+  "factors": {
+   "thermal": 1.0,
+   "rain": 1.0,
+   "wind": 1.0,
+   "uv": 1.0,
+   "air": 0.001,
+   "access": 1.0,
+   "light": 1.0
+  },
+  "clarification": null,
+  "answer": "**Best pick:** [E1] Tikona Park, Thu 22 Oct 06:00–07:00, score [E2] 53.1/100  \n⚠️ **Health warning:** [E3] US AQI 197 is unhealthy (above 150): keep exertion light and short\n\n**Why (live data):**\n- [E4] feels-like temperature 21.8 °C (06:00–07:00)\n- [E5] rain probability up to 0 % (06:00–07:00)\n- [E6] US AQI up to 197 (06:00–07:00); main pollutant PM2.5\n- [E7] PM2.5 up to 142.5 µg/m³ (06:00–07:00)\n- [E8] wind from W at 6 km/h (06:00)\n- [E9] gusts up to 10.1 km/h (06:00–07:00)\n- [E10] UV index up to 0 (06:00–07:00)\n- [E11] roads/industry/green/water around the place: unavailable (map query failed)\n- [E12] 3.6 min / 2.6 km by road (free-flow); [E13] about 4 min at 06:00 with typical traffic (estimate)\n- [E14] sunrise 06:26, sunset 17:45 on Thu 22 Oct\n- [E15] caution: US AQI 197 is unhealthy (above 150): keep exertion light and short\n\n**Carry:**\n- about 1 L of water per person\n- an N95 mask for the journey (US AQI up to 197)\n\n**Avoid / timing:**\n- [E16] Thu 22 Oct 13:00–14:00 at the same place scores only 16.1/100, mainly because of thermal comfort\n\n**Other options:**\n- [E17] Imperia Towers Park, Thu 22 Oct 06:00–07:00, score [E18] 53.1, 7.4 min away; [E19] feels-like temperature 21.8 °C (06:00–07:00); [E20] rain probability up to 0 % (06:00–07:00); [E21] US AQI up to 197 (06:00–07:00); main pollutant PM2.5\n- [E22] Manav Rachna Playground cum C Block Main Park, Thu 22 Oct 06:00–07:00, score [E23] 53.1, 8.6 min away; [E24] feels-like temperature 21.8 °C (06:00–07:00); [E25] rain probability up to 0 % (06:00–07:00); [E26] US AQI up to 197 (06:00–07:00); main pollutant PM2.5\n- same place at Thu 22 Oct 07:00–08:00: score [E27] 53.1\n\n_No search radius given: searched within 10 km._\n\n_Limitations: map context (roads, industry, green, water) was unavailable; venues came from OpenStreetMap via Nominatim because Overpass did not respond; air-quality forecast comes from a ~40 km CAMS grid, so differences between nearby places come from the modelled road/industry exposure, not from measurements; travel times are free-flow OSRM times with a typical-traffic multiplier, not live traffic; OpenStreetMap coverage varies by area; opening hours, entry rules and bookings (e.g. tee times, court slots) were not checked_"
+ },
+ {
+  "q": "Best cycling routes this Sunday morning near Gurugram considering wind, rain and air quality",
+  "http": 200,
+  "s": 23.9,
+  "status": "partial",
+  "intent": "slm+rules",
+  "activity": "cycling",
+  "answer_path": "template",
+  "grounding": "templated",
+  "venue": "Tikona Park",
+  "window": "Sun 25 Oct 06:00–07:00",
+  "score": 55.0,
+  "pick_status": "caution",
+  "concerns": [
+   "US AQI 167 is unhealthy (above 150): keep exertion light and short"
+  ],
+  "factors": {
+   "thermal": 1.0,
+   "rain": 1.0,
+   "wind": 1.0,
+   "uv": 1.0,
+   "air": 0.076,
+   "access": 1.0,
+   "light": 1.0
+  },
+  "clarification": null,
+  "answer": "**Best pick:** [E1] Tikona Park, Sun 25 Oct 06:00–07:00, score [E2] 55/100  \n⚠️ **Health warning:** [E3] US AQI 167 is unhealthy (above 150): keep exertion light and short\n\n**Why (live data):**\n- [E4] feels-like temperature 20.7 °C (06:00–07:00)\n- [E5] rain probability up to 0 % (06:00–07:00)\n- [E6] US AQI up to 167 (06:00–07:00); main pollutant PM2.5\n- [E7] PM2.5 up to 106.4 µg/m³ (06:00–07:00)\n- [E8] wind from SW at 1.9 km/h (06:00)\n- [E9] gusts up to 6.1 km/h (06:00–07:00)\n- [E10] UV index up to 0 (06:00–07:00)\n- [E11] roads/industry/green/water around the place: unavailable (map query failed)\n- [E12] 3.6 min / 2.6 km by road (free-flow); [E13] about 4 min at 06:00 with typical traffic (estimate)\n- [E14] sunrise 06:28, sunset 17:42 on Sun 25 Oct\n- [E15] caution: US AQI 167 is unhealthy (above 150): keep exertion light and short\n\n**Carry:**\n- about 1 L of water per person\n- an N95 mask for the journey (US AQI up to 167)\n\n**Other options:**\n- [E16] Imperia Towers Park, Sun 25 Oct 06:00–07:00, score [E17] 55, 7.4 min away; [E18] feels-like temperature 20.7 °C (06:00–07:00); [E19] rain probability up to 0 % (06:00–07:00); [E20] US AQI up to 167 (06:00–07:00); main pollutant PM2.5\n- [E21] Chakkarpur Wazirabad Bundh, Sun 25 Oct 06:00–07:00, score [E22] 55, 11.6 min away; [E23] feels-like temperature 21.1 °C (06:00–07:00); [E24] rain probability up to 0 % (06:00–07:00); [E25] US AQI up to 167 (06:00–07:00); main pollutant PM2.5\n- same place at Sun 25 Oct 07:00–08:00: score [E26] 55\n\n_No search radius given: searched within 10 km._\n\n_Limitations: map context (roads, industry, green, water) was unavailable; venues came from OpenStreetMap via Nominatim because Overpass did not respond; air-quality forecast comes from a ~40 km CAMS grid, so differences between nearby places come from the modelled road/industry exposure, not from measurements; travel times are free-flow OSRM times with a typical-traffic multiplier, not live traffic; OpenStreetMap coverage varies by area; opening hours, entry rules and bookings (e.g. tee times, court slots) were not checked_"
+ },
+ {
+  "q": "Compare Gurugram, Noida and Delhi for outdoor activities this Saturday using weather and AQI",
+  "http": 200,
+  "s": 2.4,
+  "status": "clarification_needed",
+  "intent": "slm+rules",
+  "activity": null,
+  "answer_path": null,
+  "grounding": null,
+  "venue": null,
+  "window": null,
+  "score": null,
+  "pick_status": null,
+  "concerns": null,
+  "factors": null,
+  "clarification": "Which outdoor activity are you planning?",
+  "answer": "Which outdoor activity are you planning? For example running, a walk, cycling, cricket, golf, a picnic, a hike, photography or an outdoor event."
+ },
+ {
+  "q": "Best time for an outdoor football match tomorrow near Gurugram considering rain probability, wind and temperature",
+  "http": 200,
+  "s": 19.9,
+  "status": "partial",
+  "intent": "slm+rules",
+  "activity": "football",
+  "answer_path": "template",
+  "grounding": "templated",
+  "venue": "Nehru Stadium",
+  "window": "Thu 22 Oct 08:00–09:00",
+  "score": 55.0,
+  "pick_status": "caution",
+  "concerns": [
+   "US AQI 196 is unhealthy (above 150): keep exertion light and short"
+  ],
+  "factors": {
+   "thermal": 1.0,
+   "rain": 1.0,
+   "wind": 1.0,
+   "uv": 1.0,
+   "air": 0.002,
+   "access": 1.0,
+   "light": 1.0
+  },
+  "clarification": null,
+  "answer": "**Best pick:** [E1] Nehru Stadium, Thu 22 Oct 08:00–09:00, score [E2] 55/100  \n⚠️ **Health warning:** [E3] US AQI 196 is unhealthy (above 150): keep exertion light and short\n\n**Why (live data):**\n- [E4] feels-like temperature 26.2 °C (08:00–09:00)\n- [E5] rain probability up to 0 % (08:00–09:00)\n- [E6] US AQI up to 196 (08:00–09:00); main pollutant PM2.5\n- [E7] PM2.5 up to 128.1 µg/m³ (08:00–09:00)\n- [E8] wind from W at 4.3 km/h (08:00)\n- [E9] gusts up to 12.2 km/h (08:00–09:00)\n- [E10] UV index up to 1.2 (08:00–09:00)\n- [E11] roads/industry/green/water around the place: unavailable (map query failed)\n- [E12] 1.7 min / 1.2 km by road (free-flow); [E13] about 3 min at 08:00 with typical traffic (estimate)\n- [E14] sunrise 06:26, sunset 17:45 on Thu 22 Oct\n- [E15] caution: US AQI 196 is unhealthy (above 150): keep exertion light and short\n\n**Carry:**\n- about 1 L of water per person\n- an N95 mask for the journey (US AQI up to 196)\n\n**Avoid / timing:**\n- [E16] Thu 22 Oct 13:00–14:00 at the same place scores only 32.2/100, mainly because of thermal comfort\n\n**Other options:**\n- [E17] Tau Devi Lal Cricket Stadium, Thu 22 Oct 08:00–09:00, score [E18] 55, 4.3 min away; [E19] feels-like temperature 26.2 °C (08:00–09:00); [E20] rain probability up to 0 % (08:00–09:00); [E21] US AQI up to 196 (08:00–09:00); main pollutant PM2.5\n- [E22] Tau Devi Lal Football Stadium, Thu 22 Oct 08:00–09:00, score [E23] 55, 4.5 min away; [E24] feels-like temperature 26.2 °C (08:00–09:00); [E25] rain probability up to 0 % (08:00–09:00); [E26] US AQI up to 196 (08:00–09:00); main pollutant PM2.5\n- same place at Thu 22 Oct 06:00–07:00: score [E27] 55\n\n_No search radius given: searched within 10 km._\n\n_Limitations: map context (roads, industry, green, water) was unavailable; venues came from OpenStreetMap via Nominatim because Overpass did not respond; air-quality forecast comes from a ~40 km CAMS grid, so differences between nearby places come from the modelled road/industry exposure, not from measurements; travel times are free-flow OSRM times with a typical-traffic multiplier, not live traffic; OpenStreetMap coverage varies by area; opening hours, entry rules and bookings (e.g. tee times, court slots) were not checked_"
+ },
+ {
+  "q": "Recommend the safest outdoor activity for the next seven days near Gurugram and explain any missing weather or air-quality data",
+  "http": 200,
+  "s": 2.7,
+  "status": "clarification_needed",
+  "intent": "slm+rules",
+  "activity": null,
+  "answer_path": null,
+  "grounding": null,
+  "venue": null,
+  "window": null,
+  "score": null,
+  "pick_status": null,
+  "concerns": null,
+  "factors": null,
+  "clarification": "Which outdoor activity are you planning?",
+  "answer": "Which outdoor activity are you planning? For example running, a walk, cycling, cricket, golf, a picnic, a hike, photography or an outdoor event."
+ }
+]

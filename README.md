@@ -163,5 +163,5 @@ Map data © OpenStreetMap contributors (ODbL). Weather data by Open-Meteo.com (C
 `backend/app/` FastAPI app (`agent/` pipeline, `data_services/` live APIs, `geospatial/`, `scoring/`, `advice/`,
 `evidence/`, `slm/`, `knowledge/` YAML) · `backend/tests/` · `backend/eval/` · `frontend/` React + Leaflet ·
 `training/` Colab notebooks, data generators, model-card tools · `deploy/` Space config ·
-`docs/` [architecture & API contract](docs/ARCHITECTURE.md), [problem statement](docs/problem-statement.txt) ·
+`docs/` [architecture & API contract](docs/ARCHITECTURE.md), [evaluation & review response](docs/evaluation/REVIEW_RESPONSE.md), [problem statement](docs/problem-statement.txt) ·
 [LICENSE](LICENSE) (Apache-2.0).

@@ -23,10 +23,14 @@ polarity:
                 "nothing to worry", "safe to play", "safe for exercise"]
     forbidden_regex: ['\b(?:low|good|clean|great|excellent|healthy|safe|fine|decent|pleasant|acceptable|moderate|okay|ok|reasonable)\s+(?:us\s+)?(?:aqi|air|pm2\.5)',
                       '\b(?:air|air quality|aqi)\s+(?:is|looks|remains|stays)\s+(?:good|fine|acceptable|okay|ok|clean|decent|reasonable|healthy|safe)']
+    # the mirror rule: when the data does NOT flag air quality, alarm language about it is false
+    forbidden_when_unflagged_regex: ['\b(?:aqi|pm2\.5|air quality|pollution)\b[^.\n]{0,60}\b(?:exceed\w*|unhealthy|harmful|hazard\w*|unsafe|dangerous|poor|bad)\b',
+                                     '\b(?:unhealthy|harmful|hazardous|unsafe|dangerous|poor|bad)\s+(?:air|aqi|pm2\.5|air quality)\b']
   - flag_triggers: ["feels-like temperature"]
     flagged_when: ["above", "limit", "warm"]
     forbidden: ["cool weather", "pleasant temperature", "comfortable temperature", "mild temperature", "nice and cool"]
     forbidden_regex: ['\b(?:cool|mild|pleasant|comfortable)\s+(?:feels-like|temperature|weather)']
+    forbidden_when_unflagged_regex: ['\b(?:too hot|extreme heat|dangerously hot|heatwave|scorching)\b']
   - flag_triggers: ["rain probability"]
     flagged_when: ["caution: rain", "above"]
     forbidden: ["no rain", "dry conditions", "zero chance of rain"]

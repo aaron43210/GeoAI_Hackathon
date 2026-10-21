@@ -1,0 +1,48 @@
+
+>>> hi   [chat · 1.0s · understood {'activity': None, 'location_text': None, 'time_text': None, 'profiles': None, 'path': 'greeting'}]
+    pick: None None None None
+    Hi! I'm **TerraPulse**, an outdoor-activity assistant. Tell me what you want to do, where and roughly when, and I'll check live weather, air quality, OpenStreetMap places and travel times across several nearby places and hours, then suggest the best place × time with what to carry, what to watch for and when to avoid going.
+    
+    I can plan: running, walking, cycling, golf, cricket, outdoor football, outdoor tennis, hikin
+
+>>> evening jog near Indiranagar Bengaluru tomorrow?   [not_recommended · 15.7s · understood {'activity': 'running', 'location_text': 'Indiranagar Bengaluru', 'time_text': 'tomorrow', 'profiles': [], 'path': 'slm+rules'}]
+    pick: Kendriya Vidyala MEG and Centre Thu 22 Oct 17:00–18:00 83.6 avoid
+    **Not recommended:** every hour hits a safety limit. Least-bad option: [E1] Kendriya Vidyala MEG and Centre, Thu 22 Oct 17:00–18:00 (score [E2] 83.6)
+    
+    **WHY:**  
+    - **Weather:** Rain probability up to 100% [E4], making surfaces wet and slippery.  
+    - **Air:** US AQI up to 45 [E5], mainly from PM2.5, which can irritate respiratory systems.  
+    - **Wind/roads/industry:** Gusts up to 28.4 km/h [E8], and roads/industry/green
+
+>>> why is it not recommended?   [explanation · 4.7s · understood {'activity': None, 'location_text': None, 'time_text': None, 'profiles': None, 'path': 'explain'}]
+    pick: None None None None
+    The activity is not recommended due to several factors. First, there is a high risk of rain throughout the entire period, as indicated by the "rain probability up to 100%" [E4], which makes running outdoors unsafe and potentially hazardous. Second, the US AQI exceeds the safe limit during this time, with PM2.5 levels reaching up to 9.9 µg/m³ [E6], which can be harmful for prolonged exposure. Additionally, the UV inde
+
+>>> what about the day after tomorrow morning?   [partial · 10.9s · understood {'activity': 'running', 'location_text': None, 'time_text': 'the day after tomorrow morning', 'profiles': [], 'path': 'slm+rules'}]
+    pick: MEBP Park1 Fri 23 Oct 07:00–08:00 98.3 ok
+    **Best pick:** [E1] MEBP Park1, Fri 23 Oct 07:00–08:00, score [E2] 98.3/100
+    
+    **Why:**  
+    - **Weather:** Feels-like temperature 23.7 °C [E3], comfortable for running.  
+    - **Air:** US AQI up to 41 [E5], well within safe limits.  
+    - **Wind/roads/industry:** Gusts up to 19.4 km/h [E8], light breeze ideal for running.  
+    - **Travel:** 15.3 min / 12.5 km by road [E11]; easy access.  
+    **Carry:** About 1 L of water per person.
+
+>>> my dad is 70, is that ok for him?   [partial · 19.8s · understood {'activity': 'running', 'location_text': None, 'time_text': 'the day after tomorrow morning', 'profiles': ['senior'], 'path': 'slm+rules'}]
+    pick: MEBP Park1 Fri 23 Oct 07:00–08:00 98.4 ok
+    **Best pick:** [E1] MEBP Park1, Fri 23 Oct 07:00–08:00, score [E2] 98.4/100
+    
+    **Why (live data):**
+    - [E3] feels-like temperature 23.7 °C (07:00–08:00)
+    - [E4] rain probability up to 8 % (07:00–08:00)
+    - [E5] US AQI up to 41 (07:00–08:00); main pollutant PM2.5
+    - [E6] PM2.5 up to 7.4 µg/m³ (07:00–08:00)
+    - [E7] wind from E at 8 km/h (07:00)
+    - [E8] gusts up to 19.4 km/h (07:00–08:00)
+    - [E9] UV index up to 0.7 (07:00–08:00)
+    
+
+>>> thanks!   [chat · 0.9s · understood {'activity': None, 'location_text': None, 'time_text': None, 'profiles': None, 'path': 'thanks'}]
+    pick: None None None None
+    You're welcome! Ask me about another plan any time, or follow up with *“what about Sunday?”* or *“somewhere closer?”*.

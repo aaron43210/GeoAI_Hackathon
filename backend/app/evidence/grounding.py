@@ -188,6 +188,11 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
         triggers = [t.lower() for t in rule["flag_triggers"]]
         flagged = any(any(t in ln for t in triggers) and any(w.lower() in ln for w in rule["flagged_when"])
                       for ln in sheet_lines)
+        if not flagged:
+            for rx in rule.get("forbidden_when_unflagged_regex", []):
+                m = re.search(rx, low_answer)
+                if m:
+                    violations.append(f"says '{m.group(0)}' but the data does not flag {rule['flag_triggers'][0]}")
         if flagged:
             for phrase in rule["forbidden"]:
                 if phrase in low_answer:
