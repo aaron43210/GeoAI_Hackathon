@@ -49,7 +49,7 @@ def main() -> None:
             }
             out.append(item)
             print(f"{'✔' if item['status_ok'] and item['activity_ok'] and item['profiles_ok'] else '✘'} "
-                  f"{item['status']:20} {item['grounding'] or '-':10} {item['seconds']:5}s  {r['q']}")
+                  f"{str(item['status']):20} {str(item['grounding'] or '-'):10} {item['seconds']:5}s  {r['q']}")
             time.sleep(args.pause)
     ok = [o for o in out if "error" not in o]
     summary = {

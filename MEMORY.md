@@ -26,7 +26,7 @@ Decisions, Findings, Open questions, Session log. Newest first. Keep it under ~2
 - [x] Dockerfile (single container, port 7860), docker-compose, HF Space README, README rewrite
 - [x] git + push to GitHub (notebooks clone it by default)
 - [x] `training/upload_hf_model.py --mode base` → config repo published
-- [ ] Colab: notebook 01 (data) → 02 (LoRA) → push adapter/merged/GGUF; set `SLM_REPO/SLM_FILE` (defaults already match)
+- [x] Colab fine-tune done (21 Oct): `-lora`, merged and `-GGUF` (Q4_K_M + Q8_0) repos published; runtime defaults already point at them
 - [ ] Deploy (HF Docker Space or Oracle Always Free); UptimeRobot on /api/v1/health; fill URL in README
 - [ ] Slides (5): problem, architecture, worked example, model + eval table, limitations
 - [ ] Final live eval + demo rehearsal + screen-recording backup
@@ -49,6 +49,11 @@ Decisions, Findings, Open questions, Session log. Newest first. Keep it under ~2
   otherwise prefer the bigger/urban settlement type.
 
 ## Findings (verified, don't re-investigate)
+- Fine-tuned model (21 Oct). Clean gold set, Q4_K_M on CPU: activity 1.0, location 0.958, profiles 1.0, scope 0.958
+  (base: 0.917/1.0/0.958/0.917). Live 20 queries: first-draft grounding pass 12/14 vs base 4/13; status 0.95,
+  activity/profile 1.0. Answers are longer, so p50 latency is 24 s vs 15.5 s. The model card's grounding 1.0 is inflated
+  (that run trained on its 20 eval sheets; the leakage fix landed in make_notebooks.py afterwards).
+- Docker Desktop holds localhost:8000 on the dev Mac; run local test servers on 8010.
 - Open-Meteo AQ path is `/v1/air-quality` (hyphen). Forecast + AQ accept comma-separated multi-coordinates (JSON list).
 - CAMS US AQI over Mumbai is often ozone-driven (e.g. 280 with PM2.5 sub-index 167); we report the dominant pollutant.
 - From this Mac/network, overpass-api.de, kumi.systems and private.coffee are unreachable even outside the sandbox;
@@ -67,6 +72,7 @@ Decisions, Findings, Open questions, Session log. Newest first. Keep it under ~2
 - WAQI token (optional) for ground-station cross-checks?
 
 ## Session log
+- 2026-10-21 (4) · Colab data + LoRA done by the user; verified the published GGUF locally (inference only).
 - 2026-10-21 (3) · Pushed to GitHub (user-only authorship), published HF config repo, notebooks now clone the repo
   and prompt for the HF token. The user shared an HF token in chat: advise revoking it after use.
 - 2026-10-21 (2) · Researched similar repos, rebuilt the backend (knowledge YAML, live-only data, grid, verifier),
