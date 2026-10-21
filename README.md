@@ -11,7 +11,7 @@ is cited and machine-checked against the data it fetched.
 
 | | |
 |---|---|
-| **Live API** | `‹your deployment URL›/api/v1/ask` (UI at `/`, docs at `/docs`) |
+| **Live API** | **https://aaronr43210-terrapulse-ai.hf.space/api/v1/ask** · web demo at [/](https://aaronr43210-terrapulse-ai.hf.space/) · docs at [/docs](https://aaronr43210-terrapulse-ai.hf.space/docs) · health at [/api/v1/health](https://aaronr43210-terrapulse-ai.hf.space/api/v1/health) |
 | **Model** | [`aaronr43210/terrapulse-qwen3-1.7b`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b) (merged, `from_pretrained`) · [`-lora`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-lora) (adapter) · [`-GGUF`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-GGUF) (served by the API) |
 | **Base model** | [`Qwen/Qwen3-1.7B`](https://huggingface.co/Qwen/Qwen3-1.7B) |
 | **Code** | https://github.com/aaron43210/GeoAI_Hackathon |
@@ -53,14 +53,14 @@ heat-sensitive, limited mobility.
 
 ```bash
 # plain text answer
-curl "‹URL›/api/v1/ask?q=golf+this+sunday+within+30+km+of+Gurugram&format=text"
+curl "https://aaronr43210-terrapulse-ai.hf.space/api/v1/ask?q=golf+this+sunday+within+30+km+of+Gurugram&format=text"
 
 # full JSON: answer, recommendation, alternatives, avoid windows, advice, heatmap, timeline, evidence, sources
-curl -X POST ‹URL›/api/v1/ask -H 'content-type: application/json' \
+curl -X POST https://aaronr43210-terrapulse-ai.hf.space/api/v1/ask -H 'content-type: application/json' \
      -d '{"question":"evening jog near Indiranagar Bengaluru tomorrow?"}'
 
 # follow-up in the same session
-curl -X POST ‹URL›/api/v1/ask -d '{"question":"what about Sunday?","session_id":"<from previous>"}' -H 'content-type: application/json'
+curl -X POST https://aaronr43210-terrapulse-ai.hf.space/api/v1/ask -d '{"question":"what about Sunday?","session_id":"<from previous>"}' -H 'content-type: application/json'
 ```
 
 | Endpoint | Purpose |
@@ -138,6 +138,9 @@ docker compose up --build                  # http://localhost:8000
 Map data © OpenStreetMap contributors (ODbL). Weather data by Open-Meteo.com (CC BY 4.0).
 
 ## Honest limitations
+* The live endpoint runs on a free Hugging Face ZeroGPU Space: GPU runs are metered per caller. When a caller's
+  free GPU allowance is used up, the API keeps answering from live data via the rule parser and data template
+  (same grounding, plainer wording). Typical latency there: ~12 s when map servers respond, 20–50 s when Overpass is down.
 * CAMS air quality is a ~40 km grid: venues in one city share the AQI forecast; venue differences come from the
   **modelled** wind × road/industry exposure index, labelled as modelled. Ozone-driven AQI is flagged as such.
 * OSRM has no live traffic; a disclosed rush-hour multiplier (geo.yaml) is applied.
