@@ -29,7 +29,13 @@ fastapi_app.state.preloaded_slm = _slm
 _local_generate = SLMRuntime._hf_generate
 
 
-@spaces.GPU(duration=45)
+def _gpu_seconds(prompt: str, max_tokens: int, temperature: float) -> int:
+    """ZeroGPU charges the *requested* duration against the caller's quota, so request about what the work needs:
+    a 1.7B model on a ZeroGPU slice writes roughly 25+ tokens/s; add a fixed allowance for scheduling and prefill."""
+    return int(6 + 0.04 * max_tokens)
+
+
+@spaces.GPU(duration=_gpu_seconds)
 def _gpu_generate(prompt: str, max_tokens: int, temperature: float) -> str:
     return _local_generate(_slm, prompt, max_tokens, temperature)
 
