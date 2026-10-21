@@ -15,6 +15,9 @@ dayparts:
   evening: {start: 16.5, end: 20.0}
   night: {start: 19.5, end: 23.0}
   tonight: {start: 18.0, end: 23.0}
+  right now: {now: true, hours: 3}
+  now: {now: true, hours: 3}
+  abhi: {now: true, hours: 3}
   sunrise: {anchor: sunrise, before: 1.0, after: 1.25}
   dawn: {anchor: sunrise, before: 1.0, after: 0.5}
   sunset: {anchor: sunset, before: 1.25, after: 0.75}
@@ -45,6 +48,9 @@ weekdays: {monday: 0, mon: 0, tuesday: 1, tue: 1, tues: 1, wednesday: 2, wed: 2,
 months: {jan: 1, january: 1, feb: 2, february: 2, mar: 3, march: 3, apr: 4, april: 4, may: 5, jun: 6, june: 6,
          jul: 7, july: 7, aug: 8, august: 8, sep: 9, sept: 9, september: 9, oct: 10, october: 10,
          nov: 11, november: 11, dec: 12, december: 12}
+
+# words that, on their own, are never a place ("right now", "this weekend", "near me")
+filler_words: [right, this, next, coming, weekend, week, here, me, home, outside, outdoors, nearby]
 
 default_window: {start: 5.5, end: 21.0, hours_ahead: 36}   # when no time is given (and we say so)
 weekend_days: [5, 6]

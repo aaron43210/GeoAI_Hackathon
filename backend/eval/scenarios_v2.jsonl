@@ -1,0 +1,24 @@
+{"q": "Where can I go running tomorrow evening near Aundh?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "running"}
+{"q": "Best time this weekend for a kids' cricket match within 15 km of Electronic City?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "cricket", "profiles": ["child"]}
+{"q": "I have mild asthma, where's good for a morning walk near Malleshwaram in the next two days?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "walking", "profiles": ["asthma"]}
+{"q": "Is it okay to cycle to work at 8 AM from Wakad?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "cycling"}
+{"q": "Planning an outdoor birthday party on Sunday afternoon in Mysuru, what should I keep in mind?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "outdoor_event"}
+{"q": "Good place and time for golf on Saturday within 40 km of Hyderabad?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "golf"}
+{"q": "Where can I take sunset photos this evening around Fort Kochi?", "expect_status": ["ok", "partial", "not_recommended", "not_available"], "activity": "photography"}
+{"q": "Is Saturday or Sunday better for a hike near Matheran?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "hiking"}
+{"q": "When is it safe for my parents to walk outdoors tomorrow in Chennai?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "walking", "profiles": ["senior"]}
+{"q": "Outdoor tennis after work today near Banjara Hills, any good spots?", "expect_status": ["ok", "partial", "not_recommended", "not_available"], "activity": "tennis"}
+{"q": "picnic tmrw w/ family nr cubbon prk", "expect_status": ["ok", "partial", "not_recommended", "clarification_needed"], "activity": "picnic"}
+{"q": "football 5 a side kal shaam dwarka delhi", "expect_status": ["ok", "partial", "not_recommended"], "activity": "football"}
+{"q": "I'm 6 months pregnant, gentle walk near Hauz Khas tomorrow morning?", "expect_status": ["ok", "partial", "not_recommended"], "activity": "walking", "profiles": ["pregnancy"]}
+{"q": "yoga by the lake in Udaipur day after tomorrow at sunrise", "expect_status": ["ok", "partial", "not_recommended"], "activity": "yoga"}
+{"q": "birdwatching near Bhigwan this sunday morning", "expect_status": ["ok", "partial", "not_recommended", "clarification_needed"], "activity": "birdwatching"}
+{"q": "Is it a good idea to go jogging right now?", "expect_status": ["clarification_needed"]}
+{"q": "best spot for cricket this weekend", "expect_status": ["clarification_needed"]}
+{"q": "What should I do this weekend near Pune?", "expect_status": ["clarification_needed"]}
+{"q": "recommend a good restaurant in Bandra", "expect_status": ["out_of_scope"]}
+{"q": "hike near Shimla on 20 December", "expect_status": ["not_available", "ok", "partial", "not_recommended"]}
+{"q": "heart patient, evening walk near Gomti Nagar Lucknow tomorrow", "expect_status": ["ok", "partial", "not_recommended"], "activity": "walking", "profiles": ["cardiac"]}
+{"q": "outdoor wedding at a garden in Jaipur next saturday evening for 300 guests", "expect_status": ["ok", "partial", "not_recommended"], "activity": "outdoor_event"}
+{"q": "cycling route near Sukhna Lake Chandigarh tomorrow early morning", "expect_status": ["ok", "partial", "not_recommended"], "activity": "cycling"}
+{"q": "running near Juhu beach tonight, avoid traffic", "expect_status": ["ok", "partial", "not_recommended"], "activity": "running"}

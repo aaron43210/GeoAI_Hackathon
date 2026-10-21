@@ -44,6 +44,12 @@ class Intent(BaseModel):
             data["radius_km"] = max(0.5, min(float(data["radius_km"]), 50.0))
         if data["location_text"]:
             data["location_text"] = data["location_text"].strip(" ,.?!") or None
+        if data["location_text"]:
+            # a "location" made only of time/filler words ("right now", "this evening") is not a place
+            lex = kb.time
+            timeish = set(lex["dayparts"]) | set(lex["relative_days"]) | set(lex["weekdays"]) | set(lex["filler_words"])
+            if all(tok in timeish for tok in data["location_text"].lower().split()):
+                data["location_text"] = None
         return Intent(**data)
 
 

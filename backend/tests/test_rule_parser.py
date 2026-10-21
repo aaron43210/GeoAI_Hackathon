@@ -26,3 +26,9 @@ def test_radius_and_out_of_scope():
 
 def test_unknown_activity_is_not_defaulted():
     assert parse("what should I do outside near Powai").activity is None
+
+
+def test_time_words_are_not_a_location():
+    from app.schemas.intent import Intent
+    assert Intent(activity="running", location_text="right now").normalised().location_text is None
+    assert parse("Is it a good idea to go jogging right now?").location_text is None

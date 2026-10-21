@@ -70,3 +70,8 @@ def test_explicit_date(tr):
 def test_horizon(tr):
     r = tr.resolve("on 30 dec", NOW)
     assert "beyond_weather_horizon" in tr.horizon_check(r, NOW)
+
+
+def test_right_now(tr):
+    r = tr.resolve("go jogging right now", NOW)
+    assert r.windows[0].day == NOW.date() and r.windows[0].start_h <= 9.5 and r.windows[0].label == "now"

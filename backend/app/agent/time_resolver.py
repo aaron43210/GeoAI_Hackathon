@@ -82,7 +82,7 @@ class TimeResolver:
         if not days:
             days = [now.date()]
             # a daypart that has already passed today rolls to tomorrow
-            if part and not part.get("anchor") and now.hour + now.minute / 60 > part["end"] - 0.5:
+            if part and not part.get("anchor") and not part.get("now") and now.hour + now.minute / 60 > part["end"] - 0.5:
                 days = [now.date() + timedelta(days=1)]
                 notes.append(f"{part_label.capitalize()} today has passed, so I looked at tomorrow.")
             elif hour is not None and now.hour + now.minute / 60 > hour:
@@ -91,7 +91,10 @@ class TimeResolver:
 
         windows: List[Window] = []
         for d in days:
-            if hour is not None:
+            if part and part.get("now"):
+                start = now.hour + now.minute / 60
+                windows.append(Window(d, start, min(23.5, start + part["hours"]), "now"))
+            elif hour is not None:
                 windows.append(Window(d, max(0.0, hour - 0.5), min(23.5, hour + 1.5), f"around {_fmt_h(hour)}"))
             elif part:
                 if part.get("anchor"):

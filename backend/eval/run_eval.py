@@ -23,8 +23,9 @@ def main() -> None:
     ap.add_argument("--base", default="http://localhost:8000")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--pause", type=float, default=2.0)
+    ap.add_argument("--file", default="queries.jsonl")
     args = ap.parse_args()
-    rows = [json.loads(l) for l in (HERE / "queries.jsonl").read_text().splitlines() if l.strip()]
+    rows = [json.loads(l) for l in (HERE / args.file).read_text().splitlines() if l.strip()]
     if args.limit:
         rows = rows[:args.limit]
     out, lat = [], []
