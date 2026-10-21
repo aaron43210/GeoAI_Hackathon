@@ -370,7 +370,10 @@ class Pipeline:
                 rows = await self.geocoder.search_category(phrase, place.latitude, place.longitude, radius_km)
             except UpstreamError:
                 continue
+            allowed = set(self.kb.geo["candidates"]["nominatim_classes"])
             for r in rows:
+                if r.get("category") not in allowed:
+                    continue                      # e.g. a shop or office whose name contains the phrase
                 bb = r.get("boundingbox")
                 tags = {**(r.get("extratags") or {}), r.get("category", "place"): r.get("type", "yes")}
                 if r.get("name"):

@@ -25,8 +25,12 @@ carry:
   - id: mask_if_aqi
     when: {var: max_us_aqi, op: ">", value: 100}
     text: "an N95 mask for the journey (US AQI up to {max_us_aqi})"
-  - id: torch
-    when: {var: minutes_to_sunset_after_end, op: "<", value: 30}
+  - id: torch_dark
+    when: {var: minutes_to_sunset_after_end, op: "<", value: 0}
+    activity: [hiking, birdwatching, cycling, running, walking]
+    text: "a torch/headlamp and light-coloured or reflective clothing: it will be dark (sunset {sunset})"
+  - id: torch_dusk
+    when: {all: [{var: minutes_to_sunset_after_end, op: ">=", value: 0}, {var: minutes_to_sunset_after_end, op: "<", value: 30}]}
     activity: [hiking, birdwatching, cycling, running, walking]
     text: "a torch/headlamp: you'll finish within 30 min of sunset ({sunset})"
   - id: repellent
@@ -74,4 +78,4 @@ watch_for:
   - id: rest_breaks
     profile: [senior, pregnancy, cardiac]
     always: true
-    text: "pace yourself and take shade breaks every 20–30 min"
+    text: "pace yourself and take a rest break every 20–30 min"

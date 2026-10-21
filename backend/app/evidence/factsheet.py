@@ -152,7 +152,7 @@ class FactSheetBuilder:
             eid2 = self.L.add("travel time with traffic", rush, "min", "heuristic rush-hour multiplier (geo.yaml)",
                               None, "heuristic", key=f"rush:{v.id}:{p.start}")
             lines.append(f"[{eid}] {fmt(v.travel['minutes'])} min / {fmt(v.travel['km'])} km by road (free-flow); "
-                         f"[{eid2}] about {fmt(rush)} min at {p.start:%H:%M} with typical traffic (estimate)")
+                         f"[{eid2}] about {fmt(rush)} min in total if you leave at {p.start:%H:%M} with typical traffic (estimate)")
         elif v.kind != "area":
             eid = self.L.add("travel time", "unavailable", None, "OSRM", None, "computed", key=f"travel-missing:{v.id}")
             lines.append(f"[{eid}] travel time unavailable; straight-line distance {fmt(round(v.straight_km, 1))} km")

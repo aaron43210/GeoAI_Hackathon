@@ -71,6 +71,8 @@ candidates:
   max_candidates: 8
   radius_slack: 1.05             # accept candidates up to 5 % beyond the radius (polygon centres)
   shortlist_pool: 40
+  # Nominatim category search matches names too ("Promenade Books" is a shop); keep only these OSM classes
+  nominatim_classes: [leisure, tourism, natural, landuse, boundary, historic, highway, waterway, man_made, sport]
   min_name_chars: 3              # ignore OSM names shorter than this ("nm", "x")
   area_log_scale: 6              # area term = log10(area m²) / scale, capped at 1 (10⁶ m² → 1)             # pre-scored pool before context fetch
   distance_weight: 1.0           # pre-score = -distance_weight·d/radius + area_weight·log-area + tag_weight·sport match

@@ -75,3 +75,33 @@ def test_negative_geocode_is_not_cached_for_a_month():
     (expiry, _), = cache.store.values()
     import time
     assert expiry - time.monotonic() <= get_settings().TTL_NEGATIVE + 1
+
+
+def test_after_dark_advice_says_dark_not_dusk():
+    from app.advice.rules import build_advice
+    base = {"duration_min": 60, "water_litres": 0.5, "sunset": "17:44"}
+    dark = build_advice({**base, "minutes_to_sunset_after_end": -136}, "walking", [])
+    texts = " ".join(i["text"] for i in dark["carry"])
+    assert "it will be dark" in texts and "within 30 min" not in texts
+    dusk = build_advice({**base, "minutes_to_sunset_after_end": 15}, "walking", [])
+    assert "within 30 min of sunset" in " ".join(i["text"] for i in dusk["carry"])
+
+
+def test_nominatim_fallback_drops_shops_named_like_a_venue():
+    import asyncio
+    from app.agent.pipeline import Pipeline
+    from app.data_services.geocoding_service import Place
+    from app.knowledge import get_knowledge
+
+    class _Geo:
+        async def search_category(self, *a, **k):
+            return [{"lat": "10.001", "lon": "76.001", "name": "Promenade Books", "osm_type": "node", "osm_id": 1,
+                     "category": "shop", "type": "books"},
+                    {"lat": "10.002", "lon": "76.002", "name": "Seaside Promenade", "osm_type": "way", "osm_id": 2,
+                     "category": "leisure", "type": "promenade"}]
+
+    p = Pipeline.__new__(Pipeline)
+    p.kb, p.geocoder = get_knowledge(), _Geo()
+    venues = asyncio.run(p._nominatim_candidates(get_knowledge().activities["walking"],
+                                                 Place("T", "T", 10.0, 76.0), 10))
+    assert [v.name for v in venues] == ["Seaside Promenade"]
