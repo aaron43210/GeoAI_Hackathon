@@ -8,7 +8,8 @@ Decisions, Findings, Open questions, Session log. Newest first. Keep it under ~2
 - **Code:** backend v2 + new frontend implemented and working end-to-end locally with base Qwen3-1.7B (Q4_K_M).
   45 offline tests green. Live eval: 18/20 expected statuses (the 2 misses are legitimate clarifications), activity
   100%, profiles 100%, SLM-written answers 85% (rest template), p50 15.5 s.
-- **HF user:** `aaronr43210` · repos not yet created.
+- **HF user:** `aaronr43210` · config repo live: https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b (base model, Apache-2.0).
+- **GitHub:** https://github.com/aaron43210/GeoAI_Hackathon (public). Commit as `aaron43210 <aaronr43210@gmail.com>` only, **no Claude co-author/attribution trailers** (user instruction).
 - **Live endpoint:** not deployed yet.
 - **Backup of the original v1 code:** `~/Desktop/GEOAI_v1_backup_2026-10-21.tar.gz` (the folder is not a git repo).
 
@@ -23,8 +24,8 @@ Decisions, Findings, Open questions, Session log. Newest first. Keep it under ~2
       place×time heatmap with scrubber, hour-by-hour strip, factor bars, evidence drawer
 - [x] Training assets: gen_intent_data.py, build_compose_data.py, 2 Colab notebooks, MODEL_CARD.md, upload_hf_model.py
 - [x] Dockerfile (single container, port 7860), docker-compose, HF Space README, README rewrite
-- [ ] `git init` + push to GitHub (needed for the Colab notebooks' REPO_URL, or upload a zip)
-- [ ] Run `training/upload_hf_model.py --mode base` (creates the config repo now) ← quick win
+- [x] git + push to GitHub (notebooks clone it by default)
+- [x] `training/upload_hf_model.py --mode base` → config repo published
 - [ ] Colab: notebook 01 (data) → 02 (LoRA) → push adapter/merged/GGUF; set `SLM_REPO/SLM_FILE` (defaults already match)
 - [ ] Deploy (HF Docker Space or Oracle Always Free); UptimeRobot on /api/v1/health; fill URL in README
 - [ ] Slides (5): problem, architecture, worked example, model + eval table, limitations
@@ -64,9 +65,10 @@ Decisions, Findings, Open questions, Session log. Newest first. Keep it under ~2
 - Team name and team size? Which other AI coding tools to disclose?
 - Can `aaronr43210` create a free CPU-basic **Docker** Space? If not, OK to use Oracle Cloud Always Free?
 - WAQI token (optional) for ground-station cross-checks?
-- GitHub repo URL (for the notebooks and the submission form)?
 
 ## Session log
+- 2026-10-21 (3) · Pushed to GitHub (user-only authorship), published HF config repo, notebooks now clone the repo
+  and prompt for the HF token. The user shared an HF token in chat: advise revoking it after use.
 - 2026-10-21 (2) · Researched similar repos, rebuilt the backend (knowledge YAML, live-only data, grid, verifier),
   model bake-off, frontend rewrite, tests, training notebooks, Docker, README; live-tested many queries.
 - 2026-10-21 (1) · Audited repo, probed APIs, wrote plan + CONNECTIONS/AGENTS/MEMORY/CLAUDE.md.
