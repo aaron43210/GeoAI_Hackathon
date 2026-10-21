@@ -34,7 +34,7 @@ postpositions: [mein, me, ke paas, ke pass, ke aas paas, ke najdik, madhe, madhy
 # Words that are never part of a place name.
 stop_words: [me, my, home, work, office, the, a, an, here, us, it, this, that, to, next, coming, go, do, be, place,
              places, spot, spots, kids, family, friends, parents, okay, ok, safe, good, best, outdoors, outdoor, outside,
-             any, some, area, city, side, team, match, game, with, and, or, is, if, for, at, on, by, near, around,
+             any, some, area, city, side, team, match, game, with, and, or, is, if, for, at, "on", by, near, around,
              within, from, in, into, of, towards, via, km, kms, minutes, min, mins, hours, hour, hrs, days, day, week, after, before, am, pm,
              # Hinglish function words and verbs
              karna, karne, hai, hain, ke, ka, ki, ko, jana, jaana, mujhe, kya, kahan, kab, acha, accha, liye, chahiye,
@@ -45,6 +45,14 @@ stop_words: [me, my, home, work, office, the, a, an, here, us, it, this, that, t
 out_of_scope_hints: [indoor, gym, netflix, movie, cinema, flight, train ticket, stock, recipe, bank, crypto, code,
                      homework, loan, hotel, restaurant, cafe, food, eat, dinner, lunch place, shopping, mall, salon,
                      book a cab, taxi, uber, pizza, doctor, hospital]
+
+# Words that end a place phrase ("near Gurugram considering wind" → "Gurugram").
+location_terminators: [for, with, "on", at, by, this, next, tomorrow, today, tonight, in the, during, after, before,
+                       between, when, where, and, or, is, if, considering, using, based on, taking, keeping, given,
+                       including, regarding, about, during the, so, because]
+
+# Words that make a request about outdoor plans even when no specific activity is named.
+in_scope_cues: [outdoor, outdoors, outside, activity, activities, weather, aqi, air quality, rain, sunny, park, trek]
 
 # How many trailing words to try as a place when no spatial cue is present ("... kal shaam dwarka delhi").
 tail_place_max_words: 3

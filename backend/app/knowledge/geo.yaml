@@ -67,4 +67,4 @@ candidates:
   tag_weight: 0.3
   radius_expand_factor: 2.0      # if nothing is found, search once more at this multiple (≤ MAX_RADIUS_KM)
   dedupe_m: 200
-  excluded_access: [private, no, customers]
+  excluded_access: [private, "no", customers]

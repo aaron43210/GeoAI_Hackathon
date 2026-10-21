@@ -74,3 +74,19 @@ def test_high_severity_caution_caps_score():
     hits = evaluate_rules(kb.rules, {"us_aqi": 177}, kb.effective_limits("golf", []))
     assert any(h.id == "GEN-AQI-UNHEALTHY" for h in hits)
     assert _capped(90.0, hits) == kb.scoring["severity_score_cap"]["high"]
+
+
+def test_knowledge_word_lists_are_strings():
+    """YAML 1.1 turns bare on/off/yes/no into booleans; every word list must stay strings."""
+    import glob
+    import yaml
+    for f in glob.glob(str(__import__("pathlib").Path(__file__).resolve().parents[1] / "app/knowledge/*.yaml")):
+        def walk(x):
+            if isinstance(x, dict):
+                for v in x.values():
+                    walk(v)
+            elif isinstance(x, list):
+                for v in x:
+                    assert not isinstance(v, bool), f"boolean in a list in {f}: quote it"
+                    walk(v)
+        walk(yaml.safe_load(open(f)))

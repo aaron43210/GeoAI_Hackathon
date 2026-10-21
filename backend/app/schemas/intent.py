@@ -28,6 +28,28 @@ class Intent(BaseModel):
     preferences: List[Literal["quiet", "shade", "water", "avoid_traffic", "close_by", "scenic"]] = Field(default_factory=list)
     is_follow_up: bool = False
 
+    @classmethod
+    def from_model_output(cls, data: dict) -> "Intent":
+        """Build from SLM JSON, keeping every field that validates and dropping only the invalid ones (a model
+        without grammar-constrained decoding may emit e.g. preferences=['wind'])."""
+        from pydantic import ValidationError
+        clean = {k: v for k, v in (data or {}).items() if k in cls.model_fields}
+        allowed_prefs = set(cls.model_fields["preferences"].annotation.__args__[0].__args__)
+        if isinstance(clean.get("preferences"), list):
+            clean["preferences"] = [p for p in clean["preferences"] if p in allowed_prefs]
+        if isinstance(clean.get("profiles"), list):
+            clean["profiles"] = [p for p in clean["profiles"] if isinstance(p, str)]
+        for _ in range(len(clean) + 1):
+            try:
+                return cls(**clean)
+            except ValidationError as exc:
+                bad = {str(e["loc"][0]) for e in exc.errors() if e.get("loc")}
+                if not bad:
+                    raise
+                for k in bad:
+                    clean.pop(k, None)
+        return cls()
+
     def normalised(self) -> "Intent":
         kb = get_knowledge()
         data = self.model_dump()

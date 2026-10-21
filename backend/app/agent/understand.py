@@ -27,7 +27,7 @@ async def understand(question: str, slm: SLMRuntime, previous: Optional[Dict[str
     try:
         raw = await asyncio.to_thread(slm.complete, intent_messages(question, previous),
                                       json_schema=intent_json_schema(), max_tokens=260, temperature=0.0)
-        model = Intent(**json.loads(raw)).normalised()
+        model = Intent.from_model_output(json.loads(raw)).normalised()
     except Exception as exc:  # noqa: BLE001 - fall back to rules, and say so in the response
         logger.warning("SLM intent extraction failed (%s); using rule parser", exc)
         return rules, "rules (SLM failed)"
@@ -43,6 +43,6 @@ async def understand(question: str, slm: SLMRuntime, previous: Optional[Dict[str
     data["use_user_location"] = model.use_user_location or rules.use_user_location
     if not rules.in_scope and rules.activity is None:
         data["in_scope"], data["out_of_scope_reason"] = False, rules.out_of_scope_reason
-    elif rules.activity is not None:
-        data["in_scope"] = True
+    elif rules.activity is not None or rule_parser.has_in_scope_cue(question):
+        data["in_scope"], data["out_of_scope_reason"] = True, None
     return Intent(**data).normalised(), "slm+rules"

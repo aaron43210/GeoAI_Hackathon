@@ -39,9 +39,14 @@ def detect_activity(q: str) -> tuple[Optional[str], Optional[str]]:
     return best[0], best[1]
 
 
+def has_in_scope_cue(question: str) -> bool:
+    q = question.lower()
+    return any(re.search(r"(?<![a-z])" + re.escape(c) + r"(?![a-z])", q) for c in _lang()["in_scope_cues"])
+
+
 def _clean_candidate(chunk: str, junk: set) -> Optional[str]:
-    chunk = re.split(r"[,?!.;]| (?:for|with|on|at|by|this|next|tomorrow|today|tonight|in the|during|after|before|"
-                     r"between|when|where|and|or|is|if)\b", chunk, maxsplit=1, flags=re.IGNORECASE)[0]
+    ends = "|".join(re.escape(w) for w in _lang()["location_terminators"])
+    chunk = re.split(r"[,?!.;]| (?:" + ends + r")\b", chunk, maxsplit=1, flags=re.IGNORECASE)[0]
     tokens = [tok for tok in chunk.strip().split() if tok.lower().strip("'") not in junk]
     cand = " ".join(tokens).strip(" '")
     return cand if len(cand) > 2 else None

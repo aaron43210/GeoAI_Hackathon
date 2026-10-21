@@ -40,3 +40,16 @@ def test_shorthand_and_trailing_place():
     assert parse("Is it okay to cycle to work at 8 AM from Wakad?").location_text == "Wakad"
     assert tail_place_candidates("football 5 a side kal shaam dwarka delhi")[0] == "dwarka delhi"
     assert parse("recommend a good restaurant in Bandra").in_scope is False
+
+
+def test_model_output_with_invalid_fields_keeps_the_rest():
+    from app.schemas.intent import Intent
+    i = Intent.from_model_output({"activity": "cycling", "location_text": "Gurugram",
+                                  "preferences": ["wind", "rain", "quiet"], "radius_km": "far"})
+    assert i.activity == "cycling" and i.location_text == "Gurugram" and i.preferences == ["quiet"] and i.radius_km is None
+
+
+def test_location_terminators_and_scope_cues():
+    from app.agent.rule_parser import has_in_scope_cue
+    assert parse("Best cycling routes this Sunday morning near Gurugram considering wind, rain").location_text == "Gurugram"
+    assert has_in_scope_cue("Compare Gurugram, Noida and Delhi for outdoor activities this Saturday")
