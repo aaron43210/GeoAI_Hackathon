@@ -4,6 +4,7 @@
 **/.venv/
 frontend/dist/
 training/data/
+training/runs/
 backend/eval/results/
 *.gguf
 .env
