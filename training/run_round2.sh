@@ -14,19 +14,29 @@
 # Executed notebooks, with all their output, are saved in training/runs/. Re-running resumes the data steps.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+# Some servers set PYTHONPATH to their own (older) Python packages, which leaks into the venv and makes the system
+# Jupyter run the notebooks on the wrong Python. Clear it and use this environment's Python for everything.
+unset PYTHONPATH
+PY="$(command -v python)"
+# ONLY=02 bash training/run_round2.sh   -> skip notebook 01 (data already built in training/data/)
+NOTEBOOKS="01_build_data_colab 02_finetune_lora_colab"
+[ "${ONLY:-}" = "02" ] && NOTEBOOKS="02_finetune_lora_colab"
 : "${HF_TOKEN:?export HF_TOKEN first (a Hugging Face write token)}"
 
-python - <<'PY'
+"$PY" - <<'PY'
 import sys
 if sys.version_info < (3, 10):
     sys.exit(f"Python {sys.version.split()[0]} ({sys.executable}) is too old for the training libraries: "
              "activate a Python 3.10+ environment first (e.g. conda activate terrapulse)")
 print("Python", sys.version.split()[0], sys.executable)
 PY
-python -m pip -q install nbconvert ipykernel huggingface_hub
+"$PY" -m pip -q install --upgrade pip
+"$PY" -m pip -q install --ignore-installed nbconvert ipykernel huggingface_hub
+# A kernel bound to exactly this Python, so nbconvert can't fall back to the server's default one.
+"$PY" -m ipykernel install --user --name terrapulse-run --display-name "TerraPulse run ($("$PY" --version))" >/dev/null
 
 # Check the token before doing anything: it must be valid and allowed to write.
-python - <<'PY'
+"$PY" - <<'PY'
 from huggingface_hub import whoami
 try:
     me = whoami()
@@ -41,7 +51,7 @@ PY
 
 # Lock round 1 first: tag the exact commits the live Space serves as "v1-stable" (no-op if the tag exists).
 # Round 2 publishes only to the separate -v2 repos, so these are never overwritten.
-python - <<'PY'
+"$PY" - <<'PY'
 from huggingface_hub import HfApi
 api = HfApi()
 V1 = {"aaronr43210/terrapulse-qwen3-1.7b": "58c3aeb1a32e9eb454199b5e951246cd4769d057",
@@ -56,11 +66,11 @@ PY
 
 mkdir -p training/runs
 stamp=$(date +%Y%m%d-%H%M)
-for nb in 01_build_data_colab 02_finetune_lora_colab; do
+for nb in $NOTEBOOKS; do
   echo "$(date '+%F %T') start  $nb"
-  jupyter nbconvert --to notebook --execute "training/$nb.ipynb" \
+  "$PY" -m nbconvert --to notebook --execute "training/$nb.ipynb" \
     --output-dir training/runs --output "${nb}_${stamp}" \
-    --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python3
+    --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=terrapulse-run
   echo "$(date '+%F %T') done   $nb  -> training/runs/${nb}_${stamp}.ipynb"
 done
 echo "Round 2 finished. Compare the BEFORE/AFTER table at the end of training/runs/02_finetune_lora_colab_${stamp}.ipynb"
