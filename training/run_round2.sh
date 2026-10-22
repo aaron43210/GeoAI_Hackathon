@@ -16,7 +16,28 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 : "${HF_TOKEN:?export HF_TOKEN first (a Hugging Face write token)}"
 
+python - <<'PY'
+import sys
+if sys.version_info < (3, 10):
+    sys.exit(f"Python {sys.version.split()[0]} ({sys.executable}) is too old for the training libraries: "
+             "activate a Python 3.10+ environment first (e.g. conda activate terrapulse)")
+print("Python", sys.version.split()[0], sys.executable)
+PY
 python -m pip -q install nbconvert ipykernel huggingface_hub
+
+# Check the token before doing anything: it must be valid and allowed to write.
+python - <<'PY'
+from huggingface_hub import whoami
+try:
+    me = whoami()
+except Exception as exc:
+    raise SystemExit(f"HF_TOKEN was rejected ({exc.__class__.__name__}). Create a new token with WRITE access at "
+                     "https://huggingface.co/settings/tokens, then: read -s HF_TOKEN && export HF_TOKEN")
+role = me.get("auth", {}).get("accessToken", {}).get("role")
+if role == "read":
+    raise SystemExit("HF_TOKEN is read-only: create a token with WRITE access")
+print("Hugging Face user:", me["name"], "| token role:", role)
+PY
 
 # Lock round 1 first: tag the exact commits the live Space serves as "v1-stable" (no-op if the tag exists).
 # Round 2 publishes only to the separate -v2 repos, so these are never overwritten.
