@@ -8,11 +8,12 @@
 #
 # Downloads (public, no token needed): the three Q4_K_M GGUFs and the round-2 dataset (held-out fact sheets).
 # Results: backend/eval/results/model_eval.json. Latency numbers describe the machine it runs on.
-set -euo pipefail
+set -eo pipefail
 cd "$(dirname "$0")/.."
 unset PYTHONPATH
 PY="$(command -v python)"
-WORK="${EVAL_WORK:-$HOME/.cache/terrapulse-eval}"
+WORK="${EVAL_WORK:-$PWD/eval/.cache}"          # inside the repo (git-ignored); some servers leave $HOME unset
+export HF_HOME="${HF_HOME:-$WORK/hf}"
 mkdir -p "$WORK/models" "$WORK/data"
 
 if [ "${GPU:-0}" = "1" ]; then

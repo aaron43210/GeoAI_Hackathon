@@ -19,3 +19,4 @@ MASTER_PRODUCTION_PROMPT.md
 
 # Hugging Face Space checkout (its own git repo)
 deploy_space/
+backend/eval/.cache/
