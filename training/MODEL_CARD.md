@@ -9,7 +9,7 @@ pipeline_tag: text-generation
 # {{REPO}}
 
 **TerraPulse AI** small language model: a LoRA fine-tune of [`Qwen/Qwen3-1.7B`](https://huggingface.co/Qwen/Qwen3-1.7B)
-(Apache-2.0, ≈2.0 B parameters including embeddings; under the 3 B limit) for the GeoAI Hackathon @ CSRE, IIT Bombay.
+(Apache-2.0, 1.72 B parameters with tied input/output embeddings; under the 3 B limit) for the GeoAI Hackathon @ CSRE, IIT Bombay.
 
 Related repos: `aaronr43210/terrapulse-qwen3-1.7b-lora` (adapter), `aaronr43210/terrapulse-qwen3-1.7b` (merged,
 `from_pretrained`), `aaronr43210/terrapulse-qwen3-1.7b-GGUF` (Q4_K_M / Q8_0 for llama.cpp CPU serving),

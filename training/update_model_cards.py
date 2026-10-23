@@ -1,6 +1,7 @@
 """Publish accurate, repo-specific model cards for the three TerraPulse repos (adapter, merged, GGUF).
 
-    HF_TOKEN=... python training/update_model_cards.py
+    HF_TOKEN=... python training/update_model_cards.py              # round 1 repos
+    HF_TOKEN=... SUFFIX=-v2 python training/update_model_cards.py   # round 2 repos (-v2)
 
 Evaluation numbers below are the ones we can defend: the clean intent gold set (excluded from training) and live
 end-to-end runs on questions never seen in training. The notebook's in-training grounding score is reported with its
@@ -9,6 +10,7 @@ caveat (those 20 fact sheets were in the training data in the 21 Oct run).
 from __future__ import annotations
 
 import os
+import re
 
 from huggingface_hub import HfApi
 
@@ -16,6 +18,7 @@ USER = "aaronr43210"
 CODE = "https://github.com/aaron43210/GeoAI_Hackathon"
 DATA = f"{USER}/terrapulse-sft-data"
 BASE = "Qwen/Qwen3-1.7B"
+SUFFIX = os.environ.get("SUFFIX", "")
 
 REPOS = {
     "terrapulse-qwen3-1.7b": {
@@ -78,7 +81,7 @@ BODY = """
 # {repo}
 
 **TerraPulse AI** small language model, {title}. A LoRA fine-tune of [`{base}`](https://huggingface.co/{base})
-(Apache-2.0, ≈2.0 B parameters including embeddings, under the hackathon's 3 B limit), built for the
+(Apache-2.0, 1.72 B parameters with tied input/output embeddings, under the hackathon's 3 B limit), built for the
 **GeoAI Hackathon @ CSRE, IIT Bombay**: an assistant that recommends where and when to head outdoors.
 
 | | |
@@ -157,18 +160,71 @@ Apache-2.0, the same as the base model. Map data © OpenStreetMap contributors; 
 """
 
 
+BODY_V2 = BODY[:BODY.index("## Training")] + """## Training (round 2)
+- Same LoRA recipe as round 1: r=16, α=32, dropout 0.05 on all attention and MLP projections; 2 epochs, lr 2e-4
+  cosine, completion-only loss; Unsloth + TRL, this time on one 80 GB NVIDIA GPU of a college DGX server.
+- Data ([`{data}`](https://huggingface.co/datasets/{data})), about 4,000 examples before a ~5 % validation split:
+  - **intent**: 3,000 generated questions with exact labels (same generator as round 1; evaluation questions excluded);
+  - **explanations**: 500 fact sheets from the live pipeline. The open teacher `Qwen/Qwen3-32B` (bf16, thinking off,
+    run on our own GPUs at training time only) wrote short friendly explanations in the app's current chat format;
+    246 passed the runtime verifier and were kept, plus 125 code-written explanations;
+  - **follow-ups**: 714 answers to "why?"-style questions ("is the air okay for this?", "why is it not recommended?")
+    from the same fact sheets, each kept only because it passed the verifier.
+  - The last 20 fact sheets were held out of training for evaluation.
+- No proprietary or hosted LLM was used anywhere (data, training or runtime).
+- Prompt format: ChatML with an empty `<think></think>` block, identical in training and inference.
+
+## Evaluation (23 Oct 2026, round 1 vs round 2, same code and prompts)
+**Intent extraction**, 24 hand-written questions not in the training data (Q4_K_M, laptop CPU):
+
+| metric | round 1 | round 2 (this model) |
+|---|---|---|
+| activity | 1.0 | 0.958 |
+| location | 0.958 | **1.0** |
+| people profiles | 1.0 | 1.0 |
+| in/out of scope | 0.958 | 0.917 |
+| time phrase | 0.958 | 0.958 |
+| seconds per intent | 2.50 | **2.36** |
+
+In the app a rule parser is merged with the model output, so the one scope miss here ("indoor gym" read as yoga) is
+still declined end to end.
+
+**End to end, live data**, 20 questions never seen in training (full API with the verifier, current chat prompt):
+
+| test | round 1 | round 2 |
+|---|---|---|
+| model-written explanations passing the verifier | 4 / 14 | **10 / 14** (+1 after one repair) |
+| correct status (answer / clarify / decline / not available) | 19 / 20 | 19 / 20 |
+| activity and profile extraction | 100 % | 100 % |
+| median seconds per question (laptop CPU) | 14.9 | 15.7 |
+
+Round 1 was trained on an older, structured answer format, which is why its drafts fail more often with the app's
+current chat prompt. The one status miss in both rounds is an ambiguous place name, where asking is the right outcome.
+
+""" + BODY[BODY.index("## Intended use"):]
+
+
 def main() -> None:
-    api = HfApi(token=os.environ["HF_TOKEN"])
+    api = HfApi(token=os.environ.get("HF_TOKEN"))    # falls back to the saved `hf auth login` token
     for name, spec in REPOS.items():
+        repo_id = f"{USER}/{name}{SUFFIX}"
         header = (f"---\nlicense: apache-2.0\nbase_model: {BASE}\n{spec['meta']}\ndatasets:\n- {DATA}\n"
                   "language:\n- en\n- hi\npipeline_tag: text-generation\n"
                   "tags:\n- geoai\n- outdoor-activity\n- grounded-generation\n- qwen3\n- small-language-model\n"
                   + ("- lora\n" if spec["kind"] != "gguf" else "- gguf\n- llama-cpp\n") + "---\n")
-        card = header + BODY.format(repo=f"{USER}/{name}", title=spec["title"], base=BASE, code=CODE, user=USER,
-                                    data=DATA, files=spec["files"], usage=spec["usage"])
-        api.upload_file(path_or_fileobj=card.encode(), path_in_repo="README.md", repo_id=f"{USER}/{name}",
-                        commit_message="Accurate model card: usage, clean evaluation, links")
-        print("updated", f"https://huggingface.co/{USER}/{name}")
+        body = BODY_V2 if SUFFIX == "-v2" else BODY
+        if SUFFIX:   # point every repo link and snippet at this round's repos, e.g. ...-lora -> ...-lora-v2
+            body = re.sub(r"terrapulse-qwen3-1\.7b(-lora|-GGUF)?(?=[`)\"'\]])", lambda m: m.group(0) + SUFFIX, body)
+            usage = re.sub(r"terrapulse-qwen3-1\.7b(-lora|-GGUF)?(?=[\"'])", lambda m: m.group(0) + SUFFIX, spec["usage"])
+            files = spec["files"].replace(", plus `prompts.json`, `intent_schema.json` "
+                                          "and `terrapulse_config.json` (prompts, JSON schema and decoding settings used at runtime)", "")
+        else:
+            usage, files = spec["usage"], spec["files"]
+        card = header + body.format(repo=repo_id, title=spec["title"], base=BASE, code=CODE, user=USER,
+                                    data=DATA, files=files, usage=usage)
+        api.upload_file(path_or_fileobj=card.encode(), path_in_repo="README.md", repo_id=repo_id,
+                        commit_message=f"Accurate model card for {repo_id}: usage, clean evaluation, links")
+        print("updated", f"https://huggingface.co/{repo_id}")
 
 
 if __name__ == "__main__":

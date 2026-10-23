@@ -117,3 +117,26 @@ def test_within_safe_limits_is_softening_when_flagged():
     sheet = SHEET + "\n[E8] caution: US AQI 129 (above 100)"
     r = verify("Lakeside Garden [E1]: US AQI 129 [E8] is still within safe limits.", sheet, IDS | {"E8"}, NAMES)
     assert any("within safe limits" in v for v in r.violations)
+
+
+FLAGGED = """BEST: [E1] Lakeside Garden, Fri 23 Oct 19:00–20:00, score [E2] 62/100
+FACTS:
+[E5] US AQI up to 135 (19:00–20:00)
+[E9] caution: US AQI 135 is above 100 (unhealthy for sensitive groups); carry an N95"""
+FIDS = {"E1", "E2", "E5", "E9"}
+
+
+def test_wrong_aqi_band_and_downplaying_are_rejected():
+    # the sentence round-2 wrote live on 23 Oct
+    a = ("Lakeside Garden [E1] suits an evening ride, and the air quality, while moderate at a US AQI of 135 [E5], "
+         "won't pose a significant risk for sensitive groups.")
+    v = verify(a, FLAGGED, FIDS, NAMES, "Lakeside Garden").violations
+    assert any("'moderate'" in x for x in v) and any("won't pose" in x for x in v), v
+
+
+def test_correct_aqi_band_passes():
+    a = ("Lakeside Garden [E1] works, but the US AQI of 135 [E5] is unhealthy for sensitive groups, "
+         "so keep it light and wear an N95 [E9].")
+    r = verify(a, FLAGGED, FIDS, NAMES, "Lakeside Garden")
+    assert r.status == "passed", r.violations
+    assert verify("The US AQI of 72 [E5] at Lakeside Garden is moderate.", SHEET, IDS, NAMES).status == "passed"
