@@ -41,11 +41,16 @@ polarity:
     forbidden: ["no rain", "dry conditions", "zero chance of rain"]
 
 # A banded value must be described with its own band: "moderate at a US AQI of 135" is false (101-150 is "unhealthy
-# for sensitive groups", US EPA AQI bands in phrasing.yaml). Band words are searched within the same sentence,
-# up to window_chars before or after the number.
+# for sensitive groups", US EPA AQI bands in phrasing.yaml), and so is "cool weather (feels like about 31 °C)".
+# Band words are searched within the same sentence, up to window_chars before or after the number.
 band_checks:
-  - value_regex: '\baqi\b[^.;\n\d]{0,20}?(\d{1,3})'
+  - label: US AQI
+    value_regex: '\baqi\b[^.;\n\d]{0,20}?(\d{1,3})'
     bands: aqi_bands
+    window_chars: 40
+  - label: feels-like temperature
+    value_regex: '\bfeels?[- ]like\b[^.;\n\d]{0,20}?(-?\d{1,2}(?:\.\d+)?)'
+    bands: feels_bands
     window_chars: 40
 
 # A citation must sit next to its own value: the number nearest to "[E#]" (within this many characters) must

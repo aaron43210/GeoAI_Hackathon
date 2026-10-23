@@ -140,3 +140,11 @@ def test_correct_aqi_band_passes():
     r = verify(a, FLAGGED, FIDS, NAMES, "Lakeside Garden")
     assert r.status == "passed", r.violations
     assert verify("The US AQI of 72 [E5] at Lakeside Garden is moderate.", SHEET, IDS, NAMES).status == "passed"
+
+
+def test_wrong_feels_like_band_is_rejected():
+    sheet = SHEET.replace("29.5 °C", "31 °C")
+    a = "Lakeside Garden [E1] offers some relief with cool weather (feels like about 31 °C [E3])."
+    assert any("'cool'" in v for v in verify(a, sheet, IDS, NAMES, "Lakeside Garden").violations)
+    ok = "Lakeside Garden [E1] will be warm, feels like about 31 °C [E3]."
+    assert verify(ok, sheet, IDS, NAMES, "Lakeside Garden").status == "passed"

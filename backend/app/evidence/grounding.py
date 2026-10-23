@@ -108,10 +108,10 @@ def _band_errors(text: str, checks: List[Dict[str, object]]) -> List[str]:
     """A value described with a band word must fall inside that band ("moderate ... AQI 135" is false)."""
     errors: List[str] = []
     for check in checks:
-        bands, lo = [], 0.0
-        for b in get_knowledge().phrasing[check["bands"]]:
+        bands, lo = [], float("-inf")
+        for b in get_knowledge().phrasing[check["bands"]]:      # band = (previous max, max]
             bands.append((b["word"].lower(), lo, float(b["max"])))
-            lo = float(b["max"]) + 1
+            lo = float(b["max"])
         # longest words first, so "unhealthy for sensitive groups" is not also read as "unhealthy"
         word_rx = re.compile(r"\b(" + "|".join(re.escape(w) for w, _, _ in sorted(bands, key=lambda b: -len(b[0]))) + r")\b")
         span = {w: (a, b) for w, a, b in bands}
@@ -124,8 +124,8 @@ def _band_errors(text: str, checks: List[Dict[str, object]]) -> List[str]:
             window = text[max(sent_start, start - win):min(sent_end, end + win)]
             for w in {x.group(1) for x in word_rx.finditer(window)}:
                 a, b = span[w]
-                if not a <= value <= b:
-                    errors.append(f"calls US AQI {m.group(1)} '{w}' (that band is {a:g}-{b:g})")
+                if not a < value <= b:
+                    errors.append(f"calls {check['label']} {m.group(1)} '{w}' (that band is above {a:g} up to {b:g})")
     return errors
 
 
