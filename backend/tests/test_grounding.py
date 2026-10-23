@@ -148,3 +148,10 @@ def test_wrong_feels_like_band_is_rejected():
     assert any("'cool'" in v for v in verify(a, sheet, IDS, NAMES, "Lakeside Garden").violations)
     ok = "Lakeside Garden [E1] will be warm, feels like about 31 °C [E3]."
     assert verify(ok, sheet, IDS, NAMES, "Lakeside Garden").status == "passed"
+
+
+def test_band_word_next_to_a_citation_is_checked_against_that_fact():
+    sheet = SHEET.replace("29.5 °C", "31 °C")
+    a = "Lakeside Garden [E1] is dry and cool with comfortable temperatures [E3]."
+    assert any("'cool'" in v and "[E3]" in v for v in verify(a, sheet, IDS, NAMES, "Lakeside Garden").violations)
+    assert verify("Lakeside Garden [E1] will be warm [E3].", sheet, IDS, NAMES, "Lakeside Garden").status == "passed"

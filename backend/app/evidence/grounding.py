@@ -104,9 +104,11 @@ def _time_comparison_errors(text: str, cfg: Optional[Dict[str, object]]) -> List
     return out
 
 
-def _band_errors(text: str, checks: List[Dict[str, object]]) -> List[str]:
-    """A value described with a band word must fall inside that band ("moderate ... AQI 135" is false)."""
+def _band_errors(text: str, checks: List[Dict[str, object]], sheet: str = "") -> List[str]:
+    """A value described with a band word must fall inside that band ("moderate ... AQI 135" is false), whether the
+    value is written next to the word or only cited ("cool weather [E2]" where E2 is a 31 °C feels-like fact)."""
     errors: List[str] = []
+    fact_lines = {m.group(1): ln.lower() for ln in sheet.splitlines() for m in [re.match(r"\s*\[(E\d+)\]", ln)] if m}
     for check in checks:
         bands, lo = [], float("-inf")
         for b in get_knowledge().phrasing[check["bands"]]:      # band = (previous max, max]
@@ -116,17 +118,35 @@ def _band_errors(text: str, checks: List[Dict[str, object]]) -> List[str]:
         word_rx = re.compile(r"\b(" + "|".join(re.escape(w) for w, _, _ in sorted(bands, key=lambda b: -len(b[0]))) + r")\b")
         span = {w: (a, b) for w, a, b in bands}
         win = int(check.get("window_chars", 40))
-        for m in re.finditer(check["value_regex"], text):
+        plain = re.sub(r"\[e\d+\]", " ", text)          # numbers inside "[E5]" are ids, not values
+        for m in re.finditer(check["value_regex"], plain):
             value = float(m.group(1))
             start, end = m.start(), m.end()
-            sent_start = max(text.rfind(c, 0, start) for c in ".;\n") + 1
-            sent_end = min([i for i in (text.find(c, end) for c in ".;\n") if i != -1] or [len(text)])
-            window = text[max(sent_start, start - win):min(sent_end, end + win)]
+            sent_start = max(plain.rfind(c, 0, start) for c in ".;\n") + 1
+            sent_end = min([i for i in (plain.find(c, end) for c in ".;\n") if i != -1] or [len(plain)])
+            window = plain[max(sent_start, start - win):min(sent_end, end + win)]
             for w in {x.group(1) for x in word_rx.finditer(window)}:
                 a, b = span[w]
                 if not a < value <= b:
                     errors.append(f"calls {check['label']} {m.group(1)} '{w}' (that band is above {a:g} up to {b:g})")
-    return errors
+        key = str(check.get("sheet_keyword") or "").lower()
+        for c in re.finditer(r"\[(e\d+)\]", text) if key else []:
+            line = fact_lines.get(c.group(1).upper(), "")
+            if key not in line:
+                continue
+            nums = [float(x) for x in re.findall(r"-?\d+(?:\.\d+)?", line.split("(")[0].split(key, 1)[1])]
+            if not nums:
+                continue
+            lo_v, hi_v = min(nums), max(nums)
+            sent_start = max(text.rfind(ch, 0, c.start()) for ch in ".;\n") + 1
+            window = text[max(sent_start, c.start() - win):c.start()]
+            for w in {x.group(1) for x in word_rx.finditer(window)}:
+                a, b = span[w]
+                if hi_v <= a or lo_v > b:      # the cited value range doesn't touch the band at all
+                    errors.append(f"calls {check['label']} [{c.group(1).upper()}] '{w}', but that fact is "
+                                  f"{lo_v:g}–{hi_v:g}" if lo_v != hi_v else
+                                  f"calls {check['label']} [{c.group(1).upper()}] '{w}', but that fact is {lo_v:g}")
+    return sorted(set(errors))
 
 
 def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str],
@@ -246,7 +266,7 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
                 if m:
                     violations.append(f"says '{m.group(0)}' but the data flags {rule['flag_triggers'][0]}")
 
-    violations += _band_errors(_CITE.sub(" ", low_answer), cfg.get("band_checks") or [])
+    violations += _band_errors(low_answer, cfg.get("band_checks") or [], sheet)
 
     # repetition: a small model looping on one phrase ("X; X; X; ...") is a failed answer even if X is true
     plain = re.sub(r"\s+", " ", _CITE.sub("", answer))

@@ -42,14 +42,18 @@ polarity:
 
 # A banded value must be described with its own band: "moderate at a US AQI of 135" is false (101-150 is "unhealthy
 # for sensitive groups", US EPA AQI bands in phrasing.yaml), and so is "cool weather (feels like about 31 °C)".
-# Band words are searched within the same sentence, up to window_chars before or after the number.
+# Band words are searched within the same sentence, up to window_chars before or after the number. A band word
+# right before a citation ("cool with comfortable temperatures [E2]") is checked against that fact's value(s) in the
+# sheet when the fact's line contains sheet_keyword.
 band_checks:
   - label: US AQI
     value_regex: '\baqi\b[^.;\n\d]{0,20}?(\d{1,3})'
+    sheet_keyword: us aqi
     bands: aqi_bands
     window_chars: 40
   - label: feels-like temperature
     value_regex: '\bfeels?[- ]like\b[^.;\n\d]{0,20}?(-?\d{1,2}(?:\.\d+)?)'
+    sheet_keyword: feels-like
     bands: feels_bands
     window_chars: 40
 
