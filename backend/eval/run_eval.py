@@ -23,9 +23,11 @@ def main() -> None:
     ap.add_argument("--base", default="http://localhost:8000")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--pause", type=float, default=2.0)
-    ap.add_argument("--file", default="queries.jsonl")
+    ap.add_argument("--file", action="append", default=[], help="query file(s) in eval/ (default queries.jsonl)")
+    ap.add_argument("--out", default="live_eval.json")
     args = ap.parse_args()
-    rows = [json.loads(l) for l in (HERE / args.file).read_text().splitlines() if l.strip()]
+    rows = [json.loads(l) for f in (args.file or ["queries.jsonl"]) for l in (HERE / f).read_text().splitlines()
+            if l.strip()]
     if args.limit:
         rows = rows[:args.limit]
     out, lat = [], []
@@ -45,6 +47,7 @@ def main() -> None:
                 "activity_ok": r.get("activity") is None or intent.get("activity") == r["activity"],
                 "profiles_ok": set(r.get("profiles", [])) <= set(intent.get("profiles", [])),
                 "grounding": (res.get("grounding") or {}).get("status"), "path": res.get("answer_path"),
+                "server_ms": (res.get("timings_ms") or {}).get("total"),
                 "seconds": round(dt, 1), "venue": ((res.get("recommendation") or res.get("least_bad") or {})
                                                    .get("venue") or {}).get("name"),
             }
@@ -61,11 +64,14 @@ def main() -> None:
         "slm_answer_rate": round(sum(1 for o in ok if (o["path"] or "").startswith("slm")) /
                                  max(1, sum(1 for o in ok if o["path"])), 3),
         "latency_p50_s": round(statistics.median(lat), 1) if lat else None,
+        "latency_p95_s": round(sorted(lat)[max(0, round(0.95 * (len(lat) - 1)))], 1) if lat else None,
         "latency_max_s": round(max(lat), 1) if lat else None,
+        "plans_answered": sum(1 for o in ok if o["path"]),
+        "answer_paths": {k: sum(1 for o in ok if o["grounding"] == k) for k in ("passed", "repaired", "templated")},
     }
     print(json.dumps(summary, indent=1))
     (HERE / "results").mkdir(exist_ok=True)
-    (HERE / "results" / "live_eval.json").write_text(json.dumps({"summary": summary, "rows": out}, indent=1,
+    (HERE / "results" / args.out).write_text(json.dumps({"summary": summary, "rows": out}, indent=1,
                                                                 ensure_ascii=False))
 
 

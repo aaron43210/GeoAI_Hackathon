@@ -1,0 +1,60 @@
+{"q": "Any good place to go for a 5 km run around Hauz Khas tomorrow at 6 am?", "activity": "running", "location": "hauz khas", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "jogging spot near Banjara Hills day after tomorrow evening, I'm asthmatic", "activity": "running", "location": "banjara hills", "profiles": ["asthma"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "long run practice this sunday along Marine Drive Mumbai", "activity": "running", "location": "marine drive", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "evening stroll with my grandparents around Lodhi Garden tomorrow", "activity": "walking", "location": "lodhi garden", "profiles": ["senior"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "Can my wife who is 7 months pregnant go for a morning walk near Koregaon Park tomorrow?", "activity": "walking", "location": "koregaon park", "profiles": ["pregnancy"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "subah walk ke liye best time batao Andheri West mein kal", "activity": "walking", "location": "andheri west", "profiles": [], "in_scope": true, "has_time": true, "lang": "hi-en"}
+{"q": "weekend cycling ride near Nandi Hills, where and when?", "activity": "cycling", "location": "nandi hills", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "I had knee surgery last month, is a slow cycle ride near Kankaria Lake ok tomorrow?", "activity": "cycling", "location": "kankaria lake", "profiles": ["mobility_limited"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "cycle chalana hai parso shaam Sector 21 Noida ke paas", "activity": "cycling", "location": "sector 21 noida", "profiles": [], "in_scope": true, "has_time": true, "lang": "hi-en"}
+{"q": "tee off time this saturday near Bangalore Golf Club?", "activity": "golf", "location": "bangalore golf club", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "golf round with my 68 year old dad near DLF Golf Course Gurugram next week", "activity": "golf", "location": "dlf golf course", "profiles": ["senior"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "gully cricket with the kids in Bandra this evening, is the weather ok?", "activity": "cricket", "location": "bandra", "profiles": ["child"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "box cricket tournament near Whitefield on sunday afternoon", "activity": "cricket", "location": "whitefield", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "5 a side football tonight near Salt Lake Sector V", "activity": "football", "location": "salt lake sector v", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "kids football practice near Kothrud tomorrow 4 pm, any heat issue?", "activity": "football", "location": "kothrud", "profiles": ["child"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "tennis doubles early morning near Jubilee Hills tomorrow", "activity": "tennis", "location": "jubilee hills", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "I have a heart condition, can I play a light game of tennis near Vasant Kunj this evening?", "activity": "tennis", "location": "vasant kunj", "profiles": ["cardiac"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "trek to Rajmachi this weekend, will it rain?", "activity": "hiking", "location": "rajmachi", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "hike near Dehradun on saturday, I have asthma", "activity": "hiking", "location": "dehradun", "profiles": ["asthma"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "trekking plan kal subah Sinhagad, kaisa mausam hai?", "activity": "hiking", "location": "sinhagad", "profiles": [], "in_scope": true, "has_time": true, "lang": "hi-en"}
+{"q": "family picnic with toddlers at Cubbon Park this sunday", "activity": "picnic", "location": "cubbon park", "profiles": ["child"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "picnic spot near Lalbagh tomorrow lunch time", "activity": "picnic", "location": "lalbagh", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "planning an open air birthday party in a garden in Jaipur next saturday evening", "activity": "outdoor_event", "location": "jaipur", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "outdoor wedding sangeet on the lawn near Mahabalipuram friday night, any rain risk?", "activity": "outdoor_event", "location": "mahabalipuram", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "golden hour photography near Fort Kochi tomorrow", "activity": "photography", "location": "fort kochi", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "sunrise photoshoot at Gateway of India this week", "activity": "photography", "location": "gateway of india", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "outdoor yoga session on the beach at Juhu before work tomorrow", "activity": "yoga", "location": "juhu", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "yoga in the park near Sector 17 Chandigarh tomorrow morning, I can't take the heat", "activity": "yoga", "location": "sector 17 chandigarh", "profiles": ["heat_sensitive"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "birdwatching at Sultanpur this weekend early morning", "activity": "birdwatching", "location": "sultanpur", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "where can I go birding to see flamingos near Navi Mumbai tomorrow morning", "activity": "birdwatching", "location": "navi mumbai", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "best time for a run tomorrow?", "activity": "running", "location": null, "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "where can I play cricket?", "activity": "cricket", "location": null, "profiles": [], "in_scope": true, "has_time": false, "lang": "en"}
+{"q": "walk near me in the evening", "activity": "walking", "location": null, "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "cycling from home to office tomorrow morning, is it safe?", "activity": "cycling", "location": null, "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "what should I do outdoors near Powai this weekend?", "activity": null, "location": "powai", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "is tomorrow good to go out near Velachery?", "activity": null, "location": "velachery", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "book a table for two at a restaurant in Koramangala tonight", "activity": null, "location": "koramangala", "profiles": [], "in_scope": false, "has_time": true, "lang": "en"}
+{"q": "which mutual fund should I invest in this month", "activity": null, "location": null, "profiles": [], "in_scope": false, "has_time": true, "lang": "en"}
+{"q": "find me a good indoor badminton court in Hyderabad", "activity": null, "location": "hyderabad", "profiles": [], "in_scope": false, "has_time": false, "lang": "en"}
+{"q": "what's a good recipe for dinner tonight", "activity": null, "location": null, "profiles": [], "in_scope": false, "has_time": true, "lang": "en"}
+{"q": "order a cake delivery to Andheri", "activity": null, "location": "andheri", "profiles": [], "in_scope": false, "has_time": false, "lang": "en"}
+{"q": "train tickets from Pune to Mumbai tomorrow", "activity": null, "location": null, "profiles": [], "in_scope": false, "has_time": true, "lang": "en"}
+{"q": "netflix movie suggestions for the weekend", "activity": null, "location": null, "profiles": [], "in_scope": false, "has_time": true, "lang": "en"}
+{"q": "how do I fix my wifi router", "activity": null, "location": null, "profiles": [], "in_scope": false, "has_time": false, "lang": "en"}
+{"q": "kal shaam football khelna hai Thane mein, mausam theek rahega?", "activity": "football", "location": "thane", "profiles": [], "in_scope": true, "has_time": true, "lang": "hi-en"}
+{"q": "meri maa 65 ki hai, Powai Lake ke paas parso subah walk karna hai", "activity": "walking", "location": "powai lake", "profiles": ["senior"], "in_scope": true, "has_time": true, "lang": "hi-en"}
+{"q": "evng run nr vile parle 2mrw", "activity": "running", "location": "vile parle", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "piknic wid kids nr hebbal lake sundy", "activity": "picnic", "location": "hebbal lake", "profiles": ["child"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "wats best tym 4 cycling in gachibowli tmrw", "activity": "cycling", "location": "gachibowli", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "jogg in Aundh tmrw morng, i hav asthama", "activity": "running", "location": "aundh", "profiles": ["asthma"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "My 80-year-old grandfather uses a walker, short walk near Besant Nagar beach tomorrow evening?", "activity": "walking", "location": "besant nagar", "profiles": ["mobility_limited", "senior"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "pregnant and asthmatic, gentle yoga near Indiranagar tomorrow morning", "activity": "yoga", "location": "indiranagar", "profiles": ["asthma", "pregnancy"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "school sports day for the children, outdoor event near Rohini on friday", "activity": "outdoor_event", "location": "rohini", "profiles": ["child"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "heart patient here, birdwatching near Okhla Bird Sanctuary on sunday", "activity": "birdwatching", "location": "okhla", "profiles": ["cardiac"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "I get heat stroke easily, tennis near Adyar this afternoon?", "activity": "tennis", "location": "adyar", "profiles": ["heat_sensitive"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "weekend hike near Lonavala with my 10 year old son", "activity": "hiking", "location": "lonavala", "profiles": ["child"], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "golf after work near Golf Course Road Gurugram tomorrow", "activity": "golf", "location": "golf course road", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "within 15 km of Electronic City, any place for a morning run on saturday?", "activity": "running", "location": "electronic city", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "cricket nets practice near Shivaji Park tomorrow 7am, 20 min drive max", "activity": "cricket", "location": "shivaji park", "profiles": [], "in_scope": true, "has_time": true, "lang": "en"}
+{"q": "parso birdwatching karna hai Bharatpur mein subah subah", "activity": "birdwatching", "location": "bharatpur", "profiles": [], "in_scope": true, "has_time": true, "lang": "hi-en"}

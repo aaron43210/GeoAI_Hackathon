@@ -32,7 +32,11 @@ async def understand(question: str, slm: SLMRuntime, previous: Optional[Dict[str
     except Exception as exc:  # noqa: BLE001 - fall back to rules, and say so in the response
         logger.warning("SLM intent extraction failed (%s); using rule parser", exc)
         return rules, "rules (SLM failed)"
+    return merge_intents(question, rules, model), "slm+rules"
 
+
+def merge_intents(question: str, rules: Intent, model: Intent) -> Intent:
+    """Combine the model's intent with the rule parser's (safety-monotone, see module docstring)."""
     data = model.model_dump()
     data["profiles"] = sorted(set(model.profiles) | set(rules.profiles))
     for key in ("activity", "location_text", "radius_km", "max_travel_min", "duration_min", "age"):
@@ -46,4 +50,4 @@ async def understand(question: str, slm: SLMRuntime, previous: Optional[Dict[str
         data["in_scope"], data["out_of_scope_reason"] = False, rules.out_of_scope_reason
     elif rules.activity is not None or rule_parser.has_in_scope_cue(question):
         data["in_scope"], data["out_of_scope_reason"] = True, None
-    return Intent(**data).normalised(), "slm+rules"
+    return Intent(**data).normalised()
