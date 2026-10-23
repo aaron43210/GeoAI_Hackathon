@@ -155,3 +155,10 @@ def test_band_word_next_to_a_citation_is_checked_against_that_fact():
     a = "Lakeside Garden [E1] is dry and cool with comfortable temperatures [E3]."
     assert any("'cool'" in v and "[E3]" in v for v in verify(a, sheet, IDS, NAMES, "Lakeside Garden").violations)
     assert verify("Lakeside Garden [E1] will be warm [E3].", sheet, IDS, NAMES, "Lakeside Garden").status == "passed"
+
+
+def test_band_check_survives_label_inside_brackets():
+    # a fact line that mentions the label only inside "(…)" must not crash the verifier
+    sheet = SHEET + "\n[E8] caution: hot afternoon (feels-like above the 33 °C limit)"
+    r = verify("Lakeside Garden [E1] gets warm later [E8].", sheet, IDS | {"E8"}, NAMES, "Lakeside Garden")
+    assert r.status in ("passed", "failed")

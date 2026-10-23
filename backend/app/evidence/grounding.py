@@ -134,7 +134,8 @@ def _band_errors(text: str, checks: List[Dict[str, object]], sheet: str = "") ->
             line = fact_lines.get(c.group(1).upper(), "")
             if key not in line:
                 continue
-            nums = [float(x) for x in re.findall(r"-?\d+(?:\.\d+)?", line.split("(")[0].split(key, 1)[1])]
+            after = line[line.find(key) + len(key):].split("(")[0]   # the value follows the label, before any "(…)"
+            nums = [float(x) for x in re.findall(r"-?\d+(?:\.\d+)?", after)]
             if not nums:
                 continue
             lo_v, hi_v = min(nums), max(nums)
@@ -266,7 +267,10 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
                 if m:
                     violations.append(f"says '{m.group(0)}' but the data flags {rule['flag_triggers'][0]}")
 
-    violations += _band_errors(low_answer, cfg.get("band_checks") or [], sheet)
+    try:
+        violations += _band_errors(low_answer, cfg.get("band_checks") or [], sheet)
+    except Exception as exc:  # noqa: BLE001 - fail safe: an unchecked answer is never shown
+        violations.append(f"band check could not run ({exc.__class__.__name__})")
 
     # repetition: a small model looping on one phrase ("X; X; X; ...") is a failed answer even if X is true
     plain = re.sub(r"\s+", " ", _CITE.sub("", answer))
