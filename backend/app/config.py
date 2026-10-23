@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     SLM_LOCAL_PATH: str = ""                         # optional explicit GGUF path
     SLM_THREADS: int = 0                             # 0 = os.cpu_count()
     SLM_CTX: int = 4096
+    SLM_GPU_LAYERS: int = 0                          # llama.cpp: -1 = offload all layers (CUDA/Metal builds)
     SLM_USE_MMAP: bool = True                        # False = read the whole GGUF into RAM at startup (slow disks)
     SLM_TEMPERATURE: float = 0.2
     SLM_MAX_TOKENS_ANSWER: int = 520

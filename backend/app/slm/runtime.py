@@ -108,6 +108,7 @@ class SLMRuntime:
         threads = self.settings.SLM_THREADS or cpu_budget()
         self.info.extra["threads"] = threads
         self._llm = Llama(model_path=path, n_ctx=self.settings.SLM_CTX, n_threads=threads, verbose=False,
+                          n_gpu_layers=self.settings.SLM_GPU_LAYERS,
                           use_mmap=self.settings.SLM_USE_MMAP)
         self.info.repo, self.info.file, self.info.path_used = repo, fname, which
 
