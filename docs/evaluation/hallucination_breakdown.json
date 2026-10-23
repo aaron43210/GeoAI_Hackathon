@@ -1,0 +1,54 @@
+{
+ "base": {
+  "explain": {
+   "cats": {
+    "12-hour time (24-h value is in the sheet)": 0,
+    "footnote number [n] or step number": 0,
+    "rounded sheet value (within \u00b11)": 0,
+    "other / genuine": 0,
+    "place name": 0,
+    "citation next to wrong value": 1
+   },
+   "answers_with_genuine_unsupported": 0,
+   "n": 20
+  },
+  "followup": {
+   "cats": {
+    "12-hour time (24-h value is in the sheet)": 0,
+    "footnote number [n] or step number": 0,
+    "rounded sheet value (within \u00b11)": 0,
+    "other / genuine": 0,
+    "place name": 0,
+    "citation next to wrong value": 0
+   },
+   "answers_with_genuine_unsupported": 0,
+   "n": 29
+  }
+ },
+ "v2": {
+  "explain": {
+   "cats": {
+    "12-hour time (24-h value is in the sheet)": 3,
+    "footnote number [n] or step number": 11,
+    "rounded sheet value (within \u00b11)": 8,
+    "other / genuine": 9,
+    "place name": 2,
+    "citation next to wrong value": 1
+   },
+   "answers_with_genuine_unsupported": 4,
+   "n": 20
+  },
+  "followup": {
+   "cats": {
+    "12-hour time (24-h value is in the sheet)": 0,
+    "footnote number [n] or step number": 0,
+    "rounded sheet value (within \u00b11)": 2,
+    "other / genuine": 1,
+    "place name": 0,
+    "citation next to wrong value": 1
+   },
+   "answers_with_genuine_unsupported": 1,
+   "n": 29
+  }
+ }
+}

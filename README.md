@@ -12,7 +12,7 @@ is cited and machine-checked against the data it fetched.
 | | |
 |---|---|
 | **Live API** | **https://aaronr43210-terrapulse-ai.hf.space/api/v1/ask** · web demo at [/](https://aaronr43210-terrapulse-ai.hf.space/) · docs at [/docs](https://aaronr43210-terrapulse-ai.hf.space/docs) · health at [/api/v1/health](https://aaronr43210-terrapulse-ai.hf.space/api/v1/health) |
-| **Model** | [`aaronr43210/terrapulse-qwen3-1.7b-v2`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-v2) (round 2, merged, `from_pretrained`, served by the live API) · [`-lora-v2`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-lora-v2) (adapter) · [`-GGUF-v2`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-GGUF-v2) (llama.cpp, local/Docker) · round 1: [`terrapulse-qwen3-1.7b`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b) (tag `v1-stable`) |
+| **Model** | [`aaronr43210/terrapulse-qwen3-1.7b-v2`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-v2) (merged, `from_pretrained`, served by the live API) · [`-lora-v2`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-lora-v2) (adapter) · [`-GGUF-v2`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-GGUF-v2) (llama.cpp, local/Docker) |
 | **Base model** | [`Qwen/Qwen3-1.7B`](https://huggingface.co/Qwen/Qwen3-1.7B) |
 | **Code** | https://github.com/aaron43210/GeoAI_Hackathon |
 | **Licence** | Apache-2.0 |
@@ -121,19 +121,30 @@ docker compose up --build                  # http://localhost:8000
   Qwen3.5-2B: 87.5% / 95.8% / 95.8%, 4.9 s. Excluded: Phi-3/4-mini (3.8 B), Ministral-3-3B (3.85 B),
   Granite-4.0-micro (3.4 B), Llama-3.2-3B (3.21 B, non-OSI licence), Qwen2.5-3B (non-commercial licence),
   SmolLM3 (3.08 B), Gemma-3n-E2B (5.4 B). Script: [backend/eval/bakeoff.py](backend/eval/bakeoff.py).
-* Training ran in two rounds, never on a developer laptop. Both use the same two notebooks
-  ([01](training/01_build_data_colab.ipynb): data, [02](training/02_finetune_lora_colab.ipynb): Unsloth LoRA r=16,
-  α=32, 2 epochs, completion-only loss, before/after eval, push adapter + merged model + GGUF + model card):
-  - **Round 1** (Google Colab T4): ~3,000 generated intent examples with exact labels + ~160 live fact sheets;
-    answer drafts from the open **Qwen3-4B**, kept only if they pass the grounding verifier.
-  - **Round 2** (one 80 GB GPU of a college DGX server, headless via
-    [training/run_round2.sh](training/run_round2.sh)): the same 3,000 intent examples + 500 live fact sheets; the open
-    **Qwen3-32B** wrote explanations in the app's chat format and answers to "why?" follow-ups, kept only if they pass
-    the verifier (246 explanations + 125 code-written ones + 714 follow-ups). Published to the `-v2` repos.
-  - Round 2 vs round 1 on 20 live questions never seen in training: model-written explanations passing the verifier
-    **10/14 vs 4/14**, same correct status (19/20), activity and profile extraction 100 % for both.
+* **How TerraPulse v2 was trained** (never on a developer laptop): one 80 GB GPU of a college DGX server, run headless
+  with [training/run_round2.sh](training/run_round2.sh), which executes the two notebooks:
+  1. [training/01_build_data_colab.ipynb](training/01_build_data_colab.ipynb): 3,000 generated intent examples with
+     exact labels + 500 real fact sheets from the live pipeline; the open **Qwen3-32B** (training time only) wrote
+     explanations in the app's chat format and answers to "why?" follow-ups, kept only if they pass the same grounding
+     verifier the app uses (246 explanations + 125 code-written ones + 714 follow-ups); the last 20 sheets held out.
+  2. [training/02_finetune_lora_colab.ipynb](training/02_finetune_lora_colab.ipynb): Unsloth + TRL supervised
+     fine-tuning with LoRA (r=16, α=32, dropout 0.05, all attention and MLP projections), 2 epochs, lr 2e-4 cosine,
+     effective batch 16, completion-only loss; pushes the adapter, the merged model, GGUF files and the model card.
 * `training/update_model_cards.py` publishes the model cards; the runtime loads the fine-tuned GGUF and falls back to the
   base GGUF only if it can't be downloaded.
+
+<!-- eval:start -->
+## Evaluation (base Qwen3-1.7B vs TerraPulse v2)
+* **Understanding questions:** all fields correct rose from 82.1 % to 94.0 % (model alone, 84 hand-labelled questions); macro-F1 for people profiles 78.0 → 97.1, in/out of scope 74.4 → 94.3, activity 94.2 → 97.2, location 100 for both.
+* **Decision accuracy** (plan / ask a question / decline): 89.3 % → 97.6 % for the model alone, and 95.2 % → **100 %** in the full app (model + rule parser).
+* **Grounded explanations:** drafts passing the full verifier first time 5 % → 20 % on 20 held-out live fact sheets, and 48.3 % → 65.5 % for “why?” follow-ups; decision consistency 15 % → 40 % and 75.9 % → 93.1 %.
+* **Live, end to end** (44 questions, real APIs): explanations written by the model and shown to the user 10 of 31 → **19 of 32**; correct outcome 97.7 % for both.
+* **Robustness and fairness:** perturbed questions 83.7 % → 87.8 %; place-swap consistency 100 % for both; accuracy gap with vs without a health profile 14.9 → 2.9 points.
+* **Hallucination, honestly:** v2 states 3.3× more specific facts (268 vs 81 claims). 30 % of its explanation drafts had a flagged claim (base 5 %), mostly formatting (footnote numbers, rounding, 12-hour times); 4 of 20 contained a genuinely unsupported claim (base 0). The verifier blocks every one of them before a user sees it.
+* **Latency** (Apple M4 Pro GPU, Q4_K_M): intent p50 1.94 s (base 1.90); explanation p50 2.38 s (base 1.74 s; longer, richer text); end to end with live APIs p50 11.1 s, p95 19.5 s.
+
+Full tables, charts and method: [docs/evaluation/MODEL_EVALUATION.md](docs/evaluation/MODEL_EVALUATION.md) · project report: [docs/TerraPulse_AI_Project_Report.docx](docs/TerraPulse_AI_Project_Report.docx)
+<!-- eval:end -->
 
 ## Data sources (all free and open, fetched live at query time)
 | Source | Used for |
@@ -160,10 +171,9 @@ Map data © OpenStreetMap contributors (ODbL). Weather data by Open-Meteo.com (C
 * Latency on a 4-core CPU: ~10–20 s typical, dominated by Overpass. Answers stream progressively.
 
 ## Disclosures
-* Runtime model: Qwen3-1.7B (1.72 B parameters) + our LoRA (round 2): transformers on the ZeroGPU Space, llama.cpp
+* Runtime model: TerraPulse v2 = Qwen3-1.7B (1.72 B parameters) + our LoRA: transformers on the ZeroGPU Space, llama.cpp
   locally and in Docker. No hosted LLM in the running assistant.
-* Training-data teachers (training time only, open weights, Apache-2.0): Qwen3-4B (round 1, Colab) and Qwen3-32B
-  (round 2, our own GPU server).
+* Training-data teacher (training time only, open weights, Apache-2.0): Qwen3-32B, run on our own GPU server.
 * AI coding assistants were used during development (disclosed per the hackathon rules); no AI service runs in the product.
 
 ## Repo map

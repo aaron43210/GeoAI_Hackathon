@@ -1,7 +1,7 @@
 """Publish accurate, repo-specific model cards for the three TerraPulse repos (adapter, merged, GGUF).
 
-    HF_TOKEN=... python training/update_model_cards.py              # round 1 repos
-    HF_TOKEN=... SUFFIX=-v2 python training/update_model_cards.py   # round 2 repos (-v2)
+    HF_TOKEN=... SUFFIX=-v2 python training/update_model_cards.py   # TerraPulse v2 repos (the final model)
+    HF_TOKEN=... python training/update_model_cards.py              # earlier repos without the suffix
 
 Evaluation numbers below are the ones we can defend: the clean intent gold set (excluded from training) and live
 end-to-end runs on questions never seen in training. The notebook's in-training grounding score is reported with its
@@ -9,6 +9,7 @@ caveat (those 20 fact sheets were in the training data in the 21 Oct run).
 """
 from __future__ import annotations
 
+import json
 import os
 import re
 
@@ -160,11 +161,11 @@ Apache-2.0, the same as the base model. Map data © OpenStreetMap contributors; 
 """
 
 
-BODY_V2 = BODY[:BODY.index("## Training")] + """## Training (round 2)
-- Same LoRA recipe as round 1: r=16, α=32, dropout 0.05 on all attention and MLP projections; 2 epochs, lr 2e-4
-  cosine, completion-only loss; Unsloth + TRL, this time on one 80 GB NVIDIA GPU of a college DGX server.
+BODY_V2 = BODY[:BODY.index("## Training")] + """## Training
+- LoRA: r=16, α=32, dropout 0.05 on all attention and MLP projections; 2 epochs, lr 2e-4
+  cosine, completion-only loss; Unsloth + TRL on one 80 GB NVIDIA GPU of a college DGX server.
 - Data ([`{data}`](https://huggingface.co/datasets/{data})), about 4,000 examples before a ~5 % validation split:
-  - **intent**: 3,000 generated questions with exact labels (same generator as round 1; evaluation questions excluded);
+  - **intent**: 3,000 generated questions with exact labels (evaluation questions excluded);
   - **explanations**: 500 fact sheets from the live pipeline. The open teacher `Qwen/Qwen3-32B` (bf16, thinking off,
     run on our own GPUs at training time only) wrote short friendly explanations in the app's current chat format;
     246 passed the runtime verifier and were kept, plus 125 code-written explanations;
@@ -174,34 +175,102 @@ BODY_V2 = BODY[:BODY.index("## Training")] + """## Training (round 2)
 - No proprietary or hosted LLM was used anywhere (data, training or runtime).
 - Prompt format: ChatML with an empty `<think></think>` block, identical in training and inference.
 
-## Evaluation (23 Oct 2026, round 1 vs round 2, same code and prompts)
-**Intent extraction**, 24 hand-written questions not in the training data (Q4_K_M, laptop CPU):
-
-| metric | round 1 | round 2 (this model) |
-|---|---|---|
-| activity | 1.0 | 0.958 |
-| location | 0.958 | **1.0** |
-| people profiles | 1.0 | 1.0 |
-| in/out of scope | 0.958 | 0.917 |
-| time phrase | 0.958 | 0.958 |
-| seconds per intent | 2.50 | **2.36** |
-
-In the app a rule parser is merged with the model output, so the one scope miss here ("indoor gym" read as yoga) is
-still declined end to end.
-
-**End to end, live data**, 20 questions never seen in training (full API with the verifier, current chat prompt):
-
-| test | round 1 | round 2 |
-|---|---|---|
-| model-written explanations passing the verifier | 4 / 14 | **10 / 14** (+1 after one repair) |
-| correct status (answer / clarify / decline / not available) | 19 / 20 | 19 / 20 |
-| activity and profile extraction | 100 % | 100 % |
-| median seconds per question (laptop CPU) | 14.9 | 15.7 |
-
-Round 1 was trained on an older, structured answer format, which is why its drafts fail more often with the app's
-current chat prompt. The one status miss in both rounds is an ambiguous place name, where asking is the right outcome.
+{evaluation}
 
 """ + BODY[BODY.index("## Intended use"):]
+
+
+EVAL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "evaluation")
+
+
+def eval_markdown() -> str:
+    """Evaluation section built from docs/evaluation/model_eval.json (+ live_eval_*.json): base model vs TerraPulse v2."""
+    path = os.path.join(EVAL_DIR, "model_eval.json")
+    if not os.path.exists(path):
+        return "## Evaluation\nSee `docs/evaluation/` in the code repository."
+    with open(path) as fh:
+        ev = json.load(fh)
+    res = {r["model"]: r for r in ev["results"]}
+    ms = [m for m in ("base", "v2") if m in res]
+    live = {}
+    for m in ms:
+        lp = os.path.join(EVAL_DIR, f"live_eval_{m}.json")
+        if os.path.exists(lp):
+            with open(lp) as fh:
+                live[m] = json.load(fh)["summary"]
+    head = {"base": "base Qwen3-1.7B", "v2": "**TerraPulse v2 (this model)**"}
+
+    def f(v, unit=""):
+        return "–" if v is None else f"{v}{unit}"
+
+    def tbl(title, rows):
+        out = [title, "", "| metric | " + " | ".join(head[m] for m in ms) + " |", "|---" * (len(ms) + 1) + "|"]
+        out += ["| " + name + " | " + " | ".join(fn(m) for m in ms) + " |" for name, fn in rows]
+        return "\n".join(out) + "\n"
+
+    def field(fld):
+        return lambda m: f"{res[m]['intent_model'][fld]['macro_f1']} / {res[m]['intent_model'][fld]['accuracy']}"
+
+    def gen(kind, key, unit=" %"):
+        return lambda m: f(res[m][kind].get(key), unit)
+
+    meta = ev["meta"]
+    parts = ["## Evaluation (base model vs TerraPulse v2, identical inputs)",
+             f"Both models ran on the same inputs, machine and settings ({meta['runtime']}). No test item was used for "
+             "training. Method, per-item outputs and code: `docs/evaluation/` and `backend/eval/model_eval.py` in the "
+             "code repository.", ""]
+    parts.append(tbl(f"**Question understanding**, {meta['intent_questions']} hand-labelled questions, model alone "
+                     "(macro-F1 % / accuracy %):", [
+        ("activity (14 classes)", field("activity")), ("location", field("location")),
+        ("people profiles (7)", field("profiles")), ("in / out of scope", field("in_scope")),
+        ("all fields correct", lambda m: f(res[m]["intent_model"]["joint_accuracy"], " %")),
+        ("decision accuracy (plan / ask / decline), model alone", lambda m: f(res[m]["intent_model"]["decision_accuracy"], " %")),
+        ("decision accuracy, full app (model + rule parser)", lambda m: f(res[m]["intent_system"]["decision_accuracy"], " %")),
+        ("valid JSON", lambda m: f(res[m]["valid_json"], " %"))]))
+    parts.append(tbl(f"**Robustness and fairness** ({meta['perturbed']} perturbed questions, {meta['counterfactual']} "
+                     "counterfactual place swaps):", [
+        ("robustness: typos / shorthand / noise, model alone", lambda m: f(res[m]["robustness"]["model_success"], " %")),
+        ("robustness, full app", lambda m: f(res[m]["robustness"]["system_success"], " %")),
+        ("counterfactual place-swap consistency", lambda m: f(res[m]["fairness"]["counterfactual_consistency"], " %")),
+        ("accuracy gap across regions (N/W/S/E)", lambda m: f(res[m]["fairness"]["region_gap"], " pts")),
+        ("English vs Hinglish accuracy", lambda m: f"{f(res[m]['fairness']['subgroup_accuracy']['english'])} vs "
+                                                   f"{f(res[m]['fairness']['subgroup_accuracy']['hinglish'])}")]))
+    for kind, title in (("gen_explain", f"**Explanations**, {meta['heldout_sheets']} held-out live fact sheets"),
+                        ("gen_followup", f"**“Why?” follow-ups**, {meta['followups']} questions on the same sheets")):
+        parts.append(tbl(title + ":", [
+            ("groundedness (passes the runtime verifier)", gen(kind, "groundedness")),
+            ("hallucination rate (lower is better)", gen(kind, "hallucination_rate")),
+            ("…of which genuinely unsupported (not formatting or rounding)", gen(kind, "genuine_unsupported_rate")),
+            ("factual claims checked", gen(kind, "claims_checked", "")),
+            ("faithfulness (supported claims)", gen(kind, "faithfulness_claims")),
+            ("decision consistency", gen(kind, "decision_consistency")),
+            ("ROUGE-L F1 vs verified Qwen3-32B answer", gen(kind, "rougeL_f1", "")),
+            ("BERTScore F1 (roberta-large, rescaled)", gen(kind, "bertscore_f1", ""))]))
+    lat = [("intent JSON p50 / p95 (s)", lambda m: f"{res[m]['latency_s']['intent']['p50']} / {res[m]['latency_s']['intent']['p95']}"),
+           ("explanation p50 / p95 (s)",
+            lambda m: f"{res[m]['latency_s']['explanation']['p50']} / {res[m]['latency_s']['explanation']['p95']}")]
+    if live:
+        lat.append(("end to end with live APIs p50 / p95 (s)",
+                    lambda m: f"{live[m]['latency_p50_s']} / {live[m]['latency_p95_s']}" if m in live else "–"))
+    parts.append(tbl("**Latency**, measured one model at a time on an Apple M4 Pro GPU (llama.cpp, Q4_K_M); end to end includes the live APIs:", lat))
+    if live:
+        parts.append(tbl("**End to end**, 44 live questions through the full app with real APIs:", [
+            ("correct outcome (answer / ask / decline / not available)",
+             lambda m: f"{100 * live[m]['status_acc']:.1f} %" if m in live else "–"),
+            ("explanations written by the model and shown",
+             lambda m: (f"{live[m]['answer_paths']['passed'] + live[m]['answer_paths']['repaired']} of "
+                        f"{live[m]['plans_answered']}") if m in live else "–"),
+            ("activity / profile extraction",
+             lambda m: f"{100 * live[m]['activity_acc']:.0f} % / {100 * live[m]['profile_recall']:.0f} %" if m in live else "–")]))
+    parts.append("This model states far more specific facts than the base model (claims checked above), so the strict "
+                 "verifier flags more of its drafts; most flags are formatting habits (footnote numbers, rounding, 12-hour "
+                 "times), the rest genuinely unsupported. In the app no flagged draft reaches users: it is repaired once or "
+                 "replaced by a code-written explanation from the same data.")
+    parts.append("ROUGE and BERTScore compare with the teacher's verified answers, whose style this model was trained "
+                 "to follow, so they favour it by design; groundedness, hallucination and decision consistency are the "
+                 "safety-relevant metrics. The test sets are small (tens of items), so differences of a few points are "
+                 "within noise.")
+    return "\n".join(parts)
 
 
 def main() -> None:
@@ -221,7 +290,7 @@ def main() -> None:
         else:
             usage, files = spec["usage"], spec["files"]
         card = header + body.format(repo=repo_id, title=spec["title"], base=BASE, code=CODE, user=USER,
-                                    data=DATA, files=files, usage=usage)
+                                    data=DATA, files=files, usage=usage, evaluation=eval_markdown())
         api.upload_file(path_or_fileobj=card.encode(), path_in_repo="README.md", repo_id=repo_id,
                         commit_message=f"Accurate model card for {repo_id}: usage, clean evaluation, links")
         print("updated", f"https://huggingface.co/{repo_id}")

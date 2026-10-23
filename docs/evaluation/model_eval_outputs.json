@@ -1,0 +1,959 @@
+{
+ "base": {
+  "explain": [
+   {
+    "sheet": 0,
+    "answer": "Tonight is not safe for bowling practice in Rajajinagar because the rain probability is high, and there's a risk of wet or slippery surfaces. The temperature is comfortable, but the UV index is low, so it's not too hot or harsh. The activity needs daylight, and after dark, it's not recommended. The place has no available venues, and travel times are long due to traffic. Avoid the time when rain is most likely, especially after sunset.",
+    "violations": [
+     "no citations",
+     "place 'Cricket Ground' not mentioned",
+     "says 'too hot' but the data does not flag feels-like temperature"
+    ],
+    "claims": 0,
+    "ref": null
+   },
+   {
+    "sheet": 1,
+    "answer": "The trail day after tomorrow near Manali is best suited for a gentle hike with comfortable temperatures, as the feels-like temperature will be around 8–12°C. The sun will be strong, so sunscreen and sunglasses are important. There's a low chance of rain, but it's still possible, so bring an extra layer. Gusts up to 37.8 km/h could make the wind feel stronger than it is, so stay aware. The UV index is high, so protect yourself from the sun. For someone who prefers a quiet trail with good visibility, [E1] Manali viewpoint is a great choice. If you want to see more of the landscape, [E18] Aleo Viewpoint is just 3 minutes away and has similar conditions.",
+    "violations": [],
+    "claims": 4,
+    "ref": null
+   },
+   {
+    "sheet": 2,
+    "answer": "The weather will be warm and slightly humid, with a feels-like temperature of 30.5–33.2 °C during the morning, which could lead to heat-stress for someone with a heart condition. The rain probability is up to 64%, so you’ll need a rain jacket or umbrella. The air quality is acceptable, but ozone levels are slightly high. Winds are light and manageable. The place is not recommended due to the risk of heat-related issues and poor air quality. The best option is Gandhinagar Playground, where the conditions are slightly better, though still risky.",
+    "violations": [
+     "no citations",
+     "says 'manageable' but the data flags US AQI",
+     "says 'air quality is acceptable' but the data flags US AQI"
+    ],
+    "claims": 3,
+    "ref": null
+   },
+   {
+    "sheet": 3,
+    "answer": "The football ground is the best choice for your 5-a-side game because it's comfortable with a feels-like temperature of 30.2 °C and low pollution, with PM2.5 at 4.7 µg/m³. The air quality index is safe (US AQI 34), and there's no rain expected. However, the park has no roads or industry nearby, so you'll need to walk around. The UV index is low, but the sun will be strong, so wear sunscreen. Since you're wheezy in pollution, this place might not be ideal due to the PM2.5 levels. If you can't go during peak pollution times, consider a different spot with better air quality.",
+    "violations": [
+     "no citations",
+     "says 'low pollution' but the data flags US AQI",
+     "says 'no rain' but the data flags rain probability"
+    ],
+    "claims": 4,
+    "ref": "The Football Ground near Besant Nagar on Saturday from 7:00 to 8:00 is a good pick for your 5-a-side game. It’s cool and comfortable with a feels-like temperature of about 30.2 °C [E3], and the air quality is very good with a US AQI of up to 34 [E5], meaning it’s safe for you if you get wheezy in pollution. There’s little chance of rain (32%) [E4], and the wind is light, with gusts up to just 9.4 km/h [E8]. It’s early morning, so the UV is low [E9], and you’ll get there in about 12 minutes if you leave on time [E12]. Just keep an eye out for any wet spots from recent rain [watch for]."
+   },
+   {
+    "sheet": 4,
+    "answer": "The best time for the gully cricket is early morning, around 7–10 AM, when the air quality is better and the temperature is comfortable. The place is safe to go if you keep exertion light and short, as the US AQI is above 150. The weather is mild with little rain, and the wind is gentle. It's best to avoid going after dark because there's not enough daylight. If you're wheezy in pollution, this time and place might be too tough for you, but if you take precautions like carrying water and an N95 mask, it could still work.",
+    "violations": [
+     "no citations",
+     "place 'Commonwealth Games Village Sports Complex' not mentioned"
+    ],
+    "claims": 3,
+    "ref": "The Commonwealth Games Village Sports Complex is the best option for gully cricket on Sunday morning, but air quality is a concern. The US AQI is 167 [E3], which is unhealthy, especially for someone who gets wheezy in pollution, so you should keep play light and short. The feels-like temperature is comfortable at 22.5–27.3 °C [E4], and there’s no rain expected [E5]. Wind is light, with gusts up to 10.4 km/h [E9], so it won’t interfere with play. You can reach the spot in about 8 minutes if you leave on time [E13]."
+   },
+   {
+    "sheet": 5,
+    "answer": "At 6 am, the temperature is around 24 °C, and it's not too hot or humid, making it comfortable for outdoor activity. The rain probability is low, so there’s little chance of wet surfaces to worry about. The air quality is good with PM2.5 at 4.8 µg/m³, which is safe. Wind is light, and the UV index is zero, so no sunburn risk. The place is accessible by foot, and it's a suitable spot for football. For people with asthma or kids, the low wind and dry conditions are good.",
+    "violations": [
+     "no citations",
+     "place 'Football Ground' not mentioned",
+     "says 'air quality is good' but the data flags US AQI",
+     "says 'air quality is good' but the data flags US AQI",
+     "says 'too hot' but the data does not flag feels-like temperature"
+    ],
+    "claims": 3,
+    "ref": null
+   },
+   {
+    "sheet": 6,
+    "answer": "The morning in Koramangala is comfortable with a feels-like temperature of 23.4–25.3 °C [E3], and the air quality is good with PM2.5 at 4.8 µg/m³ [E6]. The UV index is low, so it's safe to be outside without sunscreen. Since there's no rain probability over 50%, you don't need to worry about wet surfaces. The park has green spaces and water features, which are good for asthma-friendly outdoor activity. The wind is light from the east at 8 km/h [E7], so it won’t bother your lungs. You can enjoy a picnic with about 1.5 L of water per person and carry your reliever inhaler.",
+    "violations": [
+     "place 'Indiranagar Park' not mentioned",
+     "says 'air quality is good' but the data flags US AQI",
+     "says 'air quality is good' but the data flags US AQI"
+    ],
+    "claims": 6,
+    "ref": null
+   },
+   {
+    "sheet": 7,
+    "answer": "The morning in Skandagiri is comfortable with a feels-like temperature of 26.5–30.2 °C, making it suitable for golfing. The rain probability is low (up to 2%), and the air quality is acceptable with PM2.5 at 49.7 µg/m³. Wind speeds are gentle, and UV levels are moderate. The course is accessible by road, and the travel time is about 17 minutes. For someone who prefers a quiet environment, Skandagiri's morning is ideal. However, be cautious of the US AQI reaching 109, which could affect air quality for sensitive individuals like those with asthma or allergies.",
+    "violations": [
+     "no citations",
+     "place 'Army BEPTA Bison Golf Course' not mentioned",
+     "says 'air quality is acceptable' but the data flags US AQI"
+    ],
+    "claims": 6,
+    "ref": "Tomorrow morning is a good time for golfing at Army BEPTA Bison Golf Course, with comfortable feels-like temperatures between 26.5 and 30.2 °C [E3] and very low rain chances of up to 2 % [E4]. The air quality is moderate, with a US AQI of up to 109 [E5], so it’s best to wear an N95 mask during travel. Winds are light, with gusts up to 15.1 km/h [E8], and UV levels are low, peaking at 4.2 [E9]. You’ll need to leave by 06:00 to arrive on time, with travel taking about 19 minutes [E12], and should carry about 3 L of water per person [CARRY]."
+   },
+   {
+    "sheet": 8,
+    "answer": "The temperature will be around 16 °C, so it's comfortable for cycling. The rain probability is low, and there's no risk of rain. The air quality is acceptable, but the PM2.5 level is slightly high. Winds are light, and the UV index is very low. Since the place has no venues, you'll be on roads or water, which may not be safe for someone with asthma. The heat-sensitive person should avoid this time because the temperature will rise later in the day.",
+    "violations": [
+     "no citations",
+     "place 'Kalsubai (area, no specific venue)' not mentioned",
+     "says 'no risk' but the data flags US AQI",
+     "says 'air quality is acceptable' but the data flags US AQI"
+    ],
+    "claims": 1,
+    "ref": null
+   },
+   {
+    "sheet": 9,
+    "answer": "The cricket match at Barabati Stadium is suitable for someone with asthma because the temperature will be around 28–32°C, which is not too hot, and there's a low risk of air pollution. The UV index is mild, and the rain probability is almost zero, so it'll be comfortable to play. The wind speed is light, and the travel time is about 4.6 minutes by road, making it easy to get there early. Since the AQI is around 125, it's best to keep exertion short and avoid heat-stress signs like dizziness or cramps.",
+    "violations": [
+     "no citations",
+     "health warning in the fact sheet is not stated in the answer",
+     "says 'low risk' but the data flags US AQI",
+     "says 'too hot' but the data does not flag feels-like temperature"
+    ],
+    "claims": 4,
+    "ref": "Barabati Stadium is a good spot for your cricket match tomorrow morning, from 06:00 to 09:00, with a feels-like temperature of 28.6–32.8 °C [E4] and no chance of rain [E5]. The air quality is unhealthy (US AQI 125) [E6], so it’s important to keep exertion light and bring your inhaler and an N95 mask [E15]. Wind gusts will be gentle, up to 15.1 km/h [E9], and UV levels low, up to 3.1 [E10], making it easier to manage the heat. You’ll reach the stadium in about 5 minutes if you leave on time [E13]. Just watch for signs of heat stress and stay hydrated."
+   },
+   {
+    "sheet": 10,
+    "answer": "The best time for hiking around Mussoorie is early morning, from 06:00 to 10:00, because the temperature will be comfortable (about 10–18°C), there's no rain, and air quality is safe (US AQI 87, which is acceptable). The UV index is low, and the wind is light. It’s also daylight, so you can see clearly and enjoy the views without worrying about darkness. The place has good visibility of the surroundings, but there are no roads or water nearby. Since you have asthma, make sure to carry your reliever inhaler and enough water.",
+    "violations": [
+     "no citations",
+     "place 'Doon Valley Viewpoint' not mentioned",
+     "says 'air quality is safe' but the data flags US AQI"
+    ],
+    "claims": 5,
+    "ref": "Hiking at Doon Valley Viewpoint from 06:00 to 10:00 on Saturday, 24 October, is a great choice for you, especially with asthma. The feels-like temperature will be comfortable, between 10.5 and 18.9 °C [E3], and there will be no rain [E4], making for clear, dry conditions. The air quality will be moderate with a US AQI of up to 87 [E5], and PM2.5 levels at 20.3 µg/m³ [E6], which is acceptable but still something to be cautious about. Wind speeds will be light, with gusts up to 16.6 km/h [E8], so breathing should be easier. The early morning also gives you daylight from sunrise at 06:26 [E13], and you’ll have time to enjoy the view before the light fades."
+   },
+   {
+    "sheet": 11,
+    "answer": "The temperature will be around 12.7 °C [E3] during the time you're planning, which is comfortable for a senior. The rain probability is less than 50% [E4], so there's little chance of rain. Air quality is safe at 71 [E5], and wind speeds are gentle at 3.2 km/h [E7]. The UV index is low at 2.6, so you'll be okay in the sun. Since it's a senior, pace yourself and take breaks every 20–30 minutes. The place isn't suitable for someone with asthma or other health concerns due to the PM2.5 levels [E6].",
+    "violations": [
+     "[E4] cited next to 50, which is not that fact's value",
+     "place 'Shimla (area, no specific venue)' not mentioned",
+     "says 'air quality is safe' but the data flags US AQI"
+    ],
+    "claims": 7,
+    "ref": null
+   },
+   {
+    "sheet": 12,
+    "answer": "Sunday evening in Colaba is not safe for your mom due to high air quality and heat. The temperature will be around 35°C, which can cause heat stress. There's a risk of gusty wind up to 36 km/h, and the UV index is low but still present. The place isn't suitable because roads and industry are unavailable, making travel difficult. The best option is Mumbai Port Trust Garden, but it's not recommended for this time due to air quality and heat.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 2,
+    "ref": null
+   },
+   {
+    "sheet": 13,
+    "answer": "Tomorrow evening is not recommended for hiking in Borivali due to high air quality and heat. The feels-like temperature will be around 32°C, which can cause heat-stress. The UV index is low, but the risk of dehydration is high because of the warm weather and long hike. Jambulmal is the least-bad option, but it's still not safe for everyone. The road conditions are unavailable, so you need to be careful about travel time and safety.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 1,
+    "ref": null
+   },
+   {
+    "sheet": 14,
+    "answer": "The temperature is comfortable at 15.5 °C [E3], but the rain probability is high at 94% [E4], so you’ll need a rain jacket. The air quality is good, with PM2.5 at 2.7 µg/m³ [E6], but there’s some pollution from industry. Winds are light, and the UV index is low [E9]. The place has no roads or water nearby, which could make travel difficult. The best time to go is 20:00–21:00, when it’s cooler and rain is less likely, but you still need to be prepared for dark skies and slippery surfaces. For your mom, the risk of getting lost or injured in poor conditions makes this a cautionary choice.",
+    "violations": [
+     "place 'Bryant Park' not mentioned",
+     "result is not recommended but the answer doesn't say so",
+     "says 'air quality is good' but the data flags US AQI",
+     "says 'air quality is good' but the data flags US AQI"
+    ],
+    "claims": 5,
+    "ref": null
+   },
+   {
+    "sheet": 15,
+    "answer": "At 6 am, Queens Garden is a safe and comfortable place to go for a picnic in the park. The temperature will be around 24°C, and there's little chance of rain, so you'll stay dry. The air quality is acceptable, with PM2.5 at 36 µg/m³, which is good for pregnant women. There's no wind or UV risk, making it a peaceful time to enjoy the outdoors. Since it's early, you'll need to be careful of wet surfaces and take breaks every 20–30 minutes.",
+    "violations": [
+     "no citations",
+     "says 'air quality is acceptable' but the data flags US AQI"
+    ],
+    "claims": 5,
+    "ref": "Queens Garden is a great pick for a morning park outing tomorrow at 6 am. The feels-like temperature will be comfortable at 24.2–24.7 °C [E3], and there’s almost no chance of rain, with just 1% probability [E4]. The air quality is moderate, with a US AQI of 98 [E5], so you may want to avoid heavy exertion and stay in shaded or breezy areas. Winds will be light at up to 14 km/h [E8], and UV levels will be very low [E9], making it safe to be outside without strong sun protection. You can reach the spot in about 2 minutes with typical morning traffic [E12], and it’s best to carry about 1.5 L of water per person to stay hydrated during your 3-hour outing."
+   },
+   {
+    "sheet": 16,
+    "answer": "The weather will be comfortable with a feels-like temperature of 21.3–21.9 °C, and there's little chance of rain, so you'll stay dry. The UV index is low, so sun protection isn't needed much. The place has good biodiversity, and it's near a park where you can see birds. Since your child is young, make sure to bring water and snacks. The timing is ideal because the light is bright and there's no dark activity. Avoid gusts up to 37.8 km/h, and watch out for wet surfaces due to possible rain.",
+    "violations": [
+     "no citations",
+     "place 'Hennur Biodiversity Park' not mentioned"
+    ],
+    "claims": 3,
+    "ref": "Hennur Biodiversity Park is a great spot for birding with your 6-year-old next Monday from 6 to 8 AM because it will be comfortably cool, with a feels-like temperature of 21.3–21.9 °C [E3], and the air quality will be excellent, with a US AQI of 28 [E5]. There's a low chance of rain at 27% [E4], and the wind will be light with gusts up to 37.8 km/h [E8], so it should be easy to enjoy without too much wind or heat. The early morning also means gentle light and low UV [E9], perfect for a child’s sensitive skin. Just be ready for some gusts and possible damp surfaces from recent rain."
+   },
+   {
+    "sheet": 17,
+    "answer": "The morning in Nagpur is comfortable with a feels-like temperature of about 26 °C, making it pleasant for cycling. The rain probability is low, so you can expect dry conditions. The air quality is good with PM2.5 at around 25.9 µg/m³, which is safe. Winds are light and gentle, so you won't feel much breeze. The UV index is mild, so sunscreen is recommended. For your parents, the Children Traffic Park is a great spot as it's near the road and offers a good mix of green space and activity. It’s also close to where you’ll be leaving, so you can plan your pace easily. Since it’s morning, the sun will rise by 6:12, so you'll have some time to enjoy the early light before the heat sets in.",
+    "violations": [
+     "no citations",
+     "says 'air quality is good' but the data flags US AQI",
+     "says 'air quality is good' but the data flags US AQI"
+    ],
+    "claims": 3,
+    "ref": "Cycling at Children Traffic Park tomorrow morning from 8 to 9 AM is a great choice for you and your parents. The feels-like temperature will be about 26.9 °C [E3], making it comfortable, and there’s no chance of rain [E4]. The air quality will be good with a US AQI of 85 [E5], though it’s on the higher side for seniors, so keeping a steady pace and taking breaks will help. Winds will be light, with gusts up to 18.7 km/h [E8], and the UV index will be low at 2.1 [E9], so no need to worry about sun exposure. It’s just a 4-minute drive away [E12], and the early timing means you’ll avoid the heat later in the day [E14]."
+   },
+   {
+    "sheet": 18,
+    "answer": "The best time for birdwatching near Viman Nagar is tomorrow morning, from 7:00 to 9:00 AM. The temperature will be around 25–27°C, which is comfortable for a pregnant person. There's no rain expected, so you'll stay dry. Air quality is acceptable, with PM2.5 at 39.6 µg/m³. Wind is light, and the UV index is low. The sunrise is at 6:30 AM, so you’ll have good daylight to enjoy. It’s safe to go if you pace yourself and take breaks every 20–30 minutes.",
+    "violations": [
+     "no citations",
+     "place 'Viman Nagar (area, no specific venue)' not mentioned",
+     "says 'air quality is acceptable' but the data flags US AQI"
+    ],
+    "claims": 10,
+    "ref": null
+   },
+   {
+    "sheet": 19,
+    "answer": "Tonight, around 19:00–23:00, it's not safe to go golfing near Edappally because of high rain probability (up to 94%) and US AQI above 50. The weather is warm with feels-like temperature up to 31.1 °C, but the risk of wet surfaces increases due to recent rainfall. The course [E1] CIAL Golf Course has a low risk of safety limits, but you should still be prepared for rain and slippery conditions. Since there's no daylight after 18:00, you can't play golf after dark, so avoid that time. You'll need an inhaler, water, and protection from the elements.",
+    "violations": [
+     "says 'low risk' but the data flags US AQI"
+    ],
+    "claims": 6,
+    "ref": null
+   }
+  ],
+  "followup": [
+   {
+    "sheet": 0,
+    "question": "why not earlier in the day?",
+    "answer": "The rain probability is high throughout the evening, with up to 86% chance of rain [E4], which makes earlier times less safe. The activity requires daylight, so practicing in the dark would be unsafe [E15]. Additionally, wet or slippery surfaces are a risk due to recent rainfall [E14]. Therefore, it's not recommended to practice tonight.",
+    "violations": [],
+    "claims": 1,
+    "ref": "Earlier in the day is not recommended because the activity requires daylight, and sunset is at 17:57 [E13]. Additionally, rain probability remains high (up to 98%) from 18:00 [E15], and it has already rained 12.5 mm in the previous 12 hours, leading to wet or slippery surfaces [E14]."
+   },
+   {
+    "sheet": 0,
+    "question": "will it rain?",
+    "answer": "The rain probability is up to 86% for the requested time [E4]. It will rain, and there is a risk of wet or slippery ground due to 8.7 mm of rain in the previous 12 hours [E14]. The likelihood of rain increases with the time spent indoors, so it's advisable to carry an umbrella or rain jacket [CARRY].",
+    "violations": [],
+    "claims": 3,
+    "ref": "Yes, it will rain. The rain probability is up to 86% from 20:00 to 23:00 [E4], and there was already 12.5 mm of rain in the previous 12 hours [E14]."
+   },
+   {
+    "sheet": 1,
+    "question": "how far is it and how long to get there?",
+    "answer": "The trail is 240 minutes long, and the best spot, Manali viewpoint, is 3 minutes away by road. The travel time to get there is about 1 minute if you leave at 09:00 with typical traffic. Watch out for gusts up to 37.8 km/h.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 5,
+    "ref": "The Manali viewpoint is about 0.6 km from the starting point, and it takes approximately 1 minute to reach by road under free-flow conditions [E11]. With typical traffic, the travel time is estimated to be about 1 minute if you leave at 09:00 [E12]."
+   },
+   {
+    "sheet": 1,
+    "question": "how far is it and how long to get there?",
+    "answer": "The trail is 240 minutes long, and the best spot, Manali viewpoint, is 3 minutes away by road. The travel time to get there is about 1 minute if you leave at 09:00 with typical traffic. Watch out for gusts up to 37.8 km/h.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 5,
+    "ref": "The Manali viewpoint is about 0.6 km away by road, and it takes approximately 1 minute to reach there under free-flow traffic conditions [E11]. If you leave at 09:00 with typical traffic, it should take about 1 minute in total to get there [E12]."
+   },
+   {
+    "sheet": 2,
+    "question": "will it rain?",
+    "answer": "The rain probability is up to 64% for the requested time [E4]. It is recommended to bring a rain jacket or umbrella. The weather forecast indicates a chance of rain, so you should prepare accordingly.",
+    "violations": [],
+    "claims": 1,
+    "ref": "Yes, there is a high chance of rain. The rain probability is up to 64% during the time from 06:00 to 10:00 [E4]. You should carry a rain jacket or umbrella [CARRY]."
+   },
+   {
+    "sheet": 2,
+    "question": "what should I be careful about?",
+    "answer": "You should be careful about heat-stress signs, such as dizziness or cramps, especially when the feels-like temperature reaches 33.2 °C. Also, watch for wet or slippery surfaces due to rain probability up to 64%. Stay hydrated with water and electrolytes, and pace yourself to avoid exhaustion. Avoid prolonged activity during peak heat hours.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 2,
+    "ref": "You should be careful about heat stress due to the feels-like temperature reaching 33.2 °C [E14], which can cause dizziness, cramps, or no sweating. Also, watch for rain, as there's a 64% chance [E4], and surfaces may be wet or slippery from 5.8 mm of rain in the previous 12 hours. Pace yourself and take a rest break every 20–30 minutes [WATCH FOR]."
+   },
+   {
+    "sheet": 3,
+    "question": "is the air okay for this?",
+    "answer": "The air quality for the proposed activity is considered okay based on the US AQI of up to 34, which is within the safe range [E5]. The main pollutant PM2.5 is below 4.7 µg/m³ [E6], and there is a low risk of pollution during the planned time frame. However, watch for wet or slippery surfaces due to potential rain [E14].",
+    "violations": [
+     "says 'within the safe' but the data flags US AQI",
+     "says 'low risk' but the data flags US AQI"
+    ],
+    "claims": 2,
+    "ref": "Yes, the air should be okay for your 5-a-side football session at the recommended Football Ground [E1]. The US AQI is up to 34 [E5], which is well below the 200 limit you set and considered good for sensitive individuals. The main pollutant is PM2.5, with levels up to 4.7 µg/m³ [E6], which is low. However, keep in mind that the air-quality forecast is based on a model and may not reflect exact local conditions [E10]."
+   },
+   {
+    "sheet": 5,
+    "question": "what should I be careful about?",
+    "answer": "You should be careful about wet or slippery surfaces, as there is a risk of slipperiness due to recent rain. Also, keep in mind the air quality and potential for road/industry exposure, even though the forecast shows low pollution levels. Ensure you have enough water and check the conditions before starting your activity.",
+    "violations": [
+     "no citations",
+     "says 'low pollution' but the data flags US AQI"
+    ],
+    "claims": 0,
+    "ref": "You should be careful about wet or slippery surfaces due to 5.8 mm of rain in the previous 12 hours [E10]. Also, carry about 1 L of water per person, as hydration is important even with the low UV index [E9] and comfortable feels-like temperature of 24.1 °C [E3]."
+   },
+   {
+    "sheet": 6,
+    "question": "what should I be careful about?",
+    "answer": "You should be careful about wet or slippery surfaces, as there is a risk of 8.2 mm of rain in the previous 12 hours. Also, keep an eye on air quality, as PM2.5 levels can reach up to 4.8 µg/m³, which may affect respiratory health. The UV index is low, so sun protection is not necessary. Ensure you have your reliever inhaler ready and carry about 1.5 L of water per person.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 4,
+    "ref": "You should carry about 1.5 L of water per person and your reliever inhaler [E1]. Watch for wet or slippery surfaces due to 8.2 mm of rain in the previous 12 hours [E1]. The US AQI is up to 38 (main pollutant PM2.5), and PM2.5 is up to 4.8 µg/m³, which is acceptable, but be mindful of any sudden changes in air quality [E5][E6]. Wind gusts are up to 24.1 km/h, so secure any loose items [E8]."
+   },
+   {
+    "sheet": 7,
+    "question": "how far is it and how long to get there?",
+    "answer": "The distance to the Army BEPTA Bison Golf Course is about 12.9 km by road, and it takes approximately 17 minutes to get there. The travel time includes a typical-traffic multiplier, so the total time may be slightly longer. The route is free-flow, but traffic conditions can affect the actual travel time.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 2,
+    "ref": "The Army BEPTA Bison Golf Course is about 12.9 km away and takes approximately 17 minutes to reach by road under free-flow conditions [E11]. If you leave at 06:00 with typical traffic, the total travel time is estimated to be about 19 minutes [E12]."
+   },
+   {
+    "sheet": 7,
+    "question": "how far is it and how long to get there?",
+    "answer": "The distance to the Army BEPTA Bison Golf Course is about 12.9 km by road, and it takes approximately 17 minutes to reach there if you start at 06:00. The travel time includes a typical traffic multiplier. The route is free-flow, so the actual time may vary slightly based on traffic conditions.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 3,
+    "ref": "The Army BEPTA Bison Golf Course is about 12.9 km away, and it will take approximately 17 minutes to get there by road under free-flow conditions [E11]. If you leave at 06:00 with typical traffic, the total travel time is estimated to be about 19 minutes [E12]."
+   },
+   {
+    "sheet": 8,
+    "question": "why is it not recommended?",
+    "answer": "The recommendation is not recommended because the US AQI exceeds 100, which indicates air quality may be a concern [E5]. Additionally, there is a caution note regarding the US AQI being above 100 [E12]. The heat-sensitive activity is also considered, but the temperature feels like 16.1 °C [E3], which is not extremely hot. However, the air quality and other limitations may still make it less ideal for someone who is sensitive to heat.",
+    "violations": [
+     "calls feels-like temperature 16.1 'hot' (that band is above 32 up to 38)"
+    ],
+    "claims": 3,
+    "ref": "It is not recommended because the US AQI is 119 [E5], which exceeds the safe limit of 100 and may pose a risk to heat-sensitive individuals [E12]. While the feels-like temperature is acceptable at 16.1 °C [E3] and there is no rain [E4], the air quality remains a concern. You should consider wearing an N95 mask and carrying about 1 L of water per person [CARRY]."
+   },
+   {
+    "sheet": 8,
+    "question": "how far is it and how long to get there?",
+    "answer": "The distance to Kalsubai is not specified in the fact sheet. The travel time is estimated as free-flow OSRM times with a typical-traffic multiplier, but no exact distance or duration is provided. The activity is recommended for heat-sensitive people, and the conditions are favorable for cycling [E3][E4].",
+    "violations": [],
+    "claims": 0,
+    "ref": "The distance and travel time to Kalsubai were not available due to OpenStreetMap venue data being unavailable [E10], and travel times provided are free-flow estimates with a typical-traffic multiplier, not live traffic [LIMITATIONS]."
+   },
+   {
+    "sheet": 9,
+    "question": "why is it not recommended?",
+    "answer": "The activity is not recommended due to the high US AQI of 125, which is considered unhealthy [E6]. This level of pollution can cause respiratory issues, especially for someone with asthma. The health warning states that exertion should be light and short [E3], and the feels-like temperature reaches 32.8 °C, increasing the risk of heat-stress signs such as dizziness or cramps [E15]. Additionally, the air-quality forecast is based on a modelled exposure, not direct measurements [E7], which may not accurately reflect local conditions.",
+    "violations": [
+     "calls US AQI 125 'unhealthy' (that band is above 150 up to 200)",
+     "calls US AQI [E6] 'unhealthy', but that fact is 125"
+    ],
+    "claims": 2,
+    "ref": "It is not recommended because the US AQI is up to 125 [E6], which is considered unhealthy for people with asthma or respiratory conditions [E15]. You should keep exertion light and short in this air quality. Additionally, the feels-like temperature reaches up to 32.8 °C [E4], increasing the risk of heat stress, especially during prolonged activity."
+   },
+   {
+    "sheet": 10,
+    "question": "will it rain?",
+    "answer": "Based on the fact sheet, there is a low probability of rain [E4] during the recommended hiking time (06:00–10:00). The rain probability is up to 0% during this period. Therefore, it is likely that it will not rain.",
+    "violations": [],
+    "claims": 3,
+    "ref": "No, it will not rain during the recommended hiking time at Doon Valley Viewpoint on Saturday, 24 October from 06:00–10:00 [E4]. The rain probability is up to 0% during this period [E4]."
+   },
+   {
+    "sheet": 10,
+    "question": "why is it not recommended?",
+    "answer": "The activity is not recommended due to the US AQI reaching 87, which exceeds the 50 limit for safety. The air quality index indicates potential health risks, especially for individuals with asthma. Additionally, while the weather conditions are generally favorable, the presence of PM2.5 pollution may pose a risk during the hike.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 2,
+    "ref": "It is not recommended because the US AQI is 87 [E14], which is above 50 and may pose a risk for people with asthma or respiratory conditions. While it is below the 150 limit, caution is still advised due to the presence of PM2.5 as the main pollutant [E5]."
+   },
+   {
+    "sheet": 11,
+    "question": "is it safe for kids?",
+    "answer": "Yes, it is safe for kids to play tennis in Shimla on day after tomorrow. The conditions are favorable with a feels-like temperature of 12.7 °C and no rain probability, which makes the weather suitable for outdoor activity. The air quality is within acceptable limits, and there are no gusts exceeding 40 km/h. The UV index is low, so it's safe to play without sunscreen. [E3], [E4], [E5], [E6], [E7], [E8], [E9] support the safety for kids.",
+    "violations": [
+     "says 'safe to play' but the data flags US AQI"
+    ],
+    "claims": 2,
+    "ref": "The conditions on Saturday, 24 October from 09:00–10:00 in Shimla are also safe for kids [E3][E4][E5][E8]. The feels-like temperature is 12.7 °C, with no rain expected and very low wind gusts (up to 11.9 km/h). The US AQI is 71, which is acceptable for all age groups [E5]. As with any outdoor activity, ensure children stay hydrated and take breaks if needed."
+   },
+   {
+    "sheet": 12,
+    "question": "will it rain?",
+    "answer": "The rain probability is up to 8% during the scheduled time [E4]. It will not rain, as the risk is below 50%. The weather conditions are favorable for an outdoor gathering.",
+    "violations": [],
+    "claims": 2,
+    "ref": "The rain probability during the event time (17:00–20:00) is up to 8% [E4], so it is unlikely to rain. However, you should still be prepared with rain cover just in case."
+   },
+   {
+    "sheet": 12,
+    "question": "is it safe for kids?",
+    "answer": "The safety limits for the activity are not recommended in the requested time, but the least-bad option is [E1] Mumbai Port Trust Garden. The feels-like temperature is 33.6–35.2 °C, which is warm but below 35.2 °C, so it's slightly above 30 °C. There is a low rain probability of up to 8 %, and the US AQI is up to 260, which exceeds the 150 limit. The gusts are up to 36 km/h, which could be uncomfortable. It is recommended to monitor heat-stress signs and take breaks every 20–30 minutes. For kids, the same caution applies as for adults, but there is no specific information about children's safety in the facts provided.",
+    "violations": [],
+    "claims": 10,
+    "ref": "It is not safe for kids either, as the same safety limits apply to all age groups for this outdoor gathering. The US AQI will reach 246 [E16], which is above the 150 limit, and the feels-like temperature will be up to 35.2 °C [E14], posing heat-stress risks. Gusts will reach 36 km/h [E15], making the environment uncomfortable and potentially unsafe for children."
+   },
+   {
+    "sheet": 13,
+    "question": "is the air okay for this?",
+    "answer": "The air quality for the hike in Borivali is considered okay based on the provided data. The US AQI is up to 272, which is above the 200 limit for this activity, but it's still within a range that may be acceptable depending on the specific conditions. However, there is a caution noted about the air quality due to ozone levels. [E5]",
+    "violations": [],
+    "claims": 2,
+    "ref": "The air quality is not okay for this hike. The US AQI is forecast to reach 272 [E5], which exceeds the 200 limit for this activity. The main pollutant is ozone, and the PM2.5 sub-index is 158 [E5]. You should consider wearing an N95 mask during the journey [CARRY]."
+   },
+   {
+    "sheet": 13,
+    "question": "is the air okay for this?",
+    "answer": "The air quality for the hike in Borivali is considered okay based on the provided data. The US AQI is up to 272, which is above the 200 limit for this activity, but it's still within a range that may be acceptable depending on the specific conditions. However, there is a caution noted about the air quality due to ozone levels. [E5]",
+    "violations": [],
+    "claims": 2,
+    "ref": "The air is not okay for this hike. The US AQI is forecast to reach 272 [E5], which exceeds the 200 limit for this activity. The main pollutant is ozone, and the PM2.5 sub-index is 158 [E5]. You should consider an N95 mask for the journey [CARRY]."
+   },
+   {
+    "sheet": 14,
+    "question": "why is it not recommended?",
+    "answer": "The activity is not recommended because every hour hits a safety limit, including the rain probability up to 94% [E4]. The risk of slipping on wet surfaces increases with the rain, and the sunset occurs at 17:59, which means it gets dark early. Additionally, the UV index is zero, but the weather conditions make the activity unsafe due to slippery surfaces and limited visibility.",
+    "violations": [],
+    "claims": 2,
+    "ref": "It is not recommended because the rain probability reaches 94% [E4], which exceeds the safety limit of 70%. Additionally, it gets dark during the activity window, with sunset at 17:59 [E13], increasing the risk for a senior cyclist. Wet or slippery surfaces from 19.3 mm of rain in the previous 12 hours [WATCH FOR] also pose a hazard."
+   },
+   {
+    "sheet": 15,
+    "question": "why this place and time?",
+    "answer": "Because the time and place are suitable for a 180-minute picnic, with comfortable temperatures [E3], low rain probability [E4], and acceptable air quality [E5, E6]. The UV index is very low [E9], and the weather conditions are safe for pregnant women. The location is near Camp, and the travel time is reasonable [E12].",
+    "violations": [
+     "says 'acceptable air' but the data flags US AQI"
+    ],
+    "claims": 1,
+    "ref": "Queens Garden was selected because it has the best score of 86.1/100 [E2] for your planned 2-hour outing tomorrow at 6 am. The feels-like temperature will be comfortable at 24.2–24.7 °C [E3], with minimal rain chance (up to 1%) [E4] and US AQI at 98 [E5], which is above 50 but within acceptable limits for a short outdoor activity. Wind gusts will be up to 14 km/h [E8], and UV exposure will be very low [E9]. The travel time is just 2 minutes [E12], making it convenient for your early start."
+   },
+   {
+    "sheet": 16,
+    "question": "will it rain?",
+    "answer": "The rain probability is up to 27% during the scheduled time [E4]. It is possible that it will rain, but the likelihood is not high. The weather forecast suggests a low chance of rain, so it's generally dry. However, there is a small risk of gusts and wet surfaces due to the potential for light rain [E4][E8].",
+    "violations": [],
+    "claims": 1,
+    "ref": "The rain probability during the recommended time (06:00–08:00) is up to 27% [E4]. While there is a slight chance of rain, it is not expected to significantly impact the activity. You may want to carry a light rain cover just in case."
+   },
+   {
+    "sheet": 17,
+    "question": "why is it not recommended?",
+    "answer": "The recommendation is not recommended because the map context (roads, industry, green, water) was unavailable, and opening hours, entry rules, and bookings were not checked. Additionally, the air-quality forecast shows a main pollutant PM2.5 with a US AQI of up to 85, which may affect health. The weather conditions, including gusts and UV index, are also considered in the limitations.",
+    "violations": [
+     "no citations"
+    ],
+    "claims": 1,
+    "ref": "It is actually recommended — the Children Traffic Park is a good spot for cycling tomorrow morning from 08:00–09:00, with a high score of 92.1/100 [E2]. The conditions are favourable: feels-like temperature is 26.9 °C [E3], no rain expected [E4], and US AQI is 85 [E5]. However, it is not recommended outside this time window — for example, from 10:00–11:00, the score drops to 67.3/100 [E14] due to less favourable thermal comfort."
+   },
+   {
+    "sheet": 18,
+    "question": "why is it not recommended?",
+    "answer": "The activity is not recommended due to the US AQI of 98, which exceeds the 50 threshold for caution [E12]. This indicates poor air quality that could affect health, especially for someone who is pregnant. Additionally, there is a risk of thermal discomfort, as the feels-like temperature ranges from 25.2–27.5 °C during the recommended time [E3], which may be too warm for some individuals. The fact sheet also notes that OpenStreetMap data was unavailable, making it difficult to confirm specific venues or conditions [E10].",
+    "violations": [],
+    "claims": 4,
+    "ref": "It is not recommended because the US AQI is 98, which is above the 50 threshold and may pose a risk for pregnant individuals [E12]. While the air quality is not critically poor, it is advisable to avoid potential respiratory stress during pregnancy. Additionally, you should pace yourself and take rest breaks every 20–30 minutes [WATCH FOR]."
+   },
+   {
+    "sheet": 18,
+    "question": "is it safe for kids?",
+    "answer": "The activity is safe for kids as the conditions are suitable for birdwatching, and there is no indication of unsafe elements in the fact sheet. The weather is mild with a feels-like temperature between 25.2–27.5 °C, which is comfortable for all ages. The rain probability is up to 0%, so no need to worry about wet conditions. The UV index is low (1.6), so sun protection is recommended but not necessary for kids. [E3], [E4], [E9]",
+    "violations": [],
+    "claims": 4,
+    "ref": "The birdwatching activity in Viman Nagar is generally safe for kids, as the feels-like temperature will be 25.2–27.5 °C [E3], rain is unlikely [E4], and gusts will be up to 13 km/h [E8]. The US AQI is 98 [E5], which is above 50 and may be a concern for sensitive groups, including young children. Ensure kids stay hydrated and take regular rest breaks. Avoid prolonged exposure if children show signs of discomfort."
+   },
+   {
+    "sheet": 19,
+    "question": "why not earlier in the day?",
+    "answer": "The rain probability is high throughout the evening, which makes it unsafe to engage in outdoor activities like golf. The activity is not recommended during late hours because of the risk of wet or slippery surfaces and the need for daylight. The least-bad option is [E1] CIAL Golf Course, where you can still play but must be cautious due to the rain chance and potential slipperiness.",
+    "violations": [],
+    "claims": 0,
+    "ref": "Earlier in the day is not recommended because the golf course requires daylight, and sunset is at 18:04 [E13]. Additionally, the rain probability remains very high (up to 94%) throughout the day [E15], and the US AQI is still above 50 [E14], which is a concern for people with asthma."
+   },
+   {
+    "sheet": 19,
+    "question": "is the air okay for this?",
+    "answer": "The air quality for the requested time is within safe limits, as the US AQI is up to 59, which is above 50 but still considered acceptable [E5]. The main pollutant PM2.5 is up to 17.1 µg/m³, which is a low level [E6]. However, there is a caution due to the high rain probability [E4] and the associated air quality risk. You should monitor the conditions closely and be prepared for potential changes.",
+    "violations": [
+     "says 'within safe limits' but the data flags US AQI",
+     "says 'safe limits' but the data flags US AQI"
+    ],
+    "claims": 3,
+    "ref": "The air quality is not ideal for someone with asthma. The US AQI is 59 [E14], which is above 50 and considered a caution level. The main pollutant is PM2.5, with levels up to 17.1 µg/m³ [E6]. You should take precautions, including carrying your reliever inhaler."
+   }
+  ]
+ },
+ "v2": {
+  "explain": [
+   {
+    "sheet": 0,
+    "answer": "It’s not recommended for bowling practice in Rajajinagar tonight, as every hour hits a safety limit [E15]. The least-bad option is Cricket Ground from 20:00 to 23:00, but the rain probability is up to 86% [E4], and it will be dark after sunset at 17:57 [E13]. While the feels-like temperature is comfortable (about 23 °C [E3]), there’s still a chance of slipping on wet or slippery ground from recent rainfall. The air quality is moderate with PM2.5 up to 8.7 µg/m³ [E6], so it's best to avoid prolonged outdoor activity if you have sensitive health conditions like asthma.",
+    "violations": [],
+    "claims": 6,
+    "ref": null
+   },
+   {
+    "sheet": 1,
+    "answer": "The Manali viewpoint on Saturday from 09:00 to 13:00 is a great choice because the feels-like temperature will be comfortable at 8.9–12.2 °C [E3], and there’s only a 30% chance of rain [E4]. The air quality will also be good, with US AQI up to 52 [E5] and low wind gusts up to 37.8 km/h [E8], making it easy to stay safe during your trek. You’ll have enough daylight because sunrise is at 06:31 [E13], so you can enjoy the trail without worrying about darkness. Just bring plenty of water—about 4 L per person—and wear sunscreen with SPF 30+ [CARRY].",
+    "violations": [
+     "calls US AQI 52 'good' (that band is above -inf up to 50)",
+     "calls US AQI [E5] 'good', but that fact is 52"
+    ],
+    "claims": 10,
+    "ref": null
+   },
+   {
+    "sheet": 2,
+    "answer": "The morning at Gandhinagar Playground is the least-bad option, but it still hits safety limits. The feels-like temperature will be warm—up to 34 °C [E15]—which could strain your heart if you're sensitive. There's a chance of rain (64% [E4]) and strong winds up to 18.4 km/h [E8], so bring an umbrella or rain jacket. The air quality is good, with US AQI at 27 [E5] and PM2.5 at 4.2 µg/m³ [E6], but the heat makes it harder for your body to handle without extra care.",
+    "violations": [
+     "result is not recommended but the answer doesn't say so",
+     "says 'air quality is good' but the data flags US AQI",
+     "says 'air quality is good' but the data flags US AQI",
+     "calls feels-like temperature [E15] 'warm', but that fact is 34–34.5"
+    ],
+    "claims": 5,
+    "ref": null
+   },
+   {
+    "sheet": 3,
+    "answer": "The best time for your 5-a-side game is at [E1] Football Ground from 07:00 to 08:00, when the feels-like temperature is about 30.2 °C [E3], and air quality is moderate with a US AQI of up to 34 [E5]. The wind will be light at 3.2 km/h from the northwest [E7] with gusts up to 9.4 km/h [E8], making it comfortable for playing football without strong winds or rain. It’s also early enough that UV levels are low, only reaching 0.7 [E9], and you’ll avoid hotter parts of the day later in the afternoon when temperatures rise more quickly. The trip takes about 12 minutes with typical traffic [E12], so plan to leave by 07:00 for a smooth arrival.",
+    "violations": [
+     "calls US AQI 34 'moderate' (that band is above 50 up to 100)",
+     "calls US AQI [E5] 'moderate', but that fact is 34"
+    ],
+    "claims": 10,
+    "ref": "The Football Ground near Besant Nagar on Saturday from 7:00 to 8:00 is a good pick for your 5-a-side game. It’s cool and comfortable with a feels-like temperature of about 30.2 °C [E3], and the air quality is very good with a US AQI of up to 34 [E5], meaning it’s safe for you if you get wheezy in pollution. There’s little chance of rain (32%) [E4], and the wind is light, with gusts up to just 9.4 km/h [E8]. It’s early morning, so the UV is low [E9], and you’ll get there in about 12 minutes if you leave on time [E12]. Just keep an eye out for any wet spots from recent rain [watch for]."
+   },
+   {
+    "sheet": 4,
+    "answer": "The Commonwealth Games Village Sports Complex on Sunday from 07:00 to 10:00 is the best option, with a feels-like temperature of about 26 °C [E4] and no rain expected [E5]. However, the air quality will be unhealthy at US AQI 167 [E6], so you should keep your exertion light and short due to wheezing concerns. Wind gusts up to 10 km/h [E9] are manageable, and UV levels stay low at up to 2.5 [E10]. It’s about 8 minutes by road if you leave on time [E13], but the main issue is the air pollution.",
+    "violations": [
+     "[E4] cited next to 26, which is not that fact's value",
+     "'26 °C' not in fact sheet",
+     "says 'manageable' but the data flags US AQI"
+    ],
+    "claims": 7,
+    "ref": "The Commonwealth Games Village Sports Complex is the best option for gully cricket on Sunday morning, but air quality is a concern. The US AQI is 167 [E3], which is unhealthy, especially for someone who gets wheezy in pollution, so you should keep play light and short. The feels-like temperature is comfortable at 22.5–27.3 °C [E4], and there’s no rain expected [E5]. Wind is light, with gusts up to 10.4 km/h [E9], so it won’t interfere with play. You can reach the spot in about 8 minutes if you leave on time [E13]."
+   },
+   {
+    "sheet": 5,
+    "answer": "The best time for football at the Football Ground tomorrow is from 6:00 to 7:00 AM, when it’s comfortable with a feels-like temperature of about 24.1 °C [E3], and there's little chance of rain—only up to 9% [E4]. The air quality is also good, with US AQI at 38 [E5] and PM2.5 levels at 4.8 µg/m³ [E6], making it safe for outdoor play. Wind speeds are light at around 10.4 km/h [E8], so you won’t feel too much strain from the breeze, and UV exposure is almost non-existent with a score of up to 0 [E9]. It’s also just a short drive away—about 5 minutes by road if traffic is light [E12]—so it's convenient.",
+    "violations": [
+     "says 'safe for outdoor' but the data flags US AQI"
+    ],
+    "claims": 10,
+    "ref": null
+   },
+   {
+    "sheet": 6,
+    "answer": "Indiranagar Park is a great choice for your morning outing, with comfortable feels-like temperatures between 23.4–25.3 °C [E3] and low rain chances at up to 8% [E4]. The air quality is very good, with US AQI up to 38 [E5], so it’s safe for someone who has asthma or respiratory issues. Wind gusts will be gentle—up to 24.1 km/h [E8]—and UV levels are low at up to 0.6 [E9], making the early morning light soft and easy on your eyes. You’ll need to leave by 06:00 to allow for travel time, as it takes about 7.3 minutes by road with typical traffic [E12]. Just bring plenty of water—about 1.5 L per person—and make sure you carry your reliever inhaler and watch for any wet or slippery surfaces from recent rain [WATCH FOR].",
+    "violations": [],
+    "claims": 9,
+    "ref": null
+   },
+   {
+    "sheet": 7,
+    "answer": "Golfing in the morning at Army BEPTA Bison Golf Course tomorrow is a good choice, with comfortable feels-like temperatures between 26.5 and 30.2 °C [E3] and only a small chance of rain—up to 2% [E4]. The air quality will be moderate, with a US AQI of up to 109 [E5], so an N95 mask is recommended for the journey. Wind gusts will stay well under 50 km/h at up to 15.1 km/h [E8], and UV levels are low at up to 4.2 [E9]. You’ll need about 3 L of water per person, ORS/electrolytes for the long session, and an N95 mask due to the PM2.5 level reaching 49.7 µg/m³ [E6]. The course is just a short drive away—about 19 minutes by road if you leave at 06:00 with typical traffic [E12]—and it’s best to avoid the heat of midday when temperatures rise higher and conditions may change more unpredictably.",
+    "violations": [
+     "calls US AQI 109 'moderate' (that band is above 50 up to 100)",
+     "calls US AQI [E5] 'moderate', but that fact is 109"
+    ],
+    "claims": 11,
+    "ref": "Tomorrow morning is a good time for golfing at Army BEPTA Bison Golf Course, with comfortable feels-like temperatures between 26.5 and 30.2 °C [E3] and very low rain chances of up to 2 % [E4]. The air quality is moderate, with a US AQI of up to 109 [E5], so it’s best to wear an N95 mask during travel. Winds are light, with gusts up to 15.1 km/h [E8], and UV levels are low, peaking at 4.2 [E9]. You’ll need to leave by 06:00 to arrive on time, with travel taking about 19 minutes [E12], and should carry about 3 L of water per person [CARRY]."
+   },
+   {
+    "sheet": 8,
+    "answer": "Cycling before office hours in Kalsubai tomorrow is possible, but it’s best to go early—between 07:00 and 08:00. The feels-like temperature will be a comfortable 16.1 °C [E3], with no rain expected [E4] and light winds of up to 19.4 km/h [E8]. However, the air quality is moderate at US AQI 119 [E5], so an N95 mask is recommended for sensitive individuals like you. The UV level will be very low [E9], making it easy on your skin and eyes. You’ll want to carry about 1 L of water per person [CARRY] and watch for any sudden changes in the weather or air quality during your ride.",
+    "violations": [
+     "place 'Kalsubai (area, no specific venue)' not mentioned",
+     "calls US AQI 119 'moderate' (that band is above 50 up to 100)",
+     "calls US AQI [E5] 'moderate', but that fact is 119"
+    ],
+    "claims": 6,
+    "ref": null
+   },
+   {
+    "sheet": 9,
+    "answer": "The best time for your cricket match is at Barabati Stadium from 06:00 to 09:00, when the feels-like temperature will be between 28.6 and 32.8 °C [E4], which is quite warm but within your comfort limits if you take breaks in shade or water. The air quality is unhealthy (US AQI up to 125) [E6], so it’s important to keep the effort light and short, especially since you have asthma [E3]. There’s no rain expected [E5] and wind gusts will be gentle at up to 15.1 km/h [E9], making for a relatively calm playing surface. You’ll need an N95 mask during travel due to the high PM2.5 levels [E7], but it should still be possible to play safely with proper precautions like your inhaler and water supply.",
+    "violations": [
+     "calls US AQI 125 'unhealthy' (that band is above 150 up to 200)",
+     "calls US AQI [E6] 'unhealthy', but that fact is 125"
+    ],
+    "claims": 6,
+    "ref": "Barabati Stadium is a good spot for your cricket match tomorrow morning, from 06:00 to 09:00, with a feels-like temperature of 28.6–32.8 °C [E4] and no chance of rain [E5]. The air quality is unhealthy (US AQI 125) [E6], so it’s important to keep exertion light and bring your inhaler and an N95 mask [E15]. Wind gusts will be gentle, up to 15.1 km/h [E9], and UV levels low, up to 3.1 [E10], making it easier to manage the heat. You’ll reach the stadium in about 5 minutes if you leave on time [E13]. Just watch for signs of heat stress and stay hydrated."
+   },
+   {
+    "sheet": 10,
+    "answer": "The best time for hiking around Mussoorie is at Doon Valley Viewpoint from 06:00 to 10:00 on Saturday. The air quality will be moderate, with a US AQI of up to 87 [E5], which could trigger asthma symptoms if not careful. It’s cool and dry during this time—feels-like temperatures are between 10.5–18.9 °C [E3]—and there’s no chance of rain [E4]. Wind will be light, with gusts up to 16.6 km/h [E8], so you’ll stay comfortable without strong wind pushing against your lungs. The UV level is low at up to 2.6 [E9], and it starts getting dark after 06:30 [E13], which means daylight will be limited for most of the hike, especially if starting early in the morning. You’ll need to carry water and an inhaler due to your asthma condition.\n\nIf you leave at 06:00 with typical traffic, it should take about 11 minutes total [E12].",
+    "violations": [
+     "time 06:30 not in fact sheet"
+    ],
+    "claims": 10,
+    "ref": "Hiking at Doon Valley Viewpoint from 06:00 to 10:00 on Saturday, 24 October, is a great choice for you, especially with asthma. The feels-like temperature will be comfortable, between 10.5 and 18.9 °C [E3], and there will be no rain [E4], making for clear, dry conditions. The air quality will be moderate with a US AQI of up to 87 [E5], and PM2.5 levels at 20.3 µg/m³ [E6], which is acceptable but still something to be cautious about. Wind speeds will be light, with gusts up to 16.6 km/h [E8], so breathing should be easier. The early morning also gives you daylight from sunrise at 06:26 [E13], and you’ll have time to enjoy the view before the light fades."
+   },
+   {
+    "sheet": 11,
+    "answer": "Day after tomorrow is a good time for your mom to play tennis in Shimla, with the feels-like temperature at 12.7 °C [E3] and no rain expected [E4]. The air quality will be moderate, with a US AQI of up to 71 [E5], so it's important she stays aware of her breathing comfort. Wind gusts won’t reach dangerous levels—up to 11.9 km/h [E8]—and UV exposure is light at 2.6 [E9], which should be safe for seniors with sensitive skin or joints. The early morning timing also helps avoid the higher heat and lower visibility of later in the day. Just bring plenty of water, take regular breaks, and watch her closely as she ages.",
+    "violations": [
+     "place 'Shimla (area, no specific venue)' not mentioned"
+    ],
+    "claims": 4,
+    "ref": null
+   },
+   {
+    "sheet": 12,
+    "answer": "Sunday evening in Colaba is not recommended for your mom's gathering because the air quality hits 260 [E16], which exceeds the safe limit, and she’s 65 years old—so it’s harder to stay comfortable. The feels-like temperature will be warm at up to 35.2 °C [E14], so heat stress is a risk, especially for seniors. Wind gusts can reach up to 36 km/h [E8] and rain chance is low [E4], but the air quality remains poor due to high ozone levels. The best option would be Mumbai Port Trust Garden from 5–8 pm, though it’s still not safe enough for a long event like this one.\n\nIf you can’t avoid the heat or wind, consider an earlier time with better conditions—check another day when the AQI is lower and temperatures are more moderate.",
+    "violations": [
+     "number 5 not in fact sheet"
+    ],
+    "claims": 6,
+    "ref": null
+   },
+   {
+    "sheet": 13,
+    "answer": "Not a great time for hiking near Borivali, sorry. 😕\nEvery hour you asked about hits a safety limit, mainly: US AQI 265 is above the 200 limit for this activity/profile; after dark: this activity needs daylight.\nIf you still want to go, the least-bad option is **Jambulmal** [1] tomorrow 5–8 pm.\n\n**Weather:** **hot**, feels like about 32 °C [2] · **dry**, rain chance up to 6% [3] · **breezy**, gusts up to 13.7 km/h [4]\nAir will be: **unhealthy for sensitive groups**, US AQI up to 272 [5].\nIt gets dark during your slot (sunset is at 6:09 pm) [6].\n\n**Take:** about 6 L of water per person, ORS/electrolytes (long session, feels-like up to 32.4 °C), an N95 mask for the journey (US AQI up to 272), a torch/headlamp and light-coloured or reflective clothing: it gets dark during your slot.\n\n**Watch for:** heat-stress signs (dizziness, cramps, no sweating): feels-like reaches 32.4 °C.\nComparing days ahead, **Saturday** looks better — but still too hot.\n\n<sub>Note: map context (roads, industry, green, water) was unavailable.</sub>\n\nWant me to check another time? Try *“what about tomorrow morning?”* or another day?\n\n---\n**The data behind this**\n[1] **Jambulmal** · [OpenStreetMap (Overpass)](https://www.openstreetmap.org/way/32640789)\n[2] feels-like temperature: **29.5–32.4 °C** · [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast?latitude=19.1328&longitude=72.9610&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Ccloud_cover%2Cvisibility%2Cwind_speed_km_h%2Cwind_direction_deg%2Cwind_gusts_kmh%2Cuv",
+    "violations": [
+     "no citations",
+     "time 6:09 not in fact sheet",
+     "number 5 not in fact sheet",
+     "number 2 not in fact sheet",
+     "number 5 not in fact sheet",
+     "number 32640789 not in fact sheet",
+     "number 2 not in fact sheet",
+     "number 19.1328 not in fact sheet",
+     "number 72.9610 not in fact sheet",
+     "number 2 not in fact sheet",
+     "number 2 not in fact sheet",
+     "number 2 not in fact sheet"
+    ],
+    "claims": 39,
+    "ref": null
+   },
+   {
+    "sheet": 14,
+    "answer": "Not a great time for cycling near Kodaikanal, sorry. 😕\nEvery hour you asked about hits a safety limit, mainly: rain probability 97% is above 70%; and/or rain probability 94% is above 70%.\nIf you still want to go, the least-bad option is **Bryant Park** [1] today 8–9 pm.\n\n**Weather:** **cool**, feels like about 15 °C [2] · air quality: good, US AQI up to 30 [3] · wind: light, gusts up to 9 km/h [4]\nIt gets dark during your slot (sunset is at 5:59 pm) [5].\n**Take:** about 1 L of water per person; a rain jacket or umbrella (rain chance up to 94%); a torch/headlamp and light-coloured or reflective clothing: it gets dark during your slot (sunset 17:59); ID, phone and an emergency contact card.\nWATCH FOR: wet or slippery surfaces (19.3 mm of rain in the previous 12 h); sunset at 17:59; pace yourself and take a rest break every 20–30 min.\n\n<sub>Note: map context (roads, industry, green, water) was unavailable.</sub>\n\nWant me to check another time? Try *“what about tomorrow morning?”* or another day?\n\n---\n**The data behind this**\n[1] **Bryant Park** · [OpenStreetMap (Overpass)](https://www.openstreetmap.org/way/246583970)\n[2] feels-like temperature: **15.5 °C** · [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast?latitude=10.0156&longitude=76.3007&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Ccloud_cover%2Cvisibility%2Cwind_speed_10m%2Cwind_direction_10m%2Cwind_gusts_10m%2Cuv_index%2Cis_day&daily=sunrise%2Csunset%2Cuv_index_max%2Cprecipitation",
+    "violations": [
+     "no citations",
+     "time 5:59 not in fact sheet",
+     "number 8 not in fact sheet",
+     "number 4 not in fact sheet",
+     "number 5 not in fact sheet",
+     "number 246583970 not in fact sheet",
+     "number 10.0156 not in fact sheet",
+     "number 76.3007 not in fact sheet",
+     "place/name 'Meteo Forecast' not in fact sheet",
+     "result is not recommended but the answer doesn't say so"
+    ],
+    "claims": 46,
+    "ref": null
+   },
+   {
+    "sheet": 15,
+    "answer": "Queens Garden is a great choice for your morning picnic because the temperature will be comfortable at about 24.2–24.7 °C [E3], and there’s almost no chance of rain—just 1% [E4]. The air quality, while on the higher side with US AQI up to 98 [E5], is still within your limits for a pregnant person. Wind will be light at around 4.7 km/h from the northeast [E7], and it’s early enough that UV levels are very low [E9]. You’ll need to leave by 06:00 to allow about 2 minutes of travel time with typical traffic [E12], so plan accordingly.",
+    "violations": [],
+    "claims": 7,
+    "ref": "Queens Garden is a great pick for a morning park outing tomorrow at 6 am. The feels-like temperature will be comfortable at 24.2–24.7 °C [E3], and there’s almost no chance of rain, with just 1% probability [E4]. The air quality is moderate, with a US AQI of 98 [E5], so you may want to avoid heavy exertion and stay in shaded or breezy areas. Winds will be light at up to 14 km/h [E8], and UV levels will be very low [E9], making it safe to be outside without strong sun protection. You can reach the spot in about 2 minutes with typical morning traffic [E12], and it’s best to carry about 1.5 L of water per person to stay hydrated during your 3-hour outing."
+   },
+   {
+    "sheet": 16,
+    "answer": "Hennur Biodiversity Park on Monday from 06:00 to 08:00 is a great choice for birdwatching with your 6-year-old, as the feels-like temperature will be comfortable at about 21.3–21.9 °C [E3], and there’s low chance of rain—just up to 27% [E4]. The air quality will also be good, with a US AQI of up to 28 [E5] and light winds that won’t make it hard for kids to stay safe outdoors. You’ll need to bring about 1 L of water per person, hats, snacks, and extra water for the child—just in case. The early morning timing means you can avoid the heat of the day later on, and there’s enough daylight with sunrise at 06:11 [E13].",
+    "violations": [],
+    "claims": 9,
+    "ref": "Hennur Biodiversity Park is a great spot for birding with your 6-year-old next Monday from 6 to 8 AM because it will be comfortably cool, with a feels-like temperature of 21.3–21.9 °C [E3], and the air quality will be excellent, with a US AQI of 28 [E5]. There's a low chance of rain at 27% [E4], and the wind will be light with gusts up to 37.8 km/h [E8], so it should be easy to enjoy without too much wind or heat. The early morning also means gentle light and low UV [E9], perfect for a child’s sensitive skin. Just be ready for some gusts and possible damp surfaces from recent rain."
+   },
+   {
+    "sheet": 17,
+    "answer": "Cycling at Children Traffic Park tomorrow morning from 08:00 to 09:00 is a good choice because the feels-like temperature will be about 26.9 °C [E3], which is comfortable for seniors, and there’s no rain expected [E4]. The air quality will have a US AQI of up to 85 [E5], so it's slightly unhealthy but not too bad—just watch your breathing if you have any asthma issues. Wind gusts won’t be strong at 18.7 km/h [E8], and the UV level is low at 2.1 [E9], making for a pleasant ride with good light from sunrise around 06:12 [E13]. It’s also close to home, taking about 4 minutes by road if you leave on time [E12].",
+    "violations": [
+     "calls US AQI 85 'unhealthy' (that band is above 150 up to 200)"
+    ],
+    "claims": 8,
+    "ref": "Cycling at Children Traffic Park tomorrow morning from 8 to 9 AM is a great choice for you and your parents. The feels-like temperature will be about 26.9 °C [E3], making it comfortable, and there’s no chance of rain [E4]. The air quality will be good with a US AQI of 85 [E5], though it’s on the higher side for seniors, so keeping a steady pace and taking breaks will help. Winds will be light, with gusts up to 18.7 km/h [E8], and the UV index will be low at 2.1 [E9], so no need to worry about sun exposure. It’s just a 4-minute drive away [E12], and the early timing means you’ll avoid the heat later in the day [E14]."
+   },
+   {
+    "sheet": 18,
+    "answer": "The best time for birdwatching near Viman Nagar is early morning, from 07:00 to 09:00 [E1], when the feels-like temperature will be comfortable at about 25.2–27.5 °C [E3] and there’s no chance of rain [E4]. The air quality is moderate with a US AQI of up to 98 [E5], so it's important to stay alert, especially since you're pregnant—take regular breaks and carry about 1 L of water per person. Wind will be light at around 3.6 km/h from the northeast [E7], and gusts won’t reach dangerous levels at up to 13 km/h [E8]. It’s also best to avoid this time near sunrise (06:30) as it would make spotting birds harder due to low light [E11].",
+    "violations": [
+     "place 'Viman Nagar (area, no specific venue)' not mentioned"
+    ],
+    "claims": 9,
+    "ref": null
+   },
+   {
+    "sheet": 19,
+    "answer": "Not a great time for golf near Edappally, sorry. 😕\nEvery hour you asked about hits a safety limit, mainly: rain probability 94% is above 60%; after dark: this activity needs daylight.\nIf you still want to go, the least-bad option is **CIAL Golf Course** [1] today 7–11 pm.\n\n**Weather:** **warm**, feels like about 31 °C [2] · **rain likely**, rain chance up to 94% [3] · **breezy**, gusts up to 10.8 km/h [4]\nAir will be: **moderate**, US AQI up to 59 [5].\nSunset is at 6:04 pm [6].\n\n**Take:** about 3 L of water per person, ORS/electrolytes (long session, feels-like up to 31.1 °C); a rain jacket or umbrella (rain chance up to 94%); your reliever inhaler.\nWatch for: wet or slippery surfaces (5.7 mm of rain in the previous 12 h).\n\n<sub>Note: map context (roads, industry, green, water) was unavailable.</sub>\n\nWant me to check another time? Try *“what about tomorrow morning?”* or another day.\n\n---\n**The data behind this**\n[1] **CIAL Golf Course** · [OpenStreetMap](https://www.openstreetmap.org/way/269483057)\n[2] feels-like temperature: **30.5–31.1 °C** · [Open-Meteo Forecast API (Rain)](https://api.open-meteo.com/v1/forecast?latitude=10.0357&longitude=76.8493&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cprecipitation_probability%2Cprecipitation%2Cweather_code%2Ccloud_cover%2Cvisibility%2Cwind_speed_km_h%2Cwind_direction_deg%2Cwind_gusts_km_h%2Cuv_index%2Cis_day&daily=sunrise%2Csunset%2Cuv_index_max%2Cprecipitation_sum&start_date=2026-10-21&end_date=2026-10-23&",
+    "violations": [
+     "no citations",
+     "time 6:04 not in fact sheet",
+     "number 1 not in fact sheet",
+     "number 7 not in fact sheet",
+     "number 1 not in fact sheet",
+     "number 269483057 not in fact sheet",
+     "number 10.0357 not in fact sheet",
+     "number 76.8493 not in fact sheet",
+     "number 2026 not in fact sheet",
+     "number 21 not in fact sheet",
+     "number 2026 not in fact sheet",
+     "place/name 'Meteo Forecast' not in fact sheet"
+    ],
+    "claims": 50,
+    "ref": null
+   }
+  ],
+  "followup": [
+   {
+    "sheet": 0,
+    "question": "why not earlier in the day?",
+    "answer": "Earlier in the day was not recommended because the rain probability and other safety limits were still exceeded [E15]. The activity requires daylight, which is only available until 17:57 on Thu 22 Oct [E13], making it too dark for safe practice. Additionally, there was already a high chance of rain (up to 86%) in the previous 12 hours [E4], increasing slip and fall risks.",
+    "violations": [
+     "[E4] cited next to 12, which is not that fact's value"
+    ],
+    "claims": 4,
+    "ref": "Earlier in the day is not recommended because the activity requires daylight, and sunset is at 17:57 [E13]. Additionally, rain probability remains high (up to 98%) from 18:00 [E15], and it has already rained 12.5 mm in the previous 12 hours, leading to wet or slippery surfaces [E14]."
+   },
+   {
+    "sheet": 0,
+    "question": "will it rain?",
+    "answer": "Yes, it will rain. The rain probability is up to 86% during the suggested time [E4], and there was already 12.5 mm of rain in the previous 12 hours [E14]. This means wet or slippery surfaces are likely due to recent rainfall.",
+    "violations": [],
+    "claims": 3,
+    "ref": "Yes, it will rain. The rain probability is up to 86% from 20:00 to 23:00 [E4], and there was already 12.5 mm of rain in the previous 12 hours [E14]."
+   },
+   {
+    "sheet": 1,
+    "question": "how far is it and how long to get there?",
+    "answer": "The Manali viewpoint is about 1 minute away by road [E11], and it would take approximately 1 minute in total if you leave at 09:00 with typical traffic [E12].",
+    "violations": [],
+    "claims": 3,
+    "ref": "The Manali viewpoint is about 0.6 km from the starting point, and it takes approximately 1 minute to reach by road under free-flow conditions [E11]. With typical traffic, the travel time is estimated to be about 1 minute if you leave at 09:00 [E12]."
+   },
+   {
+    "sheet": 1,
+    "question": "how far is it and how long to get there?",
+    "answer": "The Manali viewpoint is about 1 minute away by road [E11], and it would take approximately 1 minute in total if you leave at 09:00 with typical traffic [E12].",
+    "violations": [],
+    "claims": 3,
+    "ref": "The Manali viewpoint is about 0.6 km away by road, and it takes approximately 1 minute to reach there under free-flow traffic conditions [E11]. If you leave at 09:00 with typical traffic, it should take about 1 minute in total to get there [E12]."
+   },
+   {
+    "sheet": 2,
+    "question": "will it rain?",
+    "answer": "Yes, it will rain. The rain probability is up to 64% during the suggested time [E4].",
+    "violations": [],
+    "claims": 1,
+    "ref": "Yes, there is a high chance of rain. The rain probability is up to 64% during the time from 06:00 to 10:00 [E4]. You should carry a rain jacket or umbrella [CARRY]."
+   },
+   {
+    "sheet": 2,
+    "question": "what should I be careful about?",
+    "answer": "You should be careful about heat stress, as the feels-like temperature reaches 33.2 °C [E14], and take regular rest breaks every 20–30 minutes to avoid dizziness or cramps. Also, carry a rain jacket or umbrella because there is up to 64% chance of rain [E4]. Watch for wet or slippery surfaces due to recent rainfall (5.8 mm in the previous 12 hours). Pace yourself and stay hydrated by carrying about 3 L of water per person with ORS/electrolytes, especially since it's a long session [CARRY].",
+    "violations": [],
+    "claims": 7,
+    "ref": "You should be careful about heat stress due to the feels-like temperature reaching 33.2 °C [E14], which can cause dizziness, cramps, or no sweating. Also, watch for rain, as there's a 64% chance [E4], and surfaces may be wet or slippery from 5.8 mm of rain in the previous 12 hours. Pace yourself and take a rest break every 20–30 minutes [WATCH FOR]."
+   },
+   {
+    "sheet": 3,
+    "question": "is the air okay for this?",
+    "answer": "The air quality at the Football Ground on Saturday from 07:00–08:00 is considered acceptable for a five-a-side game, with a US AQI of up to 34 [E5], which is well below the safety limit of 200. The main pollutant is PM2.5, reaching up to 4.7 µg/m³ [E6], and it's within your specified limits for this activity. However, note that air quality forecasts are based on a modelled road/industry exposure, not ground-station readings—so actual conditions may vary slightly [LIMITATIONS].",
+    "violations": [],
+    "claims": 5,
+    "ref": "Yes, the air should be okay for your 5-a-side football session at the recommended Football Ground [E1]. The US AQI is up to 34 [E5], which is well below the 200 limit you set and considered good for sensitive individuals. The main pollutant is PM2.5, with levels up to 4.7 µg/m³ [E6], which is low. However, keep in mind that the air-quality forecast is based on a model and may not reflect exact local conditions [E10]."
+   },
+   {
+    "sheet": 5,
+    "question": "what should I be careful about?",
+    "answer": "You should be careful about wet or slippery surfaces due to 5.8 mm of rain in the previous 12 hours [E10]. Also, carry about 1 L of water per person as a precaution [CARRY].",
+    "violations": [],
+    "claims": 3,
+    "ref": "You should be careful about wet or slippery surfaces due to 5.8 mm of rain in the previous 12 hours [E10]. Also, carry about 1 L of water per person, as hydration is important even with the low UV index [E9] and comfortable feels-like temperature of 24.1 °C [E3]."
+   },
+   {
+    "sheet": 6,
+    "question": "what should I be careful about?",
+    "answer": "You should be careful about the air quality, as the US AQI is up to 38 [E5], which could trigger an asthma flare-up. Also, watch for wet or slippery surfaces due to 8.2 mm of rain in the previous 12 hours [WATCH FOR]. Make sure to carry your reliever inhaler and about 1.5 L of water per person.",
+    "violations": [],
+    "claims": 4,
+    "ref": "You should carry about 1.5 L of water per person and your reliever inhaler [E1]. Watch for wet or slippery surfaces due to 8.2 mm of rain in the previous 12 hours [E1]. The US AQI is up to 38 (main pollutant PM2.5), and PM2.5 is up to 4.8 µg/m³, which is acceptable, but be mindful of any sudden changes in air quality [E5][E6]. Wind gusts are up to 24.1 km/h, so secure any loose items [E8]."
+   },
+   {
+    "sheet": 7,
+    "question": "how far is it and how long to get there?",
+    "answer": "The Army BEPTA Bison Golf Course is 12.9 km away and takes about 17 minutes by road under free-flow conditions [E11]. If you leave at 06:00 with typical traffic, it should take approximately 19 minutes in total to get there [E12].",
+    "violations": [],
+    "claims": 4,
+    "ref": "The Army BEPTA Bison Golf Course is about 12.9 km away and takes approximately 17 minutes to reach by road under free-flow conditions [E11]. If you leave at 06:00 with typical traffic, the total travel time is estimated to be about 19 minutes [E12]."
+   },
+   {
+    "sheet": 7,
+    "question": "how far is it and how long to get there?",
+    "answer": "The Army BEPTA Bison Golf Course is 12.9 km away and takes about 17 minutes by road under free-flow conditions [E11]. If you leave at 06:00 with typical traffic, it should take approximately 19 minutes in total to get there [E12].",
+    "violations": [],
+    "claims": 4,
+    "ref": "The Army BEPTA Bison Golf Course is about 12.9 km away, and it will take approximately 17 minutes to get there by road under free-flow conditions [E11]. If you leave at 06:00 with typical traffic, the total travel time is estimated to be about 19 minutes [E12]."
+   },
+   {
+    "sheet": 8,
+    "question": "why is it not recommended?",
+    "answer": "It is not recommended because the US AQI reaches 119 [E5], which exceeds the safety limit of 200 for heat-sensitive individuals. While it's still within your specified limits, this level of air pollution could pose a risk during physical exertion like cycling [E12]. Additionally, PM2.5 levels reach up to 44.5 µg/m³ [E6], which is above the recommended threshold and may affect sensitive groups more severely.",
+    "violations": [
+     "false comparison: '119  , which exceeds the safety limit of 200'"
+    ],
+    "claims": 3,
+    "ref": "It is not recommended because the US AQI is 119 [E5], which exceeds the safe limit of 100 and may pose a risk to heat-sensitive individuals [E12]. While the feels-like temperature is acceptable at 16.1 °C [E3] and there is no rain [E4], the air quality remains a concern. You should consider wearing an N95 mask and carrying about 1 L of water per person [CARRY]."
+   },
+   {
+    "sheet": 8,
+    "question": "how far is it and how long to get there?",
+    "answer": "The distance to Kalsubai is not specified in the fact sheet [E10]. Travel time depends on traffic and route conditions, but it was estimated as free-flow OSRM times with a typical-traffic multiplier. You should plan for about 2–3 hours by car if you're driving there from another city or region [LIMITATIONS].",
+    "violations": [
+     "number 2 not in fact sheet"
+    ],
+    "claims": 2,
+    "ref": "The distance and travel time to Kalsubai were not available due to OpenStreetMap venue data being unavailable [E10], and travel times provided are free-flow estimates with a typical-traffic multiplier, not live traffic [LIMITATIONS]."
+   },
+   {
+    "sheet": 9,
+    "question": "why is it not recommended?",
+    "answer": "It is not recommended because the US AQI reaches 125 [E6], which is considered unhealthy for people with asthma or respiratory conditions [E15]. At this level, you should keep exertion light and short to avoid overexertion due to high PM2.5 levels [E7].",
+    "violations": [
+     "calls US AQI 125 'unhealthy' (that band is above 150 up to 200)"
+    ],
+    "claims": 1,
+    "ref": "It is not recommended because the US AQI is up to 125 [E6], which is considered unhealthy for people with asthma or respiratory conditions [E15]. You should keep exertion light and short in this air quality. Additionally, the feels-like temperature reaches up to 32.8 °C [E4], increasing the risk of heat stress, especially during prolonged activity."
+   },
+   {
+    "sheet": 10,
+    "question": "will it rain?",
+    "answer": "No, it will not rain during the recommended time for hiking at Doon Valley Viewpoint. The rain probability is up to 0% from 06:00–10:00 [E4].",
+    "violations": [],
+    "claims": 3,
+    "ref": "No, it will not rain during the recommended hiking time at Doon Valley Viewpoint on Saturday, 24 October from 06:00–10:00 [E4]. The rain probability is up to 0% during this period [E4]."
+   },
+   {
+    "sheet": 10,
+    "question": "why is it not recommended?",
+    "answer": "It is not recommended because the US AQI reaches 87 [E5], which exceeds the safety limit of 100 for people with asthma or respiratory conditions. The main pollutant is PM2.5, up to 20.3 µg/m³ [E6]. While this score was still high enough that it might be considered \"not recommended\" in some contexts, it's within a range where precautions are advised but not strictly prohibited [E14].",
+    "violations": [
+     "false comparison: '87  , which exceeds the safety limit of 100'"
+    ],
+    "claims": 3,
+    "ref": "It is not recommended because the US AQI is 87 [E14], which is above 50 and may pose a risk for people with asthma or respiratory conditions. While it is below the 150 limit, caution is still advised due to the presence of PM2.5 as the main pollutant [E5]."
+   },
+   {
+    "sheet": 11,
+    "question": "is it safe for kids?",
+    "answer": "It is not safe for kids to play tennis on day after tomorrow in Shimla. The feels-like temperature will be 12.7 °C [E3], which is suitable, but the air quality has a US AQI of up to 71 [E5], mainly due to PM2.5 at up to 9.1 µg/m³ [E6]. While these conditions are generally acceptable for seniors, children may be more sensitive to air pollution and temperature changes. Additionally, there is no specific venue with available court slots checked in the fact sheet [E10]. You should consider an alternative day or time when conditions might be better suited for kids.",
+    "violations": [],
+    "claims": 3,
+    "ref": "The conditions on Saturday, 24 October from 09:00–10:00 in Shimla are also safe for kids [E3][E4][E5][E8]. The feels-like temperature is 12.7 °C, with no rain expected and very low wind gusts (up to 11.9 km/h). The US AQI is 71, which is acceptable for all age groups [E5]. As with any outdoor activity, ensure children stay hydrated and take breaks if needed."
+   },
+   {
+    "sheet": 12,
+    "question": "will it rain?",
+    "answer": "The rain probability during the suggested time (17:00–20:00) is up to 8% [E4], so it is unlikely to rain. However, you should still carry an umbrella as a precaution [WATCH FOR].",
+    "violations": [],
+    "claims": 3,
+    "ref": "The rain probability during the event time (17:00–20:00) is up to 8% [E4], so it is unlikely to rain. However, you should still be prepared with rain cover just in case."
+   },
+   {
+    "sheet": 12,
+    "question": "is it safe for kids?",
+    "answer": "It is not safe for kids to gather in Colaba during Sunday evening, as the activity involves a senior [E14], and children are also present. The feels-like temperature reaches 35.2 °C [E14], which can cause heat stress, and there are gusty winds up to 36 km/h [E8]. Additionally, the US AQI is above the safe limit for this activity profile [E16]. These conditions pose risks to children's health as well.",
+    "violations": [],
+    "claims": 2,
+    "ref": "It is not safe for kids either, as the same safety limits apply to all age groups for this outdoor gathering. The US AQI will reach 246 [E16], which is above the 150 limit, and the feels-like temperature will be up to 35.2 °C [E14], posing heat-stress risks. Gusts will reach 36 km/h [E15], making the environment uncomfortable and potentially unsafe for children."
+   },
+   {
+    "sheet": 13,
+    "question": "is the air okay for this?",
+    "answer": "The air quality is not ideal for hiking in Borivali tomorrow evening. The US AQI will reach up to 272 [E5], which exceeds the safety limit of 200 for this activity. Additionally, PM2.5 levels are expected to be high at up to 158 on the sub-index [E5]. These conditions make it unsuitable for a long hike like yours.",
+    "violations": [],
+    "claims": 3,
+    "ref": "The air quality is not okay for this hike. The US AQI is forecast to reach 272 [E5], which exceeds the 200 limit for this activity. The main pollutant is ozone, and the PM2.5 sub-index is 158 [E5]. You should consider wearing an N95 mask during the journey [CARRY]."
+   },
+   {
+    "sheet": 13,
+    "question": "is the air okay for this?",
+    "answer": "The air quality is not ideal for hiking in Borivali tomorrow evening. The US AQI will reach up to 272 [E5], which exceeds the safety limit of 200 for this activity. Additionally, PM2.5 levels are expected to be high at up to 158 on the sub-index [E5]. These conditions make it unsuitable for a long hike like yours.",
+    "violations": [],
+    "claims": 3,
+    "ref": "The air is not okay for this hike. The US AQI is forecast to reach 272 [E5], which exceeds the 200 limit for this activity. The main pollutant is ozone, and the PM2.5 sub-index is 158 [E5]. You should consider an N95 mask for the journey [CARRY]."
+   },
+   {
+    "sheet": 14,
+    "question": "why is it not recommended?",
+    "answer": "It is not recommended because every hour hits a safety limit [E14]. The least-bad option, Bryant Park from 20:00–21:00, still has high rain probability (up to 94%) and PM2.5 levels up to 30 µg/m³ [E5], which are above the acceptable thresholds for a senior cyclist. Additionally, it gets dark during your slot as sunset is at 17:59 [E13].",
+    "violations": [
+     "'30 µg/m³' not in fact sheet"
+    ],
+    "claims": 5,
+    "ref": "It is not recommended because the rain probability reaches 94% [E4], which exceeds the safety limit of 70%. Additionally, it gets dark during the activity window, with sunset at 17:59 [E13], increasing the risk for a senior cyclist. Wet or slippery surfaces from 19.3 mm of rain in the previous 12 hours [WATCH FOR] also pose a hazard."
+   },
+   {
+    "sheet": 15,
+    "question": "why this place and time?",
+    "answer": "Queens Garden was selected because it met the safety limits for a 180-minute outing at 6 am [E2]. The feels-like temperature of 24.2–24.7 °C [E3] and low rain probability (up to 1%) [E4] make it comfortable, while PM2.5 levels up to 36 µg/m³ [E6] are within acceptable limits for a pregnant person. The US AQI of 98 [E5] is above the warning threshold but still considered manageable due to its low sensitivity during early morning hours. Travel time estimates also favor this location, with about 2 minutes by road if traffic allows [E12].",
+    "violations": [
+     "says 'manageable' but the data flags US AQI"
+    ],
+    "claims": 8,
+    "ref": "Queens Garden was selected because it has the best score of 86.1/100 [E2] for your planned 2-hour outing tomorrow at 6 am. The feels-like temperature will be comfortable at 24.2–24.7 °C [E3], with minimal rain chance (up to 1%) [E4] and US AQI at 98 [E5], which is above 50 but within acceptable limits for a short outdoor activity. Wind gusts will be up to 14 km/h [E8], and UV exposure will be very low [E9]. The travel time is just 2 minutes [E12], making it convenient for your early start."
+   },
+   {
+    "sheet": 16,
+    "question": "will it rain?",
+    "answer": "There is a 27% chance of rain during the suggested time [E4], so it's not certain to rain, but there is still some possibility. The best option for birding on Monday near Yelahanka would be Hennur Biodiversity Park from 06:00–08:00 [E1].",
+    "violations": [],
+    "claims": 3,
+    "ref": "The rain probability during the recommended time (06:00–08:00) is up to 27% [E4]. While there is a slight chance of rain, it is not expected to significantly impact the activity. You may want to carry a light rain cover just in case."
+   },
+   {
+    "sheet": 17,
+    "question": "why is it not recommended?",
+    "answer": "It is not recommended because the score for Children Traffic Park on Friday 23 Oct from 08:00–09:00 was [E2] 92.1/100, which is still very high and within your safety limits. The main reason you asked about \"why\" might be that there's no specific recommendation against it—only a score. If you're asking why not recommended in general, the answer would be none because all conditions are acceptable [E2]. However, if you meant something else (like another time or place), please clarify.\n\n**Note:** The only reason for any \"not recommended\" is that this specific spot was already scored as good at 92.1/100 with your safety limits met [E2], so it's not actually not recommended—it’s just a high-scoring option you can consider.",
+    "violations": [],
+    "claims": 5,
+    "ref": "It is actually recommended — the Children Traffic Park is a good spot for cycling tomorrow morning from 08:00–09:00, with a high score of 92.1/100 [E2]. The conditions are favourable: feels-like temperature is 26.9 °C [E3], no rain expected [E4], and US AQI is 85 [E5]. However, it is not recommended outside this time window — for example, from 10:00–11:00, the score drops to 67.3/100 [E14] due to less favourable thermal comfort."
+   },
+   {
+    "sheet": 18,
+    "question": "why is it not recommended?",
+    "answer": "It is not recommended because the US AQI reaches 98 [E5], which exceeds the safety limit of 150 for sensitive groups like pregnant individuals. Additionally, while the feels-like temperature and rain probability are acceptable [E3][E4], the air quality poses a health risk due to high PM2.5 levels [E6].",
+    "violations": [
+     "false comparison: '98  , which exceeds the safety limit of 150'"
+    ],
+    "claims": 2,
+    "ref": "It is not recommended because the US AQI is 98, which is above the 50 threshold and may pose a risk for pregnant individuals [E12]. While the air quality is not critically poor, it is advisable to avoid potential respiratory stress during pregnancy. Additionally, you should pace yourself and take rest breaks every 20–30 minutes [WATCH FOR]."
+   },
+   {
+    "sheet": 18,
+    "question": "is it safe for kids?",
+    "answer": "The recommendation for birdwatching in Viman Nagar from 07:00–09:00 is generally safe, but with some considerations. The US AQI is up to 98 [E5], which is above the recommended limit of 150 and may affect sensitive groups like children who are more vulnerable during pregnancy or when exposed to air pollution. It's advised to carry about 1 L of water per person [CARRY] and take regular rest breaks every 20–30 minutes due to the physical demands of birdwatching, especially with a pregnant companion.\n\nAdditionally, while the rain probability is low at up to 0% [E4], you should still be cautious about air quality. The activity itself involves being outdoors in daylight (from sunrise at 06:30 [E11]), which is suitable for kids who can handle light exposure and physical exertion.\n\nIf your child has any pre-existing conditions, consult a healthcare professional before engaging in outdoor activities with pregnant individuals.",
+    "violations": [
+     "false comparison: '98  , which is above the recommended limit of 150'"
+    ],
+    "claims": 9,
+    "ref": "The birdwatching activity in Viman Nagar is generally safe for kids, as the feels-like temperature will be 25.2–27.5 °C [E3], rain is unlikely [E4], and gusts will be up to 13 km/h [E8]. The US AQI is 98 [E5], which is above 50 and may be a concern for sensitive groups, including young children. Ensure kids stay hydrated and take regular rest breaks. Avoid prolonged exposure if children show signs of discomfort."
+   },
+   {
+    "sheet": 19,
+    "question": "why not earlier in the day?",
+    "answer": "Earlier in the day was not recommended because the safety limits were still exceeded [E15]. The rain probability and other conditions remained poor from 19:00 onward, making it unsafe for a long session.",
+    "violations": [],
+    "claims": 1,
+    "ref": "Earlier in the day is not recommended because the golf course requires daylight, and sunset is at 18:04 [E13]. Additionally, the rain probability remains very high (up to 94%) throughout the day [E15], and the US AQI is still above 50 [E14], which is a concern for people with asthma."
+   },
+   {
+    "sheet": 19,
+    "question": "is the air okay for this?",
+    "answer": "The air quality at CIAL Golf Course is not ideal for someone with asthma or respiratory conditions. The US AQI reaches up to 59 [E5], which is above the recommended limit of 100, and PM2.5 levels reach up to 17.1 µg/m³ [E6]. While this level may still be acceptable in some cases, it's important to carry your reliever inhaler and consider wearing a mask if possible [CARRY].",
+    "violations": [
+     "number 100 not in fact sheet",
+     "false comparison: '59  , which is above the recommended limit of 100'"
+    ],
+    "claims": 3,
+    "ref": "The air quality is not ideal for someone with asthma. The US AQI is 59 [E14], which is above 50 and considered a caution level. The main pollutant is PM2.5, with levels up to 17.1 µg/m³ [E6]. You should take precautions, including carrying your reliever inhaler."
+   }
+  ]
+ }
+}

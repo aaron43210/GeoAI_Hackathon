@@ -1,0 +1,405 @@
+{
+ "meta": {
+  "machine": "Apple M4 Pro (12 CPU cores), macOS",
+  "runtime": "llama.cpp (llama-cpp-python), Apple M4 Pro GPU (Metal), Q4_K_M, temperature 0 for intent / 0.2 for text, seed 0",
+  "intent_questions": 84,
+  "perturbed": 172,
+  "counterfactual": 48,
+  "heldout_sheets": 20,
+  "followups": 29,
+  "explanation_refs": 8,
+  "latency_note": "latency measured separately, one model at a time with nothing else running"
+ },
+ "results": [
+  {
+   "model": "base",
+   "file": "base.Q4_K_M.gguf",
+   "intent_model": {
+    "n": 84,
+    "activity": {
+     "accuracy": 95.9,
+     "precision": 97.5,
+     "recall": 93.8,
+     "macro_f1": 94.2
+    },
+    "location": {
+     "accuracy": 100.0,
+     "precision": 100.0,
+     "recall": 100.0,
+     "macro_f1": 100.0
+    },
+    "profiles": {
+     "accuracy": 92.9,
+     "precision": 81.0,
+     "recall": 77.4,
+     "macro_f1": 78.0
+    },
+    "in_scope": {
+     "accuracy": 91.7,
+     "precision": 86.2,
+     "recall": 69.3,
+     "macro_f1": 74.4,
+     "out_of_scope_precision": 80.0,
+     "out_of_scope_recall": 40.0
+    },
+    "joint_accuracy": 82.1,
+    "decision_accuracy": 89.3,
+    "decision_ci95": [
+     80.9,
+     94.3
+    ],
+    "decision_by_class": {
+     "plan": 100.0,
+     "clarify": 66.7,
+     "decline": 40.0
+    }
+   },
+   "intent_system": {
+    "n": 84,
+    "activity": {
+     "accuracy": 95.9,
+     "precision": 97.5,
+     "recall": 93.8,
+     "macro_f1": 94.2
+    },
+    "location": {
+     "accuracy": 100.0,
+     "precision": 100.0,
+     "recall": 100.0,
+     "macro_f1": 100.0
+    },
+    "profiles": {
+     "accuracy": 96.4,
+     "precision": 79.4,
+     "recall": 85.7,
+     "macro_f1": 82.0
+    },
+    "in_scope": {
+     "accuracy": 97.6,
+     "precision": 98.7,
+     "recall": 90.0,
+     "macro_f1": 93.8,
+     "out_of_scope_precision": 100.0,
+     "out_of_scope_recall": 80.0
+    },
+    "joint_accuracy": 90.5,
+    "decision_accuracy": 95.2,
+    "decision_ci95": [
+     88.4,
+     98.1
+    ],
+    "decision_by_class": {
+     "plan": 100.0,
+     "clarify": 77.8,
+     "decline": 80.0
+    }
+   },
+   "valid_json": 100.0,
+   "robustness": {
+    "n": 172,
+    "model_success": 83.7,
+    "system_success": 86.6,
+    "model_clean_same_items": 89.8,
+    "by_kind": {
+     "typo": 75.9,
+     "shorthand": 85.5,
+     "noise": 89.8
+    }
+   },
+   "fairness": {
+    "counterfactual_consistency": 100.0,
+    "templates": 6,
+    "per_region_accuracy": {
+     "north": 100.0,
+     "west": 100.0,
+     "south": 100.0,
+     "east": 100.0
+    },
+    "region_gap": 0.0,
+    "subgroup_accuracy": {
+     "english": 86.8,
+     "hinglish": 100.0,
+     "with_profile": 78.6,
+     "without_profile": 93.5
+    },
+    "subgroup_n": {
+     "english": 68,
+     "hinglish": 6,
+     "with_profile": 28,
+     "without_profile": 46
+    },
+    "language_gap": 13.2,
+    "profile_gap": 14.9
+   },
+   "gen_explain": {
+    "n": 20,
+    "groundedness": 5.0,
+    "groundedness_ci95": [
+     0.9,
+     23.6
+    ],
+    "hallucination_rate": 5.0,
+    "faithfulness_claims": 98.8,
+    "claims_checked": 81,
+    "decision_consistency": 15.0,
+    "empty_answers": 0,
+    "ref_pairs": 8,
+    "rouge1_f1": 48.7,
+    "rougeL_f1": 29.6,
+    "bertscore_f1": 26.7,
+    "flagged_by_type": {
+     "12-hour time (24-h value is in the sheet)": 0,
+     "footnote number [n] or step number": 0,
+     "rounded sheet value (within ±1)": 0,
+     "other / genuine": 0,
+     "place name": 0,
+     "citation next to wrong value": 1
+    },
+    "genuine_unsupported_rate": 0.0
+   },
+   "gen_followup": {
+    "n": 29,
+    "groundedness": 48.3,
+    "groundedness_ci95": [
+     31.4,
+     65.6
+    ],
+    "hallucination_rate": 0.0,
+    "faithfulness_claims": 100.0,
+    "claims_checked": 72,
+    "decision_consistency": 75.9,
+    "empty_answers": 0,
+    "ref_pairs": 29,
+    "rouge1_f1": 51.3,
+    "rougeL_f1": 35.5,
+    "bertscore_f1": 38.7,
+    "flagged_by_type": {
+     "12-hour time (24-h value is in the sheet)": 0,
+     "footnote number [n] or step number": 0,
+     "rounded sheet value (within ±1)": 0,
+     "other / genuine": 0,
+     "place name": 0,
+     "citation next to wrong value": 0
+    },
+    "genuine_unsupported_rate": 0.0
+   },
+   "latency_s": {
+    "intent": {
+     "p50": 1.9,
+     "p95": 2.09,
+     "n": 40
+    },
+    "explanation": {
+     "p50": 1.74,
+     "p95": 2.21,
+     "n": 20
+    },
+    "follow-up": {
+     "p50": 1.51,
+     "p95": 2.04,
+     "n": 20
+    }
+   },
+   "tokens_per_s": {
+    "intent": 52.4,
+    "explanation": 72.6,
+    "follow-up": 69.6
+   }
+  },
+  {
+   "model": "v2",
+   "file": "terrapulse-qwen3-1.7b-GGUF-v2.Q4_K_M.gguf",
+   "intent_model": {
+    "n": 84,
+    "activity": {
+     "accuracy": 97.3,
+     "precision": 97.0,
+     "recall": 97.9,
+     "macro_f1": 97.2
+    },
+    "location": {
+     "accuracy": 100.0,
+     "precision": 100.0,
+     "recall": 100.0,
+     "macro_f1": 100.0
+    },
+    "profiles": {
+     "accuracy": 98.8,
+     "precision": 100.0,
+     "recall": 95.2,
+     "macro_f1": 97.1
+    },
+    "in_scope": {
+     "accuracy": 97.6,
+     "precision": 94.3,
+     "recall": 94.3,
+     "macro_f1": 94.3,
+     "out_of_scope_precision": 90.0,
+     "out_of_scope_recall": 90.0
+    },
+    "joint_accuracy": 94.0,
+    "decision_accuracy": 97.6,
+    "decision_ci95": [
+     91.7,
+     99.3
+    ],
+    "decision_by_class": {
+     "plan": 100.0,
+     "clarify": 88.9,
+     "decline": 90.0
+    }
+   },
+   "intent_system": {
+    "n": 84,
+    "activity": {
+     "accuracy": 97.3,
+     "precision": 97.0,
+     "recall": 97.9,
+     "macro_f1": 97.2
+    },
+    "location": {
+     "accuracy": 100.0,
+     "precision": 100.0,
+     "recall": 100.0,
+     "macro_f1": 100.0
+    },
+    "profiles": {
+     "accuracy": 98.8,
+     "precision": 98.4,
+     "recall": 100.0,
+     "macro_f1": 99.2
+    },
+    "in_scope": {
+     "accuracy": 100.0,
+     "precision": 100.0,
+     "recall": 100.0,
+     "macro_f1": 100.0,
+     "out_of_scope_precision": 100.0,
+     "out_of_scope_recall": 100.0
+    },
+    "joint_accuracy": 96.4,
+    "decision_accuracy": 100.0,
+    "decision_ci95": [
+     95.6,
+     100.0
+    ],
+    "decision_by_class": {
+     "plan": 100.0,
+     "clarify": 100.0,
+     "decline": 100.0
+    }
+   },
+   "valid_json": 100.0,
+   "robustness": {
+    "n": 172,
+    "model_success": 87.8,
+    "system_success": 87.8,
+    "model_clean_same_items": 94.9,
+    "by_kind": {
+     "typo": 82.8,
+     "shorthand": 85.5,
+     "noise": 94.9
+    }
+   },
+   "fairness": {
+    "counterfactual_consistency": 100.0,
+    "templates": 6,
+    "per_region_accuracy": {
+     "north": 100.0,
+     "west": 100.0,
+     "south": 100.0,
+     "east": 100.0
+    },
+    "region_gap": 0.0,
+    "subgroup_accuracy": {
+     "english": 94.1,
+     "hinglish": 100.0,
+     "with_profile": 96.4,
+     "without_profile": 93.5
+    },
+    "subgroup_n": {
+     "english": 68,
+     "hinglish": 6,
+     "with_profile": 28,
+     "without_profile": 46
+    },
+    "language_gap": 5.9,
+    "profile_gap": 2.9
+   },
+   "gen_explain": {
+    "n": 20,
+    "groundedness": 20.0,
+    "groundedness_ci95": [
+     8.1,
+     41.6
+    ],
+    "hallucination_rate": 30.0,
+    "faithfulness_claims": 87.3,
+    "claims_checked": 268,
+    "decision_consistency": 40.0,
+    "empty_answers": 0,
+    "ref_pairs": 8,
+    "rouge1_f1": 61.8,
+    "rougeL_f1": 42.2,
+    "bertscore_f1": 48.6,
+    "flagged_by_type": {
+     "12-hour time (24-h value is in the sheet)": 3,
+     "footnote number [n] or step number": 11,
+     "rounded sheet value (within ±1)": 8,
+     "other / genuine": 9,
+     "place name": 2,
+     "citation next to wrong value": 1
+    },
+    "genuine_unsupported_rate": 20.0
+   },
+   "gen_followup": {
+    "n": 29,
+    "groundedness": 65.5,
+    "groundedness_ci95": [
+     47.3,
+     80.1
+    ],
+    "hallucination_rate": 13.8,
+    "faithfulness_claims": 96.1,
+    "claims_checked": 103,
+    "decision_consistency": 93.1,
+    "empty_answers": 0,
+    "ref_pairs": 29,
+    "rouge1_f1": 58.7,
+    "rougeL_f1": 46.1,
+    "bertscore_f1": 50.8,
+    "flagged_by_type": {
+     "12-hour time (24-h value is in the sheet)": 0,
+     "footnote number [n] or step number": 0,
+     "rounded sheet value (within ±1)": 2,
+     "other / genuine": 1,
+     "place name": 0,
+     "citation next to wrong value": 1
+    },
+    "genuine_unsupported_rate": 3.4
+   },
+   "latency_s": {
+    "intent": {
+     "p50": 1.94,
+     "p95": 2.06,
+     "n": 40
+    },
+    "explanation": {
+     "p50": 2.38,
+     "p95": 5.44,
+     "n": 20
+    },
+    "follow-up": {
+     "p50": 2.03,
+     "p95": 2.43,
+     "n": 20
+    }
+   },
+   "tokens_per_s": {
+    "intent": 52.2,
+    "explanation": 80.8,
+    "follow-up": 78.9
+   }
+  }
+ ]
+}

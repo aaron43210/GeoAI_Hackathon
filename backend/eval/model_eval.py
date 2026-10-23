@@ -339,6 +339,8 @@ def main() -> None:
     ap.add_argument("--heldout", type=int, default=20)
     ap.add_argument("--limit", type=int, default=0, help="smoke test: use only the first N items of each set")
     ap.add_argument("--gpu-layers", type=int, default=0, help="-1 = all layers on GPU (needs a CUDA/Metal build)")
+    ap.add_argument("--out", default="model_eval.json", help="results file name in eval/results/")
+    ap.add_argument("--append", action="store_true", help="keep models already in the results file; run only new ones")
     ap.add_argument("--rescore-only", action="store_true", help="only (re)compute ROUGE/BERTScore from saved results")
     args = ap.parse_args()
 
@@ -375,7 +377,7 @@ def main() -> None:
         sheets = sheets[:2]
     out = HERE / "results"
     out.mkdir(exist_ok=True)
-    path = out / "model_eval.json"
+    path = out / args.out
     meta = {"machine": f"{platform.machine()} · {os.cpu_count()} cores · {platform.platform(terse=True)}",
             "runtime": (f"llama.cpp (llama-cpp-python), {'GPU' if args.gpu_layers else 'CPU only'}, Q4_K_M, "
                         "temperature 0 for intent / 0.2 for text, seed 0"),
@@ -384,9 +386,13 @@ def main() -> None:
     if args.rescore_only:
         results = json.loads(path.read_text())["results"]
     else:
-        results = []
+        results = json.loads(path.read_text())["results"] if args.append and path.exists() else []
+        done = {r["model"] for r in results}
         for spec in args.model:
             name, mpath = spec.split("=", 1)
+            if name in done:
+                print(f"[{name}] already in {path.name}, skipped", flush=True)
+                continue
             results.append(evaluate(name, mpath, tests, robust, fair, sheets, explains, refs, args.gpu_layers))
             path.write_text(json.dumps({"meta": meta, "results": results}, indent=1, ensure_ascii=False))
     try:
