@@ -12,7 +12,7 @@ is cited and machine-checked against the data it fetched.
 | | |
 |---|---|
 | **Live API** | **https://aaronr43210-terrapulse-ai.hf.space/api/v1/ask** · web demo at [/](https://aaronr43210-terrapulse-ai.hf.space/) · docs at [/docs](https://aaronr43210-terrapulse-ai.hf.space/docs) · health at [/api/v1/health](https://aaronr43210-terrapulse-ai.hf.space/api/v1/health) |
-| **Model** | [`aaronr43210/terrapulse-qwen3-1.7b`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b) (merged, `from_pretrained`) · [`-lora`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-lora) (adapter) · [`-GGUF`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-GGUF) (served by the API) |
+| **Model** | [`aaronr43210/terrapulse-qwen3-1.7b-v2`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-v2) (round 2, merged, `from_pretrained`, served by the live API) · [`-lora-v2`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-lora-v2) (adapter) · [`-GGUF-v2`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b-GGUF-v2) (llama.cpp, local/Docker) · round 1: [`terrapulse-qwen3-1.7b`](https://huggingface.co/aaronr43210/terrapulse-qwen3-1.7b) (tag `v1-stable`) |
 | **Base model** | [`Qwen/Qwen3-1.7B`](https://huggingface.co/Qwen/Qwen3-1.7B) |
 | **Code** | https://github.com/aaron43210/GeoAI_Hackathon |
 | **Licence** | Apache-2.0 |
@@ -121,12 +121,17 @@ docker compose up --build                  # http://localhost:8000
   Qwen3.5-2B: 87.5% / 95.8% / 95.8%, 4.9 s. Excluded: Phi-3/4-mini (3.8 B), Ministral-3-3B (3.85 B),
   Granite-4.0-micro (3.4 B), Llama-3.2-3B (3.21 B, non-OSI licence), Qwen2.5-3B (non-commercial licence),
   SmolLM3 (3.08 B), Gemma-3n-E2B (5.4 B). Script: [backend/eval/bakeoff.py](backend/eval/bakeoff.py).
-* Training runs **only in Google Colab** (VS Code Colab extension, free T4):
-  1. [training/01_build_data_colab.ipynb](training/01_build_data_colab.ipynb): ~3,000 generated intent examples with exact
-     labels + ~160 real fact sheets from the live pipeline; answer drafts from the open **Qwen3-4B** (fp16, batched), kept only if they
-     pass the grounding verifier.
-  2. [training/02_finetune_lora_colab.ipynb](training/02_finetune_lora_colab.ipynb): Unsloth LoRA (r=16, α=32, 2 epochs,
-     completion-only loss), before/after eval, push adapter + merged model + GGUF + model card.
+* Training ran in two rounds, never on a developer laptop. Both use the same two notebooks
+  ([01](training/01_build_data_colab.ipynb): data, [02](training/02_finetune_lora_colab.ipynb): Unsloth LoRA r=16,
+  α=32, 2 epochs, completion-only loss, before/after eval, push adapter + merged model + GGUF + model card):
+  - **Round 1** (Google Colab T4): ~3,000 generated intent examples with exact labels + ~160 live fact sheets;
+    answer drafts from the open **Qwen3-4B**, kept only if they pass the grounding verifier.
+  - **Round 2** (one 80 GB GPU of a college DGX server, headless via
+    [training/run_round2.sh](training/run_round2.sh)): the same 3,000 intent examples + 500 live fact sheets; the open
+    **Qwen3-32B** wrote explanations in the app's chat format and answers to "why?" follow-ups, kept only if they pass
+    the verifier (246 explanations + 125 code-written ones + 714 follow-ups). Published to the `-v2` repos.
+  - Round 2 vs round 1 on 20 live questions never seen in training: model-written explanations passing the verifier
+    **10/14 vs 4/14**, same correct status (19/20), activity and profile extraction 100 % for both.
 * `training/update_model_cards.py` publishes the model cards; the runtime loads the fine-tuned GGUF and falls back to the
   base GGUF only if it can't be downloaded.
 
@@ -155,8 +160,10 @@ Map data © OpenStreetMap contributors (ODbL). Weather data by Open-Meteo.com (C
 * Latency on a 4-core CPU: ~10–20 s typical, dominated by Overpass. Answers stream progressively.
 
 ## Disclosures
-* Runtime model: Qwen3-1.7B (+ our LoRA), run locally with llama.cpp. No hosted LLM in the running assistant.
-* Training-data teacher: Qwen3-4B (open weights, Apache-2.0), run in Colab.
+* Runtime model: Qwen3-1.7B (1.72 B parameters) + our LoRA (round 2): transformers on the ZeroGPU Space, llama.cpp
+  locally and in Docker. No hosted LLM in the running assistant.
+* Training-data teachers (training time only, open weights, Apache-2.0): Qwen3-4B (round 1, Colab) and Qwen3-32B
+  (round 2, our own GPU server).
 * AI coding assistants were used during development (disclosed per the hackathon rules); no AI service runs in the product.
 
 ## Repo map

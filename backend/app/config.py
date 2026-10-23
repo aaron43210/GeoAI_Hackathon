@@ -19,11 +19,11 @@ class Settings(BaseSettings):
     # Small language model (≤3B, open weights, run locally)
     SLM_ENABLED: bool = True
     SLM_BACKEND: str = "llama_cpp"                 # llama_cpp | transformers | none
-    SLM_REPO: str = "aaronr43210/terrapulse-qwen3-1.7b-GGUF"
+    SLM_REPO: str = "aaronr43210/terrapulse-qwen3-1.7b-GGUF-v2"
     SLM_FILE: str = "terrapulse-qwen3-1.7b.Q4_K_M.gguf"
     SLM_BASE_REPO: str = "unsloth/Qwen3-1.7B-GGUF"
     SLM_BASE_FILE: str = "Qwen3-1.7B-Q4_K_M.gguf"
-    SLM_HF_MODEL: str = "aaronr43210/terrapulse-qwen3-1.7b"   # transformers backend (from_pretrained)
+    SLM_HF_MODEL: str = "aaronr43210/terrapulse-qwen3-1.7b-v2"   # transformers backend (from_pretrained)
     SLM_LOCAL_PATH: str = ""                         # optional explicit GGUF path
     SLM_THREADS: int = 0                             # 0 = os.cpu_count()
     SLM_CTX: int = 4096

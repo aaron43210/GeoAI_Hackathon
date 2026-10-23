@@ -104,6 +104,31 @@ def _time_comparison_errors(text: str, cfg: Optional[Dict[str, object]]) -> List
     return out
 
 
+def _band_errors(text: str, checks: List[Dict[str, object]]) -> List[str]:
+    """A value described with a band word must fall inside that band ("moderate ... AQI 135" is false)."""
+    errors: List[str] = []
+    for check in checks:
+        bands, lo = [], 0.0
+        for b in get_knowledge().phrasing[check["bands"]]:
+            bands.append((b["word"].lower(), lo, float(b["max"])))
+            lo = float(b["max"]) + 1
+        # longest words first, so "unhealthy for sensitive groups" is not also read as "unhealthy"
+        word_rx = re.compile(r"\b(" + "|".join(re.escape(w) for w, _, _ in sorted(bands, key=lambda b: -len(b[0]))) + r")\b")
+        span = {w: (a, b) for w, a, b in bands}
+        win = int(check.get("window_chars", 40))
+        for m in re.finditer(check["value_regex"], text):
+            value = float(m.group(1))
+            start, end = m.start(), m.end()
+            sent_start = max(text.rfind(c, 0, start) for c in ".;\n") + 1
+            sent_end = min([i for i in (text.find(c, end) for c in ".;\n") if i != -1] or [len(text)])
+            window = text[max(sent_start, start - win):min(sent_end, end + win)]
+            for w in {x.group(1) for x in word_rx.finditer(window)}:
+                a, b = span[w]
+                if not a <= value <= b:
+                    errors.append(f"calls US AQI {m.group(1)} '{w}' (that band is {a:g}-{b:g})")
+    return errors
+
+
 def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str],
            must_mention: Optional[str] = None, recommended: bool = True,
            ledger_values: Optional[Dict[str, object]] = None) -> GroundingResult:
@@ -220,6 +245,8 @@ def verify(answer: str, sheet: str, ledger_ids: Set[str], known_names: List[str]
                 m = re.search(rx, low_answer)
                 if m:
                     violations.append(f"says '{m.group(0)}' but the data flags {rule['flag_triggers'][0]}")
+
+    violations += _band_errors(_CITE.sub(" ", low_answer), cfg.get("band_checks") or [])
 
     # repetition: a small model looping on one phrase ("X; X; X; ...") is a failed answer even if X is true
     plain = re.sub(r"\s+", " ", _CITE.sub("", answer))

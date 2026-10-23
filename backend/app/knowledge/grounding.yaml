@@ -21,7 +21,11 @@ polarity:
     forbidden: ["good air", "clean air", "fresh air", "excellent air", "healthy air", "air is good", "air quality is good",
                 "good air quality", "great air", "low pollution", "pollution-free", "manageable", "not a concern",
                 "nothing to worry", "safe to play", "safe for exercise", "within safe limits", "within the safe",
-                "still safe", "safe limits", "acceptable levels", "safe for outdoor"]
+                "still safe", "safe limits", "acceptable levels", "safe for outdoor",
+                # downplaying a flagged risk ("won't pose a significant risk for sensitive groups")
+                "won't pose", "will not pose", "not pose a", "no significant risk", "not a significant risk",
+                "no real risk", "low risk", "minimal risk", "little risk", "no risk", "not a problem",
+                "won't be a problem", "no cause for concern", "not significant", "won't affect", "will not affect"]
     forbidden_regex: ['\b(?:low|good|clean|great|excellent|healthy|safe|fine|decent|pleasant|acceptable|moderate|okay|ok|reasonable)\s+(?:us\s+)?(?:aqi|air|pm2\.5)',
                       '\b(?:air|air quality|aqi)\s+(?:is|looks|remains|stays)\s+(?:good|fine|acceptable|okay|ok|clean|decent|reasonable|healthy|safe)']
     # the mirror rule: when the data does NOT flag air quality, alarm language about it is false
@@ -35,6 +39,14 @@ polarity:
   - flag_triggers: ["rain probability"]
     flagged_when: ["caution: rain", "above"]
     forbidden: ["no rain", "dry conditions", "zero chance of rain"]
+
+# A banded value must be described with its own band: "moderate at a US AQI of 135" is false (101-150 is "unhealthy
+# for sensitive groups", US EPA AQI bands in phrasing.yaml). Band words are searched within the same sentence,
+# up to window_chars before or after the number.
+band_checks:
+  - value_regex: '\baqi\b[^.;\n\d]{0,20}?(\d{1,3})'
+    bands: aqi_bands
+    window_chars: 40
 
 # A citation must sit next to its own value: the number nearest to "[E#]" (within this many characters) must
 # appear on that fact's line in the fact sheet.
